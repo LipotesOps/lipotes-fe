@@ -1,10 +1,12 @@
 /** When your routing table is too long, you can split it into small modules**/
 
-import Layout from "@/layout";
+// import Layout from "@/layout";
+import home from "@/components/home.vue";
 
 const itscAdminRouter = {
   path: "/flow-manage",
-  component: Layout,
+  // component: Layout,
+  component: home,
   redirect: "/flow-manage/flow",
   name: "flowManage",
   meta: {

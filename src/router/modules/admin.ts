@@ -6,7 +6,7 @@ const itscAdminRouter = {
   path: "/flow-manage",
   component: Layout,
   redirect: "/flow-manage/flow",
-  name: "flowManage",
+  name: "flow-manage",
   meta: {
     title: "流程管理",
     icon: "example"

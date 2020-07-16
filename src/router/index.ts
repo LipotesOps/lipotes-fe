@@ -14,7 +14,7 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: "dashboard",
-        // component: () => import('@/views/dashboard/index'),
+        component: () => import("@/views/itsc-flow/index.vue"),
         name: "Dashboard",
         meta: { title: "Dashboard", icon: "dashboard", affix: true }
       }

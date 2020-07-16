@@ -1,5 +1,8 @@
 <template>
-  <p>i am sidebar!</p>
+  <div>
+    <p>i am sidebar!</p>
+    <router-view />
+  </div>
 </template>
 
 <script>

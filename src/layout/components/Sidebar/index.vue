@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import variables from "@/styles/variables.scss";
+import variables from "@/styles/variables.less";
 export default {
   computed: {
     activeMenu() {
@@ -38,7 +38,7 @@ export default {
       return path;
     },
     showLogo() {
-      return true;
+      return false;
     },
     variables() {
       return variables;

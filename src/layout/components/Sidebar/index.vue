@@ -14,7 +14,7 @@
         mode="vertical"
       >
         <sidebar-item
-          v-for="route in permission_routes"
+          v-for="route in permissionRoutes"
           :key="route.path"
           :item="route"
           :base-path="route.path"
@@ -26,6 +26,7 @@
 
 <script>
 import variables from "@/styles/variables.less";
+import { routes } from "@/router";
 export default {
   computed: {
     activeMenu() {
@@ -45,6 +46,9 @@ export default {
     },
     isCollapse() {
       return true;
+    },
+    permissionRoutes() {
+      return routes;
     }
   }
 };

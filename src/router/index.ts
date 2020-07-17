@@ -6,7 +6,7 @@ import { itscAdminRouter } from "./modules/admin";
 
 Vue.use(VueRouter);
 
-const routes: Array<RouteConfig> = [
+export const routes: Array<RouteConfig> = [
   {
     path: "/",
     component: Layout,

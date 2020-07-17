@@ -1,26 +1,24 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-
-import Layout from "@/layout/index.vue";
-import { itscAdminRouter } from "./modules/admin";
+import Home from "../views/Home.vue";
 
 Vue.use(VueRouter);
 
-export const routes: Array<RouteConfig> = [
+const routes: Array<RouteConfig> = [
   {
     path: "/",
-    component: Layout,
-    redirect: "/dashboard",
-    children: [
-      {
-        path: "dashboard",
-        component: () => import("@/views/itsc-flow/index.vue"),
-        name: "Dashboard",
-        meta: { title: "Dashboard", icon: "dashboard", affix: true }
-      }
-    ]
+    name: "Home",
+    component: Home
   },
-  itscAdminRouter
+  {
+    path: "/about",
+    name: "About",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/About.vue")
+  }
 ];
 
 const router = new VueRouter({

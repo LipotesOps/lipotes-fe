@@ -44,6 +44,14 @@ module.exports = {
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
+      },
+      [process.env.FLOWABLE_REST_API]: {
+        target: 'http://101.132.191.123:8081/flowable-rest/service', // 云上:flowable-rest
+        ws: true,
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.FLOWABLE_REST_API]: ''
+        }
       }
     }
   },

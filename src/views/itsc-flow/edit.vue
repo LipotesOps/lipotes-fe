@@ -308,7 +308,7 @@ export default {
       const a = document.createElement('a')
       switch (type) {
         case 'xml':
-          dataTrack = 'bpmn'
+          dataTrack = 'bpmn20.xml'
           break
         case 'svg':
           dataTrack = 'svg'
@@ -316,7 +316,7 @@ export default {
         default:
           break
       }
-      const reName = name || `diagram.${dataTrack}`
+      const reName = name || `${this.computed_flow_uniq_name}.${dataTrack}`
       a.setAttribute(
         'href',
         `data:application/bpmn20-xml;charset=UTF-8,${encodeURIComponent(data)}`

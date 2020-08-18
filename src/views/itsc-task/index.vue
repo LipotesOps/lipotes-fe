@@ -30,9 +30,9 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="流程名称" min-width="150px">
+      <el-table-column label="任务名称" min-width="150px">
         <template slot-scope="{row}">
-          <el-tag>{{ row.status | typeFilter }}</el-tag>
+          <el-tag>{{ row.name }}</el-tag>
           <span class="link-type" @click="handleUpdate(row)">{{ row.uniq_name }}</span>
         </template>
       </el-table-column>
@@ -101,8 +101,7 @@
 
 <script>
 import { updateFlow, createFlow, fetchCategory, fetchBpmn } from '@/api/itsc-flow'
-import { startProcessInstance } from '@/api/flowable-rest'
-import { fetchServices } from '@/api/itsc-service'
+import { startProcessInstance, queryTask } from '@/api/flowable-rest'
 import uuid from '@/utils/guid'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -244,9 +243,9 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchServices(this.listQuery).then(response => {
-        this.list = response.data.results
-        this.total = response.data.count
+      queryTask({}).then(response => {
+        this.list = response.data.data
+        this.total = response.data.total
 
         // Just to simulate the time of the request
         setTimeout(() => {

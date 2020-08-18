@@ -21,7 +21,7 @@ const serviceManageRouter = {
     {
       path: 'list',
       component: () => import('@/views/itsc-service/index'),
-      name: 'itsc-home',
+      name: 'service-list',
       meta: { title: '服务列表', icon: 'documentation' }
     }
   ]
@@ -40,32 +40,32 @@ const flowManageRouter = {
     {
       path: 'flow',
       component: () => import('@/views/itsc-flow/index'),
-      name: 'itsc-home',
+      name: 'process-design',
       meta: { title: '流程设计', icon: 'documentation' }
     },
     {
       path: 'flow/edit',
       hidden: true,
       component: () => import('@/views/itsc-flow/edit'),
-      name: 'itsc-home',
+      name: 'bpmn-design',
       meta: { title: '设计bpmn', icon: 'documentation' }
     },
     {
       path: 'form',
       component: () => import('@/views/itsc-home/index'),
-      name: 'itsc-home',
+      name: 'form-design',
       meta: { title: '表单设计', icon: 'documentation' }
     },
     {
       path: 'jobs',
       component: () => import('@/views/itsc-task/index'),
-      name: 'itsc-home',
+      name: 'tasks-center',
       meta: { title: '工单中心', icon: 'documentation' }
     },
     {
       path: 'scripts',
       component: () => import('@/views/itsc-home/index'),
-      name: 'itsc-home',
+      name: 'script-manage',
       meta: { title: '脚本管理', icon: 'documentation' }
     }
   ]
@@ -84,39 +84,45 @@ const userManageRouter = {
     {
       path: 'user',
       component: () => import('@/views/itsc-home/index'),
-      name: 'itsc-home',
+      name: 'users',
       meta: { title: '用户', icon: 'documentation' }
     },
     {
       path: 'group',
       component: () => import('@/views/itsc-home/index'),
-      name: 'itsc-home',
+      name: 'groups',
       meta: { title: '用户组', icon: 'documentation' }
     },
     {
       path: 'role',
       component: () => import('@/views/itsc-home/index'),
-      name: 'itsc-home',
+      name: 'roles',
       meta: { title: '角色', icon: 'documentation' }
     }
   ]
 }
 
 const permissionManageRouter = {
-  path: '/user-manage',
+  path: '/permission',
   component: Layout,
   redirect: 'noRedirect',
-  name: 'userManage',
+  name: 'permissionManage',
   meta: {
     title: '权限管理',
     icon: 'example'
   },
   children: [
     {
-      path: 'permission',
+      path: 'settings',
       component: () => import('@/views/itsc-home/index'),
-      name: 'itsc-home',
+      name: 'permission',
       meta: { title: '权限设置', icon: 'documentation' }
+    },
+    {
+      path: 'happy',
+      component: () => import('@/views/itsc-home/index'),
+      name: 'itsc-roles',
+      meta: { title: '角色', icon: 'documentation' }
     }
   ]
 }

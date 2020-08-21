@@ -15,6 +15,9 @@
       <el-color-picker v-model="color" @active-change="colorChange" />
     </div>
     <div class="btn-area">
+      <el-select v-model="selectedVersion" placeholder="Version" clearable class="filter-item" style="width: 130px; margin-right: 11px">
+        <!-- <el-option v-for="item in flowStatusOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" /> -->
+      </el-select>
       <el-button type="info" :plain="true" icon="fa-undo" @click="$router.go(-1)">返回</el-button>
       <el-tooltip v-if="!isNew" content="新建并归属至流程" placement="top">
         <el-button type="warning" icon="check" :loading="committing" class="save-btn" @click="createXML">新建<i class="el-icon-document-add el-icon--right" /></el-button>
@@ -46,6 +49,7 @@ import { fetchBpmn, updateBpmn, createBpmn } from '@/api/itsc-flow'
 export default {
   data() {
     return {
+      selectedVersion: '',
       hasBpmn: true,
       color: null,
       element: {},
@@ -60,13 +64,13 @@ export default {
 
   computed: {
     isNew() {
-      return this.$route.query.bpmn_uniq_key && this.hasBpmn // 是否新建
+      return this.$route.query.bpmn_uid && this.hasBpmn // 是否新建
     },
-    computed_flow_uniq_key() {
-      return this.$route.query.flow_uniq_key
+    computed_flow_uid() {
+      return this.$route.query.flow_uid
     },
-    computed_flow_uniq_name() {
-      return this.$route.query.uniq_name
+    computed_flow_uname() {
+      return this.$route.query.uname
     }
   },
 
@@ -112,8 +116,8 @@ export default {
       // 监听节点选择变化
       this.bpmnModeler.on('selection.changed', e => {
         // 更新process基本信息，id + name，保证一致
-        this.bpmnModeler._definitions.rootElements[0].id = this.computed_flow_uniq_key
-        this.bpmnModeler._definitions.rootElements[0].name = this.computed_flow_uniq_name
+        this.bpmnModeler._definitions.rootElements[0].id = this.computed_flow_uid
+        this.bpmnModeler._definitions.rootElements[0].name = this.computed_flow_uname
         const element = e.newSelection[0]
         this.element = element
         // console.log(this.element)
@@ -166,8 +170,8 @@ export default {
 
     createDiagram() {
       const queryDate = {
-        bpmn_uniq_key: this.$route.query.bpmn_uniq_key,
-        flow_uniq_key: this.$route.query.flow_uniq_key
+        bpmn_uid: this.$route.query.bpmn_uid,
+        flow_uid: this.$route.query.flow_uid
       }
 
       //  ff
@@ -182,17 +186,17 @@ export default {
               duration: 2000
             })
             this.hasBpmn = false
-            const bpmn_content = newBpmnXML
-            this.uniq_key = uuid('B')
-            this.flow_uniq_key = this.$route.query.flow_uniq_key
-            this.importXML(bpmn_content)
+            const content = newBpmnXML
+            this.uid = uuid('B')
+            this.flow_uid = this.$route.query.flow_uid
+            this.importXML(content)
             return
           }
-          const bpmn_content = resp.data[0].bpmn_content
+          const content = resp.data[0].content
           this.bpmn_id = resp.data[0].id
-          this.uniq_key = resp.data[0].uniq_key
-          this.flow_uniq_key = resp.data[0].flow_uniq_key
-          this.importXML(bpmn_content)
+          this.uid = resp.data[0].uid
+          this.flow_uid = resp.data[0].flow_uid
+          this.importXML(content)
           return
         }
       },
@@ -208,9 +212,9 @@ export default {
         const { xml } = result
 
         const postData = {
-          'uniq_key': this.uniq_key,
-          'flow_uniq_key': this.flow_uniq_key,
-          'bpmn_content': xml,
+          'uid': this.uid,
+          'flow_uid': this.flow_uid,
+          'content': xml,
           'version': '1.0.5'
         }
         this.committing = true
@@ -236,9 +240,9 @@ export default {
 
         const id = this.bpmn_id
         const postData = {
-          'uniq_key': this.uniq_key,
-          'flow_uniq_key': this.$route.query.flow_uniq_key,
-          'bpmn_content': xml,
+          'uid': this.uid,
+          'flow_uid': this.$route.query.flow_uid,
+          'content': xml,
           'version': '1.0.5'
         }
         this.committing = true
@@ -316,7 +320,7 @@ export default {
         default:
           break
       }
-      const reName = name || `${this.computed_flow_uniq_name}.${dataTrack}`
+      const reName = name || `${this.computed_flow_uname}.${dataTrack}`
       a.setAttribute(
         'href',
         `data:application/bpmn20-xml;charset=UTF-8,${encodeURIComponent(data)}`

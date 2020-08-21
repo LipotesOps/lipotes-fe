@@ -1,5 +1,5 @@
 export default function uuid(type = 'P', len = 16, radix = 16) {
-  var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
+  var chars = '0123456789abcdefghijklmnopqrstuvwxyz'.split('')
   var uuid = []; var i
   radix = radix || chars.length
 

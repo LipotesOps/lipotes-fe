@@ -33,7 +33,7 @@
       <el-table-column label="流程名称" min-width="150px">
         <template slot-scope="{row}">
           <el-tag>{{ row.status | typeFilter }}</el-tag>
-          <span class="link-type" @click="handleUpdate(row)">{{ row.uniq_name }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.uname }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Actions" align="center" width="200" class-name="small-padding fixed-width">
@@ -50,12 +50,12 @@
       </el-table-column>
       <el-table-column label="版本" width="110px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.online_bpmn_key | versionFilter(bpmnVersionKeyValue) }}</span>
+          <span>{{ row.bpmn_uid | versionFilter(bpmnVersionKeyValue) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="BPMN" width="110px" align="center">
         <template slot-scope="{row}">
-          <el-link :href="'/flow-manage/flow/edit?bpmn_uniq_key='+row.online_bpmn_key+'&flow_uniq_key='+row.uniq_key+'&uniq_name='+row.uniq_name" type="primary">查看/创建</el-link>
+          <router-link :to="'/flow-manage/flow/edit?bpmn_uid='+row.bpmn_uid+'&flow_uid='+row.uid+'&uname='+row.uname">查看/创建</router-link>
         </template>
       </el-table-column>
     </el-table>
@@ -69,17 +69,17 @@
             <el-option v-for="item in flowStatusOptions" :key="item.key" :label="item.display_name" :value="item.key" />
           </el-select>
         </el-form-item>
-        <el-form-item label="Name" prop="uniq_name">
-          <el-input v-model="temp.uniq_name" placeholder="Please select" />
+        <el-form-item label="Name" prop="uname">
+          <el-input v-model="temp.uname" placeholder="Please select" />
         </el-form-item>
         <el-form-item label="Category" prop="category">
           <el-select v-model="temp.category" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in flowCategoryOptions" :key="item.uniq_key" :label="item.annotation" :value="item.uniq_key" />
+            <el-option v-for="item in flowCategoryOptions" :key="item.uid" :label="item.uname" :value="item.uid" />
           </el-select>
         </el-form-item>
-        <el-form-item label="BPMN" prop="online_bpmn_key">
-          <el-select v-model="temp.online_bpmn_key" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in versionOption" :key="item.uniq_key" :label="item.version" :value="item.uniq_key" />
+        <el-form-item label="BPMN" prop="bpmn_uid">
+          <el-select v-model="temp.bpmn_uid" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in versionOption" :key="item.uid" :label="item.version" :value="item.uid" />
           </el-select>
         </el-form-item>
         <el-form-item label="Remark">
@@ -140,8 +140,8 @@ export default {
     categoryFilter(type, flowCategoryKeyValue) {
       return flowCategoryKeyValue[type]
     },
-    versionFilter(uniq_key, bpmnVersionKeyValue) {
-      return bpmnVersionKeyValue[uniq_key]
+    versionFilter(uid, bpmnVersionKeyValue) {
+      return bpmnVersionKeyValue[uid]
     }
   },
   data() {
@@ -169,10 +169,10 @@ export default {
       showReviewer: false,
       temp: {
         id: undefined,
-        uniq_key: '',
-        uniq_name: '',
+        uid: '',
+        uname: '',
         category: '',
-        online_bpmn_key: '',
+        bpmn_uid: '',
         status: ''
       },
       dialogFormVisible: false,
@@ -209,7 +209,7 @@ export default {
           if (response.status === 200) {
             this.flowCategoryOptions = response.data
             this.flowCategoryKeyValue = this.flowCategoryOptions.reduce((acc, cur) => {
-              acc[cur.uniq_key] = cur.annotation
+              acc[cur.uid] = cur.uname
               return acc
             },
             {})
@@ -224,7 +224,7 @@ export default {
           if (response.status === 200) {
             this.bpmnVersionOptions = response.data
             this.bpmnVersionKeyValue = this.bpmnVersionOptions.reduce((acc, cur) => {
-              acc[cur.uniq_key] = cur.version
+              acc[cur.uid] = cur.version
               return acc
             },
             {})
@@ -232,10 +232,10 @@ export default {
         }
       )
     },
-    versionOptionFilter(uniq_key) {
+    versionOptionFilter(uid) {
       var versionOption = []
       for (const i of this.bpmnVersionOptions) {
-        if (i.flow_uniq_key === uniq_key || i.flow_uniq_key === '') {
+        if (i.flow_uid === uid || i.flow_uid === '') {
           versionOption.push(i)
         }
       }
@@ -259,13 +259,13 @@ export default {
     },
     handleDeploy(row) {
       const bpmnData = {
-        bpmn_uniq_key: row.online_bpmn_key
+        bpmn_uid: row.bpmn_uid
       }
       fetchBpmn(bpmnData).then(
         response => {
           if (response.status === 200) {
-            const bpmn_content = response.data[0].bpmn_content
-            const filename = `${row.uniq_name}.bpmn20.xml`
+            const bpmn_content = response.data[0].content
+            const filename = `${row.uname}.bpmn20.xml`
             const deployData = new FormData()
             // 1.先将字符串转换成Buffer
             const fileContent = Buffer.from(bpmn_content)
@@ -305,10 +305,10 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        uniq_key: '',
-        uniq_name: '',
+        uid: '',
+        uname: '',
         category: '',
-        online_bpmn_key: '',
+        bpmn_uid: '',
         status: ''
       }
     },
@@ -323,8 +323,8 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.uniq_key = uuid()
-          this.temp.online_bpmn_key = 'first'
+          this.temp.uid = uuid()
+          this.temp.bpmn_uid = 'first'
           const tempData = Object.assign({}, this.temp)
           createFlow(tempData).then((response) => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
@@ -345,8 +345,8 @@ export default {
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       this.dialogStatus = 'update'
-      this.versionOption = Object.assign([], this.versionOptionFilter(row.uniq_key))
-      // this.versionOption = this.versionOptionFilter(row.uniq_key)
+      this.versionOption = Object.assign([], this.versionOptionFilter(row.uid))
+      // this.versionOption = this.versionOptionFilter(row.uid)
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()

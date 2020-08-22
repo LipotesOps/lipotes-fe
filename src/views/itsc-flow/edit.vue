@@ -15,7 +15,7 @@
       <el-color-picker v-model="color" @active-change="colorChange" />
     </div>
     <div class="btn-area">
-      <el-select v-model="selectedVersion" placeholder="Version" clearable class="filter-item" style="width: 130px; margin-right: 11px">
+      <el-select v-model="selectedVersion" placeholder="Version" clearable class="filter-item" popper-class="select-option" style="width: 130px; margin-right: 11px">
         <!-- <el-option v-for="item in flowStatusOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" /> -->
       </el-select>
       <el-button type="info" :plain="true" icon="fa-undo" @click="$router.go(-1)">返回</el-button>
@@ -387,9 +387,10 @@ export default {
 
   #bpmn-editor {
     @paddingTop: 100px;
-    @paddingBottom: 20px;
+    @paddingBottom: 10px;
+    margin: 20px;
     border: 1px solid #d1dbe5;
-    border-radius: 4px;
+    border-radius: 8px;
     background-color: #fff;
     overflow: hidden;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,.12), 0 0 6px 0 rgba(0,0,0,.04);
@@ -405,6 +406,7 @@ export default {
     width: 240px;
     z-index: 10;
     border-left: 1px solid #ccc;
+    border-radius: 8px;
     overflow: auto;
     background-color: #f8f8f8;
     font-size: 12px;

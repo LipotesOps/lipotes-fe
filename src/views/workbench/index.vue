@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="workbench-container" style="margin: 0px; background-color:White">
+    <div class="workbench-container" style="margin: 0px; padding: 10px; background-color:White; border-radius: 8px">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="待办" name="todo">待办</el-tab-pane>
         <el-tab-pane label="待阅" name="toread">待阅</el-tab-pane>

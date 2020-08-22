@@ -1,16 +1,16 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="listQuery.type" placeholder="Type" clearable class="filter-item" style="width: 130px">
+      <el-select v-model="listQuery.type" placeholder="Type" clearable class="filter-item" popper-class="select-option" style="width: 130px">
         <el-option v-for="item in flowStatusOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button v-waves class="filter-item" popper-class="select-option" type="primary" icon="el-icon-search" @click="handleFilter">
         Search
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button class="filter-item" popper-class="select-option" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         Add
       </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+      <el-button v-waves :loading="downloadLoading" class="filter-item" popper-class="select-option" type="primary" icon="el-icon-download" @click="handleDownload">
         Export
       </el-button>
     </div>
@@ -65,7 +65,7 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
         <el-form-item label="Status" prop="status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
+          <el-select v-model="temp.status" class="filter-item" popper-class="select-option" placeholder="Please select">
             <el-option v-for="item in flowStatusOptions" :key="item.key" :label="item.display_name" :value="item.key" />
           </el-select>
         </el-form-item>
@@ -73,12 +73,12 @@
           <el-input v-model="temp.uniq_name" placeholder="Please select" />
         </el-form-item>
         <el-form-item label="Category" prop="category">
-          <el-select v-model="temp.category" class="filter-item" placeholder="Please select">
+          <el-select v-model="temp.category" class="filter-item" popper-class="select-option" placeholder="Please select">
             <el-option v-for="item in flowCategoryOptions" :key="item.uniq_key" :label="item.annotation" :value="item.uniq_key" />
           </el-select>
         </el-form-item>
         <el-form-item label="BPMN" prop="online_bpmn_key">
-          <el-select v-model="temp.online_bpmn_key" class="filter-item" placeholder="Please select">
+          <el-select v-model="temp.online_bpmn_key" class="filter-item" popper-class="select-option" placeholder="Please select">
             <el-option v-for="item in versionOption" :key="item.uniq_key" :label="item.version" :value="item.uniq_key" />
           </el-select>
         </el-form-item>

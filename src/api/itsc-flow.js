@@ -55,3 +55,11 @@ export function createBpmn(data) {
     data: data
   })
 }
+
+export function createFlowInst(data) {
+  return request({
+    url: `/api/flow-instance/`,
+    method: 'post',
+    data: data
+  })
+}

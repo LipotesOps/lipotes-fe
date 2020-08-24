@@ -67,7 +67,7 @@ export default {
       return this.$route.query.bpmn_uid && this.hasBpmn // 是否新建
     },
     computed_flow_uid() {
-      return this.$route.query.flow_uid
+      return 'p' + this.$route.query.flow_uid
     },
     computed_flow_uname() {
       return this.$route.query.uname

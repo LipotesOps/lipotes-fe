@@ -101,7 +101,7 @@
 
 <script>
 import { updateFlow, createFlow, fetchCategory, fetchBpmn } from '@/api/itsc-flow'
-import { startProcessInstance, queryTask } from '@/api/flowable-rest'
+import { apiStartProcessInstance, queryTask } from '@/api/flowable-rest'
 import uuid from '@/utils/guid'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -266,7 +266,7 @@ export default {
           if (response.status === 200) {
             const launchData = { processDefinitionKey: row.uniq_key }
 
-            startProcessInstance(launchData).then(
+            apiStartProcessInstance(launchData).then(
               resp => {
                 if (resp.status === 201) {
                   console.log(resp)

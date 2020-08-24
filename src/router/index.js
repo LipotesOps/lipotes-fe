@@ -66,6 +66,13 @@ export const constantRoutes = [
       name: 'Workbench',
       component: () => import('@/views/workbench/index'),
       meta: { title: 'Workbench', icon: 'el-icon-monitor' }
+    },
+    {
+      path: 'start/:bpmn_uid',
+      name: 'service-start',
+      component: () => import('@/views/workbench/service-start'),
+      meta: { title: 'service-start', icon: 'el-icon-monitor' },
+      hidden: true
     }
     ]
   },

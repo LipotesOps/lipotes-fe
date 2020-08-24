@@ -13,7 +13,7 @@ export function createDeployment(data) {
   })
 }
 
-export function startProcessInstance(data) {
+export function apiStartProcessInstance(data) {
   return request({
     baseURL: flowableRestUrl,
     url: '/runtime/process-instances',

@@ -101,7 +101,6 @@
 
 <script>
 import { updateFlow, createFlow, fetchCategory, fetchBpmn } from '@/api/itsc-flow'
-import { apiStartProcessInstance } from '@/api/flowable-rest'
 import { fetchServices } from '@/api/itsc-service'
 import uuid from '@/utils/guid'
 import waves from '@/directive/waves' // waves directive
@@ -210,7 +209,7 @@ export default {
           if (response.status === 200) {
             this.flowCategoryOptions = response.data
             this.flowCategoryKeyValue = this.flowCategoryOptions.reduce((acc, cur) => {
-              acc[cur.uniq_key] = cur.annotation
+              acc[cur.uid] = cur.uname
               return acc
             },
             {})
@@ -265,19 +264,7 @@ export default {
       fetchBpmn(bpmnData).then(
         response => {
           if (response.status === 200) {
-            const launchData = { processDefinitionKey: row.uniq_key }
-
-            apiStartProcessInstance(launchData).then(
-              resp => {
-                if (resp.status === 201) {
-                  console.log(resp)
-                  this.$message({
-                    message: 'launch success',
-                    type: 'success'
-                  })
-                }
-              }
-            )
+            this.$router.push({ name: 'service-start', params: { bpmn_uid: row.bpmn_uid }})
           }
         }
       )

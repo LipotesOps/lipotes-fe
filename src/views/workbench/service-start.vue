@@ -55,8 +55,7 @@ export default {
           console.log('201')
           const data = {
             uid: uuid(),
-            flowable_id: resp.data.id,
-            bpmn_uid: this.bpmn_uid,
+            bpmn_uid: resp.data.id,
             start_time: resp.data.startTime,
             start_user_id: 'easyops'
           }

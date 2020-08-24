@@ -33,7 +33,7 @@
       <el-table-column label="流程名称" min-width="150px">
         <template slot-scope="{row}">
           <el-tag>{{ row.status | typeFilter }}</el-tag>
-          <span class="link-type" @click="handleUpdate(row)">{{ row.uniq_name }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.uname }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Actions" align="center" width="200" class-name="small-padding fixed-width">
@@ -260,7 +260,7 @@ export default {
     },
     handleLaunch(row) {
       const bpmnData = {
-        bpmn_uniq_key: row.online_bpmn_key
+        bpmn_uniq_key: row.bpmn_uid
       }
       fetchBpmn(bpmnData).then(
         response => {

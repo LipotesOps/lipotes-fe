@@ -116,7 +116,7 @@ export default {
       // 监听节点选择变化
       this.bpmnModeler.on('selection.changed', e => {
         // 更新process基本信息，id + name，保证一致
-        this.bpmnModeler._definitions.rootElements[0].id = this.computed_flow_uid
+        // this.bpmnModeler._definitions.rootElements[0].id = this.computed_flow_uid
         this.bpmnModeler._definitions.rootElements[0].name = this.computed_flow_uname
         const element = e.newSelection[0]
         this.element = element

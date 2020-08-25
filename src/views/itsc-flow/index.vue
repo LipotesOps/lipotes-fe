@@ -100,8 +100,8 @@
 </template>
 
 <script>
-import { fetchFlows, updateFlow, createFlow, fetchCategory, fetchBpmn } from '@/api/itsc-flow'
-import { createDeployment } from '@/api/flowable-rest'
+import { fetchFlows, updateFlow, createFlow, fetchCategory, fetchBpmn, updateBpmn } from '@/api/itsc-flow'
+import { createDeployment, apiGetProcessDefinitions } from '@/api/flowable-rest'
 import uuid from '@/utils/guid'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -264,6 +264,8 @@ export default {
       fetchBpmn(bpmnData).then(
         response => {
           if (response.status === 200) {
+            this.bpmn_object = response.data[0]
+            const bpmn_id = response.data[0].id
             const bpmn_content = response.data[0].content
             const filename = `${row.uname}.bpmn20.xml`
             const deployData = new FormData()
@@ -276,9 +278,10 @@ export default {
             createDeployment(deployData).then(
               resp => {
                 if (resp.status === 201) {
-                  console.log(resp)
+                  const deploymentId = resp.data.id
+                  this.getProcessDefinitionId(bpmn_id, deploymentId)
                   this.$message({
-                    message: 'deploy success',
+                    message: 'flowable deploy success',
                     type: 'success'
                   })
                 }
@@ -287,6 +290,40 @@ export default {
           }
         }
       )
+    },
+    getProcessDefinitionId(bpmn_id, deploymentId) {
+      const queryData = {
+        deploymentId: deploymentId
+      }
+      apiGetProcessDefinitions(queryData).then(resp => {
+        if (resp.status === 200) {
+          const definitionId = resp.data.data[0].id
+          const flowable_id = this.bpmn_object['flowable_id']
+          if (flowable_id !== '') {
+            this.$message({
+              message: 'already deployed',
+              type: 'warnning'
+            })
+            return
+          }
+          if (flowable_id !== null) {
+            this.$message({
+              message: 'already deployed',
+              type: 'warnning'
+            })
+            return
+          }
+          this.bpmn_object['flowable_id'] = definitionId
+          updateBpmn(bpmn_id, this.bpmn_object).then(resp => {
+            if (resp.status === 200) {
+              this.$message({
+                message: 'update bpmn flowable_id success',
+                type: 'success'
+              })
+            }
+          })
+        }
+      })
     },
     sortChange(data) {
       const { prop, order } = data

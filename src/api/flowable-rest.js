@@ -43,10 +43,11 @@ export function queryTask(data) {
   })
 }
 
-export function fetchFlows(query) {
+// 根据DeploymentId 获取definitionId
+export function apiGetProcessDefinitions(query) {
   return request({
     baseURL: flowableRestUrl,
-    url: '/api/flow/',
+    url: '/repository/process-definitions',
     method: 'get',
     auth,
     params: query

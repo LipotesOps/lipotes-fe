@@ -12,7 +12,7 @@ export function updateFlow(id, data) {
   return request({
     url: `/api/flow/${id}/`,
     method: 'put',
-    data: data
+    data
   })
 }
 
@@ -20,7 +20,7 @@ export function createFlow(data) {
   return request({
     url: `/api/flow/`,
     method: 'post',
-    data: data
+    data
   })
 }
 
@@ -44,7 +44,7 @@ export function updateBpmn(id, data) {
   return request({
     url: `/api/bpmn/${id}/`,
     method: 'put',
-    data: data
+    data
   })
 }
 
@@ -52,7 +52,7 @@ export function createBpmn(data) {
   return request({
     url: `/api/bpmn/`,
     method: 'post',
-    data: data
+    data
   })
 }
 
@@ -60,6 +60,14 @@ export function createFlowInst(data) {
   return request({
     url: `/api/flow-instance/`,
     method: 'post',
-    data: data
+    data
+  })
+}
+
+export function createTaskInst(data) {
+  return request({
+    url: `/api/task-instance/`,
+    method: 'post',
+    data
   })
 }

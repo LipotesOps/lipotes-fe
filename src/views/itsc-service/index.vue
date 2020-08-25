@@ -55,7 +55,7 @@
       </el-table-column>
       <el-table-column label="BPMN" width="110px" align="center">
         <template slot-scope="{row}">
-          <el-link :href="'/flow-manage/flow/edit?bpmn_uniq_key='+row.online_bpmn_key+'&flow_uniq_key='+row.uniq_key" type="primary">查看/创建</el-link>
+          <el-link :href="'/flow-manage/flow/edit?bpmn_uid='+row.online_bpmn_key+'&flow_uniq_key='+row.uniq_key" type="primary">查看/创建</el-link>
         </template>
       </el-table-column>
     </el-table>
@@ -259,7 +259,7 @@ export default {
     },
     handleLaunch(row) {
       const bpmnData = {
-        bpmn_uniq_key: row.bpmn_uid
+        bpmn_uid: row.bpmn_uid
       }
       fetchBpmn(bpmnData).then(
         response => {

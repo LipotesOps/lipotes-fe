@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
-export function fetchFlows(query) {
+export function fetchFlows(params) {
   return request({
     url: '/api/flow/',
     method: 'get',
-    params: query
+    params
   })
 }
 
@@ -24,19 +24,19 @@ export function createFlow(data) {
   })
 }
 
-export function fetchCategory(query) {
+export function fetchCategory(params) {
   return request({
     url: '/api/category/',
     method: 'get',
-    params: query
+    params
   })
 }
 
-export function fetchBpmn(query) {
+export function fetchBpmn(params) {
   return request({
     url: '/api/bpmn/',
     method: 'get',
-    params: query
+    params
   })
 }
 

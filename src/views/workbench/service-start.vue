@@ -9,7 +9,7 @@
     </div>
     <div class="service-btn-area">
       <el-button type="info" :plain="true" icon="fa-undo" @click="$router.go(-1)">返回</el-button>
-      <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="startProcessInstance">提交<i class="el-icon-upload el-icon--right" /></el-button>
+      <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="startProcessInstancePromise">提交<i class="el-icon-upload el-icon--right" /></el-button>
     </div>
   </div>
 </template>
@@ -33,6 +33,42 @@ export default {
     this.getBpmnInfo()
   },
   methods: {
+    startProcessInstancePromise() {
+      return new Promise((resolve, reject) => {
+        const data = {
+          'processDefinitionId': this.flowableProcessDefinitionId
+        }
+        apiStartProcessInstance(data).then(resp => {
+          if (resp.status === 201) {
+            resolve(resp.data)
+          } else { reject(resp.err || 'flowable-rest error') }
+        })
+      }).then(this.createFlowInstance(), () => {
+        console.log('failure')
+      }).catch((err) => {
+        console.log(err || 'promise error')
+      })
+    },
+    createFlowInstance(respData) {
+      return new Promise((resolve, reject) => {
+        const data = {
+          uid: uuid(),
+          bpmn_uid: respData.id,
+          start_time: respData.startTime,
+          start_user_id: 'easyops'
+        }
+        createFlowInst(data).then(resp => {
+          console.log()
+          if (resp.status === 201) {
+            resolve(data)
+            this.$router.go(-1)
+          } else {
+            reject()
+          }
+        })
+      }).then()
+    },
+    createTaskInst() {},
     getBpmnInfo() {
       const query = {
         bpmn_uid: this.bpmn_uid
@@ -67,7 +103,6 @@ export default {
           })
         }
       })
-      console.log('')
     }
   }
 }

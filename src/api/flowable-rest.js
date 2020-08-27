@@ -3,6 +3,18 @@ import request from '@/utils/request'
 const flowableRestUrl = '/flowable-api'
 const auth = { username: 'rest-admin', password: 'test' }
 
+// flowable-rest 通用axios接口
+export function generaFlowable({ url: url, method: method, data: data, params: params }) {
+  return request({
+    baseUrl: flowableRestUrl,
+    url: { url },
+    method: { method },
+    auth,
+    data: { data },
+    params: { params }
+  })
+}
+
 export function createDeployment(data) {
   return request({
     baseURL: flowableRestUrl,
@@ -44,12 +56,12 @@ export function queryTask(data) {
 }
 
 // 根据DeploymentId 获取definitionId
-export function apiGetProcessDefinitions(query) {
+export function apiGetProcessDefinitions(params) {
   return request({
     baseURL: flowableRestUrl,
     url: '/repository/process-definitions',
     method: 'get',
     auth,
-    params: query
+    params
   })
 }

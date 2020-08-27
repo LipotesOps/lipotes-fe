@@ -299,17 +299,10 @@ export default {
         if (resp.status === 200) {
           const definitionId = resp.data.data[0].id
           const flowable_id = this.bpmn_object['flowable_id']
-          if (flowable_id !== '') {
+          if (!(flowable_id === '' || flowable_id === null)) {
             this.$message({
               message: 'already deployed',
-              type: 'warnning'
-            })
-            return
-          }
-          if (flowable_id !== null) {
-            this.$message({
-              message: 'already deployed',
-              type: 'warnning'
+              type: 'warning'
             })
             return
           }

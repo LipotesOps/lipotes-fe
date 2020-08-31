@@ -4,7 +4,7 @@ const flowableRestUrl = '/flowable-api'
 const auth = { username: 'rest-admin', password: 'test' }
 
 // flowable-rest 通用axios接口
-export function generaFlowable({ url: url, method: method, data: data, params: params }) {
+export function generalFlowableApi({ url: url, method: method, data: data, params: params }) {
   return request({
     baseUrl: flowableRestUrl,
     url: { url },

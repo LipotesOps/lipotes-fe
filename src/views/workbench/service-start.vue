@@ -16,7 +16,7 @@
 
 <script>
 import { apiStartProcessInstance } from '@/api/flowable-rest'
-import { fetchBpmn, createFlowInst } from '@/api/itsc-flow'
+import { fetchBpmn, createFlowInst, createTaskInst } from '@/api/itsc-flow'
 import uuid from '@/utils/guid'
 
 export default {
@@ -43,18 +43,18 @@ export default {
             resolve(resp.data)
           } else { reject(resp.err || 'flowable-rest error') }
         })
-      }).then(this.createFlowInstance(), () => {
+      }).then(this.createFlowInstance, () => {
         console.log('failure')
       }).catch((err) => {
         console.log(err || 'promise error')
       })
     },
-    createFlowInstance(respData) {
+    createFlowInstance(flowableProcessInstanceData) {
       return new Promise((resolve, reject) => {
         const data = {
           uid: uuid(),
-          bpmn_uid: respData.id,
-          start_time: respData.startTime,
+          bpmn_uid: flowableProcessInstanceData.id,
+          start_time: flowableProcessInstanceData.startTime,
           start_user_id: 'easyops'
         }
         createFlowInst(data).then(resp => {
@@ -68,7 +68,11 @@ export default {
         })
       }).then()
     },
-    createTaskInst() {},
+    createTaskInstance() {
+      const data = {}
+      createTaskInst(data)
+    },
+    queryTaskInstance() {},
     getBpmnInfo() {
       const query = {
         bpmn_uid: this.bpmn_uid

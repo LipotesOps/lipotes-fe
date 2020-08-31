@@ -1,5 +1,15 @@
 import request from '@/utils/request'
 
+// itsc-flow 通用axios接口
+export function generalApi({ url: url, method: method, data: data, params: params }) {
+  return request({
+    url: { url },
+    method: { method },
+    data: { data },
+    params: { params }
+  })
+}
+
 export function fetchFlows(params) {
   return request({
     url: '/api/flow/',
@@ -64,6 +74,7 @@ export function createFlowInst(data) {
   })
 }
 
+// sync taskInst from flowable
 export function createTaskInst(data) {
   return request({
     url: `/api/task-instance/`,

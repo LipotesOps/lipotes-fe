@@ -38,6 +38,7 @@ export default {
         const data = {
           'processDefinitionId': this.flowableProcessDefinitionId
         }
+        // 启动一个flowable流程实例
         apiStartProcessInstance(data).then(resp => {
           if (resp.status === 201) {
             resolve(resp.data)
@@ -45,7 +46,9 @@ export default {
         })
       }).then(this.createFlowInstance, () => {
         console.log('failure')
-      }).catch((err) => {
+      }).then(this.queryTaskInstance
+      ).then(this.createTaskInst
+      ).catch((err) => {
         console.log(err || 'promise error')
       })
     },

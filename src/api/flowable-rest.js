@@ -25,7 +25,7 @@ export function createDeployment(data) {
   })
 }
 
-export function apiStartProcessInstance(data) {
+export function startProcessInstance(data) {
   return request({
     baseURL: flowableRestUrl,
     url: '/runtime/process-instances',
@@ -45,7 +45,7 @@ export function queryProcessInstance(data) {
   })
 }
 
-export function queryTask(data) {
+export function queryFlowableTask(data) {
   return request({
     baseURL: flowableRestUrl,
     url: '/query/tasks',

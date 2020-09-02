@@ -9,15 +9,15 @@
     </div>
     <div class="service-btn-area">
       <el-button type="info" :plain="true" icon="fa-undo" @click="$router.go(-1)">返回</el-button>
-      <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="startProcessInstancePromise">提交<i class="el-icon-upload el-icon--right" /></el-button>
+      <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="handleStart">提交<i class="el-icon-upload el-icon--right" /></el-button>
     </div>
   </div>
 </template>
 
 <script>
-import { apiStartProcessInstance } from '@/api/flowable-rest'
+import { startProcessInstance, queryFlowableTask } from '@/api/flowable-rest'
 import { fetchBpmn, createFlowInst, createTaskInst } from '@/api/itsc-flow'
-import uuid from '@/utils/guid'
+// import uuid from '@/utils/guid'
 
 export default {
   name: 'Workbench',
@@ -33,30 +33,40 @@ export default {
     this.getBpmnInfo()
   },
   methods: {
-    startProcessInstancePromise() {
+    handleStart() {
+      // step1
+      this.startFlowableProcessInstance()
+        // step2
+        .then(this.createFlowInstance)
+        // step3
+        .then(this.queryTaskInstance)
+        // step4
+        .then(this.createTaskInstance)
+        .then(this.onSuccess)
+        .catch((err) => {
+          console.log(err || 'promise error')
+        })
+    },
+    startFlowableProcessInstance() {
       return new Promise((resolve, reject) => {
         const data = {
           'processDefinitionId': this.flowableProcessDefinitionId
         }
         // 启动一个flowable流程实例
-        apiStartProcessInstance(data).then(resp => {
+        startProcessInstance(data).then(resp => {
           if (resp.status === 201) {
             resolve(resp.data)
           } else { reject(resp.err || 'flowable-rest error') }
         })
-      }).then(this.createFlowInstance, () => {
-        console.log('failure')
-      }).then(this.queryTaskInstance
-      ).then(this.createTaskInst
-      ).catch((err) => {
-        console.log(err || 'promise error')
       })
     },
     createFlowInstance(flowableProcessInstanceData) {
       return new Promise((resolve, reject) => {
         const data = {
-          uid: uuid(),
-          bpmn_uid: flowableProcessInstanceData.id,
+          // flowable instacne id
+          uid: flowableProcessInstanceData.id,
+          // 等于definition id
+          bpmn_uid: flowableProcessInstanceData.processDefinitionId,
           start_time: flowableProcessInstanceData.startTime,
           start_user_id: 'easyops'
         }
@@ -64,18 +74,43 @@ export default {
           console.log()
           if (resp.status === 201) {
             resolve(data)
-            this.$router.go(-1)
           } else {
             reject()
           }
         })
-      }).then()
+      })
     },
-    createTaskInstance() {
-      const data = {}
-      createTaskInst(data)
+    queryTaskInstance(flowInstanceData) {
+      return new Promise((resolve, reject) => {
+        const flowableInstanceId = flowInstanceData.uid
+        const data = {
+          'processInstanceId': flowableInstanceId
+        }
+        queryFlowableTask(data).then(resp => {
+          if (resp.status === 200) {
+            resolve(resp.data)
+          }
+        })
+      })
     },
-    queryTaskInstance() {},
+    createTaskInstance(flowableTaskInstanceData) {
+      console.log(flowableTaskInstanceData)
+      const { id, taskDefinitionKey, name, createTime } = flowableTaskInstanceData.data[0]
+      const data = {
+        uid: id,
+        taskDefinitionKey: taskDefinitionKey,
+        name: name,
+        create_time: createTime
+      }
+      createTaskInst(data).then(resp => {
+        if (resp.status === 200) {
+          console.log('success')
+        }
+      })
+    },
+    onSuccess() {
+      this.$router.go(-1)
+    },
     getBpmnInfo() {
       const query = {
         bpmn_uid: this.bpmn_uid
@@ -86,28 +121,6 @@ export default {
           const flowable_process_definition_id = resp.data[0].flowable_id
           this.flowableProcessDefinitionId = flowable_process_definition_id
           return
-        }
-      })
-    },
-    startProcessInstance() {
-      const data = {
-        'processDefinitionId': this.flowableProcessDefinitionId
-      }
-      apiStartProcessInstance(data).then(resp => {
-        if (resp.status === 201) {
-          console.log('201')
-          const data = {
-            uid: uuid(),
-            bpmn_uid: resp.data.id,
-            start_time: resp.data.startTime,
-            start_user_id: 'easyops'
-          }
-          createFlowInst(data).then(resp => {
-            console.log()
-            if (resp.status === 201) {
-              this.$router.go(-1)
-            }
-          })
         }
       })
     }

@@ -82,3 +82,11 @@ export function createTaskInst(data) {
     data
   })
 }
+
+export function fetchTask(params) {
+  return request({
+    url: '/api/task-instance/',
+    method: 'get',
+    params
+  })
+}

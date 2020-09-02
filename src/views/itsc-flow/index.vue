@@ -45,17 +45,17 @@
       </el-table-column>
       <el-table-column label="分类" width="110px" align="center">
         <template slot-scope="{row}">
-          <el-tag>{{ row.category | categoryFilter(flowCategoryKV) }}</el-tag>
+          <el-tag>{{ row.category_id | categoryFilter(flowCategoryKV) }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="版本" width="110px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.bpmn_uid | versionFilter(bpmnVersionKeyValue) }}</span>
+          <span>{{ row.id | versionFilter(bpmnVersionKeyValue) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="BPMN" width="110px" align="center">
         <template slot-scope="{row}">
-          <router-link :to="'/flow-manage/flow/edit?bpmn_uid='+row.bpmn_uid+'&flow_uid='+row.uid+'&uname='+row.uname">查看/创建</router-link>
+          <router-link :to="'/flow-manage/flow/edit?id='+row.id+'&flow_uid='+row.id+'&uname='+row.uname">查看/创建</router-link>
         </template>
       </el-table-column>
     </el-table>
@@ -72,14 +72,14 @@
         <el-form-item label="Name" prop="uname">
           <el-input v-model="temp.uname" placeholder="Please select" />
         </el-form-item>
-        <el-form-item label="Category" prop="category">
-          <el-select v-model="temp.category" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in flowCategoryOptions" :key="item.uid" :label="item.uname" :value="item.uid" />
+        <el-form-item label="Category" prop="category_id">
+          <el-select v-model="temp.category_id" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in flowCategoryOptions" :key="item.id" :label="item.uname" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item label="BPMN" prop="bpmn_uid">
-          <el-select v-model="temp.bpmn_uid" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in versionOption" :key="item.uid" :label="item.version" :value="item.uid" />
+        <el-form-item label="BPMN" prop="id">
+          <el-select v-model="temp.id" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in versionOption" :key="item.id" :label="item.version" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="Remark">
@@ -134,14 +134,14 @@ export default {
       }
       return statusMap[status]
     },
-    typeFilter(category) {
-      return flowStatusKeyValue[category]
+    typeFilter(category_id) {
+      return flowStatusKeyValue[category_id]
     },
     categoryFilter(type, flowCategoryKeyValue) {
       return flowCategoryKeyValue[type]
     },
-    versionFilter(uid, bpmnVersionKeyValue) {
-      return bpmnVersionKeyValue[uid]
+    versionFilter(id, bpmnVersionKeyValue) {
+      return bpmnVersionKeyValue[id]
     }
   },
   data() {
@@ -169,11 +169,10 @@ export default {
       showReviewer: false,
       temp: {
         id: undefined,
-        uid: '',
         uname: '',
-        category: '',
-        bpmn_uid: '',
-        status: ''
+        category_id: '',
+        status: '',
+        version_id: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -209,7 +208,7 @@ export default {
           if (response.status === 200) {
             this.flowCategoryOptions = response.data
             this.flowCategoryKeyValue = this.flowCategoryOptions.reduce((acc, cur) => {
-              acc[cur.uid] = cur.uname
+              acc[cur.id] = cur.uname
               return acc
             },
             {})
@@ -224,7 +223,7 @@ export default {
           if (response.status === 200) {
             this.bpmnVersionOptions = response.data
             this.bpmnVersionKeyValue = this.bpmnVersionOptions.reduce((acc, cur) => {
-              acc[cur.uid] = cur.version
+              acc[cur.id] = cur.version
               return acc
             },
             {})
@@ -232,10 +231,10 @@ export default {
         }
       )
     },
-    versionOptionFilter(uid) {
+    versionOptionFilter(id) {
       var versionOption = []
       for (const i of this.bpmnVersionOptions) {
-        if (i.flow_uid === uid || i.flow_uid === '') {
+        if (i.flow_uid === id || i.flow_uid === '') {
           versionOption.push(i)
         }
       }
@@ -259,7 +258,7 @@ export default {
     },
     handleDeploy(row) {
       const bpmnData = {
-        bpmn_uid: row.bpmn_uid
+        id: row.id
       }
       fetchBpmn(bpmnData).then(
         response => {
@@ -335,11 +334,10 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        uid: '',
         uname: '',
-        category: '',
-        bpmn_uid: '',
-        status: ''
+        category_id: '',
+        status: '',
+        version_id: ''
       }
     },
     handleCreate() {
@@ -353,8 +351,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.uid = uuid()
-          this.temp.bpmn_uid = 'first'
+          this.temp.id = uuid()
           const tempData = Object.assign({}, this.temp)
           createFlow(tempData).then((response) => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
@@ -375,8 +372,8 @@ export default {
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       this.dialogStatus = 'update'
-      this.versionOption = Object.assign([], this.versionOptionFilter(row.uid))
-      // this.versionOption = this.versionOptionFilter(row.uid)
+      this.versionOption = Object.assign([], this.versionOptionFilter(row.id))
+      // this.versionOption = this.versionOptionFilter(row.id)
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()

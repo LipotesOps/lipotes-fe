@@ -259,7 +259,7 @@ export default {
     },
     handleLaunch(row) {
       const bpmnData = {
-        bpmn_uid: row.bpmn_uid
+        bpmn_uid: row.version_id
       }
       fetchBpmn(bpmnData).then(
         response => {

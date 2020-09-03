@@ -27,7 +27,7 @@
     >
       <el-table-column label="ID" prop="id" sortable="true" align="center" min-width="100">
         <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
+          <span>{{ row.uuid }}</span>
         </template>
       </el-table-column>
       <el-table-column label="流程名称" min-width="150px">
@@ -74,7 +74,7 @@
         </el-form-item>
         <el-form-item label="Category" prop="category_id">
           <el-select v-model="temp.category_id" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in flowCategoryOptions" :key="item.id" :label="item.uname" :value="item.id" />
+            <el-option v-for="item in flowCategoryOptions" :key="item.uuid" :label="item.uname" :value="item.uuid" />
           </el-select>
         </el-form-item>
         <el-form-item label="BPMN" prop="id">
@@ -169,6 +169,7 @@ export default {
       showReviewer: false,
       temp: {
         id: undefined,
+        uuid: '',
         uname: '',
         category_id: '',
         status: '',
@@ -208,7 +209,7 @@ export default {
           if (response.status === 200) {
             this.flowCategoryOptions = response.data
             this.flowCategoryKeyValue = this.flowCategoryOptions.reduce((acc, cur) => {
-              acc[cur.id] = cur.uname
+              acc[cur.uuid] = cur.uname
               return acc
             },
             {})
@@ -234,7 +235,7 @@ export default {
     versionOptionFilter(id) {
       var versionOption = []
       for (const i of this.bpmnVersionOptions) {
-        if (i.flow_uid === id || i.flow_uid === '') {
+        if (i.id === id || i.flow_definition_id === '' || i.flow_definition_id === null) {
           versionOption.push(i)
         }
       }
@@ -334,6 +335,7 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
+        uuid: '',
         uname: '',
         category_id: '',
         status: '',
@@ -351,7 +353,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = uuid()
+          this.temp.uuid = uuid()
           const tempData = Object.assign({}, this.temp)
           createFlow(tempData).then((response) => {
             const index = this.list.findIndex(v => v.id === this.temp.id)

@@ -64,7 +64,7 @@ export default {
 
   computed: {
     isNew() {
-      return this.$route.query.bpmn_uid && this.hasBpmn // 是否新建
+      return this.$route.query.id && this.hasBpmn // 是否新建
     },
     computed_flow_uid() {
       return 'p' + this.$route.query.flow_uid

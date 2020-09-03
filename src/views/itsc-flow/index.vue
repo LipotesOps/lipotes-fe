@@ -257,8 +257,10 @@ export default {
       this.getList()
     },
     handleDeploy(row) {
-      const deployData = {}
-      createDeployment(deployData)
+      const params = { id: row.id }
+      const filename = `${row.uname}.bpmn20.xml`
+      this.getOneBpmn(params, filename)
+        .then()
         // 部署成功
         .then()
         // sync deployment
@@ -266,14 +268,26 @@ export default {
         // sync definition
         .then()
     },
-    getOneBpmn(params) {
+    getOneBpmn(params, filename) {
       return new Promise((resolve, reject) => {
         fetchBpmn(params).then(resp => {
           if (resp.status === 200) {
-            resolve(resp.data)
+            resolve(resp.data, filename)
           }
         })
       })
+    },
+    constructBpmnFile(data, filename) {
+      const bpmn_object = data[0]
+      // const bpmn_id = bpmn_object.id
+      const bpmn_content = bpmn_object.content
+      const deployData = new FormData()
+      // 1.先将字符串转换成Buffer
+      const fileContent = Buffer.from(bpmn_content)
+      var blob = new Blob([fileContent], { type: 'text/xml' })
+      var file = new window.File([blob], filename, { type: 'text/xml' })
+      // 2.补上文件meta信息
+      deployData.append('file', file)
     },
     handleDeploy_(row) {
       const params = {

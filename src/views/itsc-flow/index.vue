@@ -78,8 +78,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="BPMN" prop="id">
-          <el-select v-model="temp.id" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in versionOption" :key="item.id" :label="item.version" :value="item.id" />
+          <el-select v-model="temp.version_id" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in versionOption" :key="item.id" :label="item.version" :value="item.uuid" />
           </el-select>
         </el-form-item>
         <el-form-item label="Remark">

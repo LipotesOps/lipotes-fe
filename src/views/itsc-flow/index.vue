@@ -217,8 +217,7 @@ export default {
         }
       )
     },
-    getBpmn() {
-      const queryData = {}
+    getBpmn(queryData = {}) {
       fetchBpmn(queryData).then(
         response => {
           if (response.status === 200) {
@@ -258,10 +257,29 @@ export default {
       this.getList()
     },
     handleDeploy(row) {
-      const bpmnData = {
+      const deployData = {}
+      createDeployment(deployData)
+        // 部署成功
+        .then()
+        // sync deployment
+        .then()
+        // sync definition
+        .then()
+    },
+    getOneBpmn(params) {
+      return new Promise((resolve, reject) => {
+        fetchBpmn(params).then(resp => {
+          if (resp.status === 200) {
+            resolve(resp.data)
+          }
+        })
+      })
+    },
+    handleDeploy_(row) {
+      const params = {
         id: row.id
       }
-      fetchBpmn(bpmnData).then(
+      fetchBpmn(params).then(
         response => {
           if (response.status === 200) {
             this.bpmn_object = response.data[0]

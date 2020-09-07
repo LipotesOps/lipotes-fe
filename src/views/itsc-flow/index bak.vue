@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-select v-model="listQuery.type" placeholder="Type" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in flowCategoryOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />
+        <el-option v-for="item in flowStatusOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         Search
@@ -32,6 +32,7 @@
       </el-table-column>
       <el-table-column label="流程名称" min-width="150px">
         <template slot-scope="{row}">
+          <el-tag>{{ row.status | typeFilter }}</el-tag>
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
@@ -44,7 +45,7 @@
       </el-table-column>
       <el-table-column label="分类" width="110px" align="center">
         <template slot-scope="{row}">
-          <el-tag>{{ row.category | categoryFilter }}</el-tag>
+          <el-tag>{{ row.category_id | categoryFilter(flowCategoryKV) }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="版本" width="110px" align="center">
@@ -54,30 +55,35 @@
       </el-table-column>
       <el-table-column label="BPMN" width="110px" align="center">
         <template slot-scope="{row}">
-          <router-link :to="'/flow-manage/flow/edit?id='+row.id+'&uuid='+row.uuid+'&name='+row.name">查看/创建</router-link>
+          <router-link :to="'/flow-manage/flow/edit?id='+row.id+'&flow_uid='+row.id+'&uname='+row.uname">查看/创建</router-link>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getFlow" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getFlows" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="Name" prop="name">
-          <el-input v-model="rowTemp.name" placeholder="Please select" />
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="Status" prop="status">
+          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in flowStatusOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="Name" prop="uname">
+          <el-input v-model="temp.uname" placeholder="Please select" />
         </el-form-item>
         <el-form-item label="Category" prop="category_id">
-          <el-select v-model="rowTemp.category" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in flowCategoryOptions" :key="item.uuid" :label="item.name" :value="item.uuid" />
+          <el-select v-model="temp.category_id" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in flowCategoryOptions" :key="item.uuid" :label="item.uname" :value="item.uuid" />
           </el-select>
         </el-form-item>
         <el-form-item label="BPMN" prop="id">
-          <el-select v-model="rowTemp.bpmn" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in versionOption" :key="item.id" :label="item.tag" :value="item.uuid" />
+          <el-select v-model="temp.version_id" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in versionOption" :key="item.id" :label="item.version" :value="item.uuid" />
           </el-select>
         </el-form-item>
         <el-form-item label="Remark">
-          <el-input v-model="rowTemp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
+          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -101,6 +107,19 @@ import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
+const flowStatusOptions = [
+  { key: 'draft', display_name: '草稿' },
+  { key: 'online', display_name: '上线' },
+  { key: 'offline', display_name: '下线' },
+  { key: 'del', display_name: '删除' }
+]
+
+// arr to obj, such as { CN : "China", US : "USA" }
+const flowStatusKeyValue = flowStatusOptions.reduce((acc, cur) => {
+  acc[cur.key] = cur.display_name
+  return acc
+}, {})
+
 export default {
   name: 'FlowList',
   components: { Pagination },
@@ -114,15 +133,14 @@ export default {
       }
       return statusMap[status]
     },
+    typeFilter(category_id) {
+      return flowStatusKeyValue[category_id]
+    },
+    categoryFilter(type, flowCategoryKeyValue) {
+      return flowCategoryKeyValue[type]
+    },
     versionFilter(id, bpmnVersionKeyValue) {
       return bpmnVersionKeyValue[id]
-    },
-    categoryFilter(category) {
-      if (category) {
-        return category.name
-      }
-
-      return '无'
     }
   },
   data() {
@@ -130,6 +148,7 @@ export default {
       versionOption: [],
       bpmnVersionKeyValue: {},
       bpmnVersionOptions: [],
+      flowCategoryKeyValue: {},
       flowCategoryOptions: [],
       tableKey: 0,
       flows: null,
@@ -143,15 +162,17 @@ export default {
         type: undefined,
         sort: '+id'
       },
+      flowStatusOptions,
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
-      rowTemp: {
+      temp: {
         id: undefined,
         uuid: '',
-        name: '',
-        category: '',
-        bpmn: ''
+        uname: '',
+        category_id: '',
+        status: '',
+        version_id: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -170,12 +191,12 @@ export default {
     }
   },
   computed: {
-
+    flowCategoryKV: function() {
+      return this.flowCategoryKeyValue
+    }
   },
   created() {
-    this.getFlow()
-    this.getCategory()
-    this.getBpmn()
+    this.getFlows()
   },
   methods: {
     getCategory() {
@@ -183,7 +204,12 @@ export default {
       fetchCategory(queryData).then(
         response => {
           if (response.status === 200) {
-            this.flowCategoryOptions = response.data.results
+            this.flowCategoryOptions = response.data
+            this.flowCategoryKeyValue = this.flowCategoryOptions.reduce((acc, cur) => {
+              acc[cur.uuid] = cur.uname
+              return acc
+            },
+            {})
           }
         }
       )
@@ -192,9 +218,9 @@ export default {
       fetchBpmn(queryData).then(
         response => {
           if (response.status === 200) {
-            this.bpmnVersionOptions = response.data.results
+            this.bpmnVersionOptions = response.data
             this.bpmnVersionKeyValue = this.bpmnVersionOptions.reduce((acc, cur) => {
-              acc[cur.id] = cur.tag
+              acc[cur.id] = cur.version
               return acc
             },
             {})
@@ -211,7 +237,7 @@ export default {
       }
       return versionOption
     },
-    getFlow() {
+    getFlows() {
       this.listLoading = true
       fetchFlows(this.listQuery).then(response => {
         this.flows = response.data.results
@@ -225,7 +251,7 @@ export default {
     },
     handleFilter() {
       this.listQuery.page = 1
-      this.getFlow()
+      this.getFlows()
     },
     handleDeploy(row) {
       const deployData = {}
@@ -256,7 +282,7 @@ export default {
             this.bpmn_object = response.data[0]
             const bpmn_id = response.data[0].id
             const bpmn_content = response.data[0].content
-            const filename = `${row.name}.bpmn20.xml`
+            const filename = `${row.uname}.bpmn20.xml`
             const deployData = new FormData()
             // 1.先将字符串转换成Buffer
             const fileContent = Buffer.from(bpmn_content)
@@ -322,12 +348,13 @@ export default {
       this.handleFilter()
     },
     resetTemp() {
-      this.rowTemp = {
+      this.temp = {
         id: undefined,
         uuid: '',
-        name: '',
-        category: '',
-        bpmn: ''
+        uname: '',
+        category_id: '',
+        status: '',
+        version_id: ''
       }
     },
     handleCreate() {
@@ -341,11 +368,11 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.rowTemp.uuid = uuid()
-          const tempData = Object.assign({}, this.rowTemp)
+          this.temp.uuid = uuid()
+          const tempData = Object.assign({}, this.temp)
           createFlow(tempData).then((response) => {
-            const index = this.flows.findIndex(v => v.id === this.rowTemp.id)
-            this.flows.splice(index, 1, this.rowTemp)
+            const index = this.flows.findIndex(v => v.id === this.temp.id)
+            this.flows.splice(index, 1, this.temp)
             this.dialogFormVisible = false
             if (response.status === 200) {
               this.$notify({
@@ -360,9 +387,10 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.rowTemp = Object.assign({}, row) // copy obj
+      this.temp = Object.assign({}, row) // copy obj
       this.dialogStatus = 'update'
       this.versionOption = Object.assign([], this.versionOptionFilter(row.id))
+      // this.versionOption = this.versionOptionFilter(row.id)
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
@@ -371,11 +399,11 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({}, this.rowTemp)
+          const tempData = Object.assign({}, this.temp)
           const id = tempData.id
           updateFlow(id, tempData).then((response) => {
-            const index = this.flows.findIndex(v => v.id === this.rowTemp.id)
-            this.flows.splice(index, 1, this.rowTemp)
+            const index = this.flows.findIndex(v => v.id === this.temp.id)
+            this.flows.splice(index, 1, this.temp)
             this.dialogFormVisible = false
             if (response.status === 200) {
               this.$notify({

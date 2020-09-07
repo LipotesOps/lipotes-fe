@@ -15,14 +15,14 @@
       <el-color-picker v-model="color" @active-change="colorChange" />
     </div>
     <div class="btn-area">
-      <el-select v-model="selectedVersion" placeholder="Version" clearable class="filter-item" popper-class="select-option" style="width: 130px; margin-right: 11px">
+      <el-select v-model="selectedVersion" placeholder="Tag" clearable class="filter-item" popper-class="select-option" style="width: 130px; margin-right: 11px">
         <!-- <el-option v-for="item in flowStatusOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" /> -->
       </el-select>
       <el-button type="info" :plain="true" icon="fa-undo" @click="$router.go(-1)">返回</el-button>
-      <el-tooltip v-if="!isNew" content="新建并归属至流程" placement="top">
-        <el-button type="warning" icon="check" :loading="committing" class="save-btn" @click="createXML">新建<i class="el-icon-document-add el-icon--right" /></el-button>
+      <el-tooltip v-if="!isExist" content="新建并归属至流程" placement="top">
+        <el-button type="warning" icon="check" :loading="committing" class="save-btn" @click="createBPMN">新建<i class="el-icon-document-add el-icon--right" /></el-button>
       </el-tooltip>
-      <el-button v-if="isNew" type="success" icon="check" :loading="committing" class="save-btn" @click="updateXML">更新<i class="el-icon-upload el-icon--right" /></el-button>
+      <el-button v-if="isExist" type="success" icon="check" :loading="committing" class="save-btn" @click="updateBpmnXML">更新<i class="el-icon-upload el-icon--right" /></el-button>
     </div>
     <footer class="credit">
       <img :src="logoSrc">
@@ -33,7 +33,6 @@
 
 <script>
 import newBpmnXML from './resources/newDiagram'
-import uuid from '@/utils/guid'
 import BpmnModeler from 'bpmn-js/lib/Modeler'
 import propertiesPanelModule from 'bpmn-js-properties-panel'
 import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/camunda'
@@ -49,31 +48,30 @@ import { fetchBpmn, updateBpmn, createBpmn } from '@/api/itsc-flow'
 export default {
   data() {
     return {
+      hasBpmn: false,
+      bpmnObj: {},
       selectedVersion: '',
-      hasBpmn: true,
       color: null,
       element: {},
       circle: true,
       newScale: 1,
-      bpmn_id: null,
+      flowUuid: null,
+      flowName: null,
       bpmnModeler: null,
       committing: false,
       logoSrc: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAAA0CAMAAADypuvZAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADBQTFRFiMte9PrwldFwfcZPqtqN0+zEyOe1XLgjvuKncsJAZ70y6fXh3vDT////UrQV////G2zN+AAAABB0Uk5T////////////////////AOAjXRkAAAHDSURBVHjavJZJkoUgDEBJmAX8979tM8u3E6x20VlYJfFFMoL4vBDxATxZcakIOJTWSmxvKWVIkJ8jHvlRv1F2LFrVISCZI+tCtQx+XfewgVTfyY3plPiQEAzI3zWy+kR6NBhFBYeBuscJLOUuA2WVLpCjVIaFzrNQZArxAZKUQm6gsj37L9Cb7dnIBUKxENaaMJQqMpDXvSL+ktxdGRm2IsKgJGGPg7atwUG5CcFUEuSv+CwQqizTrvDTNXdMU2bMiDWZd8d7QIySWVRsb2vBBioxOFt4OinPBapL+neAb5KL5IJ8szOza2/DYoipUCx+CjO0Bpsv0V6mktNZ+k8rlABlWG0FrOpKYVo8DT3dBeLEjUBAj7moDogVii7nSS9QzZnFcOVBp1g2PyBQ3Vr5aIapN91VJy33HTJLC1iX2FY6F8gRdaAeIEfVONgtFCzZTmoLEdOjBDfsIOA6128gw3eu1shAajdZNAORxuQDJN5A5PbEG6gNIu24QJD5iNyRMZIr6bsHbCtCU/OaOaSvgkUyDMdDa1BXGf5HJ1To+/Ym6mCKT02Y+/Sa126ZKyd3jxhzpc1r8zVL6YM1Qy/kR4ABAFJ6iQUnivhAAAAAAElFTkSuQmCC'
     }
   },
-
   computed: {
-    isNew() {
-      return this.$route.query.id && this.hasBpmn // 是否新建
-    },
-    computed_flow_uid() {
-      return 'p' + this.$route.query.flow_uid
-    },
-    computed_flow_uname() {
-      return this.$route.query.uname
+    // 计算（true:存在 false:不存在）
+    isExist() {
+      return this.hasBpmn
     }
   },
-
+  created() {
+    this.flowUuid = this.$route.query.uuid
+    this.flowName = this.$route.query.name
+  },
   mounted() {
     const customTranslate = {
       translate: ['value', require('./customTranslate/customTranslate')]
@@ -116,8 +114,7 @@ export default {
       // 监听节点选择变化
       this.bpmnModeler.on('selection.changed', e => {
         // 更新process基本信息，id + name，保证一致
-        // this.bpmnModeler._definitions.rootElements[0].id = this.computed_flow_uid
-        this.bpmnModeler._definitions.rootElements[0].name = this.computed_flow_uname
+        this.bpmnModeler._definitions.rootElements[0].name = this.flowName
         const element = e.newSelection[0]
         this.element = element
         // console.log(this.element)
@@ -167,55 +164,57 @@ export default {
       // document.getElementsByClassName('bjs-powered-by')[0].outerHTML = ''
       // this.customizeEditor()
     },
-
     createDiagram() {
-      const queryDate = {
-        bpmn_uid: this.$route.query.bpmn_uid,
-        flow_uid: this.$route.query.flow_uid
-      }
-
-      //  ff
-      fetchBpmn(queryDate).then(resp => {
+      const query = { flow: this.flowUuid }
+      fetchBpmn(query).then(resp => {
         if (resp.status === 200) {
+          const results = resp.data.results
           // 将字符串转换成图显示出来
-          if (resp.data.length === 0) {
+          if (results.length === 0) {
             this.$notify({
-              title: 'Failed',
-              message: 'FetchBpmn Failed!',
-              type: 'warning',
+              title: '请先绑定或创建BPMN',
+              message: 'Fetch None Bpmn!',
+              type: 'info',
               duration: 2000
             })
+            // 不存在
             this.hasBpmn = false
+            // 新建
             const content = newBpmnXML
-            this.uid = uuid('B')
-            this.flow_uid = this.$route.query.flow_uid
             this.importXML(content)
             return
           }
-          const content = resp.data[0].content
-          this.bpmn_id = resp.data[0].id
-          this.uid = resp.data[0].uid
-          this.flow_uid = resp.data[0].flow_uid
-          this.importXML(content)
-          return
+          if (results.length >= 1) {
+            this.bpmnObj = Object.assign({}, results[0])
+            // 存在
+            this.hasBpmn = true
+            // 更新
+            const content = this.bpmnObj.content
+            this.bpmnId = this.bpmnObj.id
+            this.importXML(content)
+            return
+          }
         }
-      },
+      })
       errResp => {
+        this.$notify({
+          title: 'server error!',
+          message: '请检查网络或联系管理员！',
+          type: 'info',
+          duration: 2000
+        })
         return (errResp.response)
       }
-      )
     },
-
-    async createXML() {
+    // post bpmn
+    async createBPMN() {
       try {
         const result = await this.bpmnModeler.saveXML({ format: true })
         const { xml } = result
 
         const postData = {
-          'uid': this.uid,
-          'flow_uid': this.flow_uid,
-          'content': xml,
-          'version': '1.0.5'
+          'flow': this.flowUuid,
+          'content': xml
         }
         this.committing = true
         createBpmn(postData).then((res) => {
@@ -232,21 +231,19 @@ export default {
         console.log(err)
       }
     },
-
-    async updateXML() {
+    // put bpmn
+    async updateBpmnXML() {
       try {
         const result = await this.bpmnModeler.saveXML({ format: true })
         const { xml } = result
 
-        const id = this.bpmn_id
-        const postData = {
-          'uid': this.uid,
-          'flow_uid': this.$route.query.flow_uid,
-          'content': xml,
-          'version': '1.0.5'
+        const id = this.bpmnId
+        const updateData = {
+          'flow': this.flowUuid,
+          'content': xml
         }
         this.committing = true
-        updateBpmn(id, postData).then((res) => {
+        updateBpmn(id, updateData).then((res) => {
           if (res.status === 200 || res.status === 201) {
             this.$message.success('保存成功！')
             this.$router.replace('/flow-manage/flow')
@@ -260,7 +257,6 @@ export default {
         console.log(err)
       }
     },
-
     // 实时保存
     async saveBmap() {
       const vm = this
@@ -320,7 +316,7 @@ export default {
         default:
           break
       }
-      const reName = name || `${this.computed_flow_uname}.${dataTrack}`
+      const reName = name || `${this.flowName}.${dataTrack}`
       a.setAttribute(
         'href',
         `data:application/bpmn20-xml;charset=UTF-8,${encodeURIComponent(data)}`

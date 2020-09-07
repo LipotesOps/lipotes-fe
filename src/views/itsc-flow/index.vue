@@ -25,29 +25,29 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="ID" prop="id" sortable="true" align="center" min-width="100">
+      <el-table-column label="ID" prop="id" sortable="true" align="center" min-width="110">
         <template slot-scope="{row}">
           <span>{{ row.uuid }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="流程名称" min-width="150px">
+      <el-table-column label="流程名称" min-width="100">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="200" class-name="small-padding fixed-width">
+      <el-table-column label="Actions" align="center" min-width="50" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button size="mini" type="success" @click="handleDeploy(row)">
             Deploy
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="分类" width="110px" align="center">
+      <el-table-column label="分类" align="center" min-width="50">
         <template slot-scope="{row}">
           <el-tag>{{ row.category | categoryFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="版本" width="110px" align="center">
+      <el-table-column label="版本" align="center" min-width="50">
         <template slot-scope="{row}">
           <span>{{ row.bpmn | bpmnFilter }}</span>
         </template>
@@ -127,6 +127,7 @@ export default {
       return '未绑定'
     }
   },
+  inject: ['reload'],
   data() {
     return {
       bpmnTagArray: [],
@@ -354,6 +355,7 @@ export default {
                 type: 'success',
                 duration: 2000
               })
+              this.reload()
             }
           })
         }
@@ -364,7 +366,12 @@ export default {
       const query = { flow: row.uuid }
       this.getBpmn(query)
       this.rowTemp = Object.assign({}, row) // copy obj
-      // this.rowTemp.category = row.category.uuid
+      if (row.category !== null) {
+        this.rowTemp.category = row.category.uuid
+      }
+      if (row.bpmn !== null) {
+        this.rowTemp.bpmn = row.bpmn.uuid
+      }
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -387,6 +394,7 @@ export default {
                 type: 'success',
                 duration: 2000
               })
+              this.reload()
             }
           })
         }

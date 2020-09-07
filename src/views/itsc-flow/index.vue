@@ -47,7 +47,7 @@
           <el-tag>{{ row.category | categoryFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="版本" align="center" min-width="50">
+      <el-table-column label="Rev." align="center" min-width="50">
         <template slot-scope="{row}">
           <span>{{ row.bpmn | bpmnFilter }}</span>
         </template>

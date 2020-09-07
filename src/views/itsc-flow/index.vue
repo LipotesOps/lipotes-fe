@@ -49,7 +49,7 @@
       </el-table-column>
       <el-table-column label="版本" width="110px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.id | versionFilter(bpmnVersionKeyValue) }}</span>
+          <span>{{ row.bpmn | bpmnFilter }}</span>
         </template>
       </el-table-column>
       <el-table-column label="BPMN" width="110px" align="center">
@@ -66,14 +66,14 @@
         <el-form-item label="Name" prop="name">
           <el-input v-model="rowTemp.name" placeholder="Please select" />
         </el-form-item>
-        <el-form-item label="Category" prop="category_id">
-          <el-select v-model="rowTemp.category" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in flowCategoryOptions" :key="item.uuid" :label="item.name" :value="item.uuid" />
+        <el-form-item label="Category" prop="id">
+          <el-select v-model="rowTemp.category" class="filter-item" placeholder="Please select" clearable>
+            <el-option v-for="item in flowCategoryOptions" :key="item.id" :label="item.name" :value="item.uuid" />
           </el-select>
         </el-form-item>
         <el-form-item label="BPMN" prop="id">
-          <el-select v-model="rowTemp.bpmn" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in versionOption" :key="item.id" :label="item.tag" :value="item.uuid" />
+          <el-select v-model="rowTemp.bpmn" class="filter-item" placeholder="Please select" clearable>
+            <el-option v-for="item in bpmnTagArray" :key="item.id" :label="item.tag" :value="item.uuid" />
           </el-select>
         </el-form-item>
         <el-form-item label="Remark">
@@ -114,22 +114,22 @@ export default {
       }
       return statusMap[status]
     },
-    versionFilter(id, bpmnVersionKeyValue) {
-      return bpmnVersionKeyValue[id]
-    },
     categoryFilter(category) {
       if (category) {
         return category.name
       }
-
-      return '无'
+      return '未分类'
+    },
+    bpmnFilter(bpmn) {
+      if (bpmn) {
+        return bpmn.tag
+      }
+      return '未绑定'
     }
   },
   data() {
     return {
-      versionOption: [],
-      bpmnVersionKeyValue: {},
-      bpmnVersionOptions: [],
+      bpmnTagArray: [],
       flowCategoryOptions: [],
       tableKey: 0,
       flows: null,
@@ -175,7 +175,6 @@ export default {
   created() {
     this.getFlow()
     this.getCategory()
-    this.getBpmn()
   },
   methods: {
     getCategory() {
@@ -189,27 +188,14 @@ export default {
       )
     },
     getBpmn(queryData = {}) {
+      this.bpmnTagArray = []
       fetchBpmn(queryData).then(
         response => {
           if (response.status === 200) {
-            this.bpmnVersionOptions = response.data.results
-            this.bpmnVersionKeyValue = this.bpmnVersionOptions.reduce((acc, cur) => {
-              acc[cur.id] = cur.tag
-              return acc
-            },
-            {})
+            this.bpmnTagArray = response.data.results
           }
         }
       )
-    },
-    versionOptionFilter(id) {
-      var versionOption = []
-      for (const i of this.bpmnVersionOptions) {
-        if (i.id === id || i.flow_definition_id === '' || i.flow_definition_id === null) {
-          versionOption.push(i)
-        }
-      }
-      return versionOption
     },
     getFlow() {
       this.listLoading = true
@@ -374,9 +360,12 @@ export default {
       })
     },
     handleUpdate(row) {
+      // get bpmns abouted
+      const query = { flow: row.uuid }
+      this.getBpmn(query)
       this.rowTemp = Object.assign({}, row) // copy obj
+      // this.rowTemp.category = row.category.uuid
       this.dialogStatus = 'update'
-      this.versionOption = Object.assign([], this.versionOptionFilter(row.id))
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()

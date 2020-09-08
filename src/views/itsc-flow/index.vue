@@ -380,7 +380,7 @@ export default {
             const index = this.flows.findIndex(v => v.id === this.rowTemp.id)
             this.flows.splice(index, 1, this.rowTemp)
             this.dialogFormVisible = false
-            if (response.status === 200) {
+            if (response.status === 201) {
               this.$notify({
                 title: 'Success',
                 message: 'Create Successfully',

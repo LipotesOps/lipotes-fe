@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { startProcessInstance, queryFlowableTask } from '@/api/flowable-rest'
+import { startFlowableProcessInstance, queryFlowableTask } from '@/api/flowable-rest'
 import { fetchFlow, createFlowInst, createTaskInst } from '@/api/itsc-flow'
 // import uuid from '@/utils/guid'
 
@@ -53,7 +53,7 @@ export default {
           'processDefinitionId': this.flowableProcessDefinitionId
         }
         // 启动一个flowable流程实例
-        startProcessInstance(data).then(resp => {
+        startFlowableProcessInstance(data).then(resp => {
           if (resp.status === 201) {
             resolve(resp.data)
           } else { reject(resp.err || 'flowable-rest error') }
@@ -80,7 +80,7 @@ export default {
     },
     queryTaskInstance(flowInstanceData) {
       return new Promise((resolve, reject) => {
-        const flowableInstanceId = flowInstanceData.uid
+        const flowableInstanceId = flowInstanceData.flowable_process_instance_id
         const data = {
           'processInstanceId': flowableInstanceId
         }

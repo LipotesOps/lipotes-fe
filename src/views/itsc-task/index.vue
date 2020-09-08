@@ -24,7 +24,7 @@
     >
       <el-table-column label="ID" prop="uid" sortable="true" align="center" min-width="50px">
         <template slot-scope="{row}">
-          <span>{{ row.uid }}</span>
+          <span>{{ row.uuid }}</span>
         </template>
       </el-table-column>
       <el-table-column label="节点名称" min-width="100px">
@@ -35,19 +35,19 @@
       </el-table-column>
       <el-table-column label="Actions" align="center" width="200" class-name="small-padding">
         <template slot-scope="{row}">
-          <el-button size="mini" type="success" @click="handleLaunch(row)">
+          <el-button size="mini" type="success" @click="handleAudit(row)">
             审批
           </el-button>
         </template>
       </el-table-column>
       <el-table-column label="类型" width="110px" align="center">
         <template slot-scope="{row}">
-          <el-tag>{{ row.category | categoryFilter(flowCategoryKV) }}</el-tag>
+          <el-tag>{{ row.category | categoryFilter }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="流程版本" width="110px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.online_bpmn_key | versionFilter(bpmnVersionKeyValue) }}</span>
+          <span>{{ row.online_bpmn_key }}</span>
         </template>
       </el-table-column>
       <el-table-column label="BPMN" width="110px" align="center">
@@ -57,14 +57,13 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getTask" />
 
   </div>
 </template>
 
 <script>
-import { fetchCategory, fetchBpmn, fetchTask } from '@/api/itsc-flow'
-import { startProcessInstance } from '@/api/flowable-rest'
+import { fetchTask } from '@/api/itsc-flow'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -76,43 +75,18 @@ const flowStatusOptions = [
   { key: 'del', display_name: '删除' }
 ]
 
-// arr to obj, such as { CN : "China", US : "USA" }
-const flowStatusKeyValue = flowStatusOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-},
-{})
-
 export default {
-  name: 'FlowList',
+  name: 'TaskList',
   components: { Pagination },
   directives: { waves },
   filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    },
-    typeFilter(category) {
-      return flowStatusKeyValue[category]
-    },
-    categoryFilter(type, flowCategoryKeyValue) {
-      return flowCategoryKeyValue[type]
-    },
-    versionFilter(uniq_key, bpmnVersionKeyValue) {
-      return bpmnVersionKeyValue[uniq_key]
+    categoryFilter(type) {
+      return type
     }
   },
   data() {
     return {
-      versionOption: [],
       bpmnVersionKeyValue: {},
-      bpmnVersionOptions: [],
-      flowCategoryKeyValue: {},
-      flowCategoryOptions: [],
       tableKey: 0,
       list: null,
       total: 0,
@@ -146,47 +120,12 @@ export default {
     }
   },
   computed: {
-    flowCategoryKV: function() {
-      return this.flowCategoryKeyValue
-    }
   },
   created() {
-    this.getBpmn()
-    this.getCategory()
-    this.getList()
+    this.getTask()
   },
   methods: {
-    getCategory() {
-      const queryData = {}
-      fetchCategory(queryData).then(
-        response => {
-          if (response.status === 200) {
-            this.flowCategoryOptions = response.data
-            this.flowCategoryKeyValue = this.flowCategoryOptions.reduce((acc, cur) => {
-              acc[cur.uid] = cur.uname
-              return acc
-            },
-            {})
-          }
-        }
-      )
-    },
-    getBpmn() {
-      const queryData = {}
-      fetchBpmn(queryData).then(
-        response => {
-          if (response.status === 200) {
-            this.bpmnVersionOptions = response.data
-            this.bpmnVersionKeyValue = this.bpmnVersionOptions.reduce((acc, cur) => {
-              acc[cur.uniq_key] = cur.version
-              return acc
-            },
-            {})
-          }
-        }
-      )
-    },
-    getList() {
+    getTask() {
       this.listLoading = true
       fetchTask({}).then(response => {
         this.list = response.data.results
@@ -200,31 +139,9 @@ export default {
     },
     handleFilter() {
       this.listQuery.page = 1
-      this.getList()
+      this.getTask()
     },
-    handleLaunch(row) {
-      const bpmnData = {
-        bpmn_uniq_key: row.online_bpmn_key
-      }
-      fetchBpmn(bpmnData).then(
-        response => {
-          if (response.status === 200) {
-            const launchData = { processDefinitionKey: row.uniq_key }
-
-            startProcessInstance(launchData).then(
-              resp => {
-                if (resp.status === 201) {
-                  console.log(resp)
-                  this.$message({
-                    message: 'launch success',
-                    type: 'success'
-                  })
-                }
-              }
-            )
-          }
-        }
-      )
+    handleAudit(row) {
     },
     sortChange(data) {
       const { prop, order } = data

@@ -101,7 +101,7 @@
 
 <script>
 import { fetchFlows, updateFlow, createFlow, fetchCategory, fetchBpmn, updateBpmn } from '@/api/itsc-flow'
-import { createDeployment, apiGetProcessDefinitions } from '@/api/flowable-rest'
+import { createDeployment, listProcessDefinitions } from '@/api/flowable-rest'
 import uuid from '@/utils/guid'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -310,7 +310,7 @@ export default {
       const queryData = {
         deploymentId: deploymentId
       }
-      apiGetProcessDefinitions(queryData).then(resp => {
+      listProcessDefinitions(queryData).then(resp => {
         if (resp.status === 200) {
           const definitionId = resp.data.data[0].id
           const flowable_id = this.bpmn_object['flowable_id']

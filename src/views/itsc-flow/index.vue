@@ -95,7 +95,7 @@
 
 <script>
 import { fetchFlows, updateFlow, createFlow, fetchCategory, fetchBpmn, updateBpmn } from '@/api/itsc-flow'
-import { createDeployment, apiGetProcessDefinitions } from '@/api/flowable-rest'
+import { createDeployment, listProcessDefinitions } from '@/api/flowable-rest'
 import uuid from '@/utils/guid'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -215,37 +215,69 @@ export default {
       this.getFlow()
     },
     handleDeploy(row) {
-      const params = { id: row.id }
-      const filename = `${row.uname}.bpmn20.xml`
-      this.getOneBpmn(params, filename)
-        .then()
-        // 部署成功
-        .then()
-        // sync deployment
-        .then()
-        // sync definition
-        .then()
+      this.rowTemporary = row
+      this.constructBpmnFile(row)
+        // 部署
+        .then(this.makeDeployment)
+        // get flowable definition
+        .then(this.getFlowableProcessDefinition)
+        // sync flowable definition
+        .then(this.syncProcessDefinition)
     },
-    getOneBpmn(params, filename) {
+    constructBpmnFile(row) {
       return new Promise((resolve, reject) => {
-        fetchBpmn(params).then(resp => {
+        // 构建bpmnFile
+        const filename = `${row.name}.bpmn20.xml`
+        const content = row.bpmn.content
+        const deployData = new FormData()
+        // 1.先将字符串转换成Buffer
+        const fileContent = Buffer.from(content)
+        var blob = new Blob([fileContent], { type: 'text/xml' })
+        var file = new window.File([blob], filename, { type: 'text/xml' })
+        // 2.补上文件meta信息
+        deployData.append('file', file)
+        resolve(deployData)
+      })
+    },
+    makeDeployment(deployData) {
+      return new Promise((resolve, reject) => {
+        createDeployment(deployData).then(
+          resp => {
+            if (resp.status === 201) {
+            // const deploymentId = resp.data.id
+            // this.getProcessDefinitionId(bpmn_id, deploymentId)
+              this.$message({
+                message: 'flowable deploy success',
+                type: 'success'
+              })
+              resolve(resp.data)
+            }
+          }
+        )
+      })
+    },
+    getFlowableProcessDefinition(deploymentData) {
+      return new Promise((resolve, reject) => {
+        const deploymentId = deploymentData.id
+        const query = { deploymentId: deploymentId }
+        listProcessDefinitions(query).then(resp => {
           if (resp.status === 200) {
-            resolve(resp.data, filename)
+            const definitionInfo = resp.data.data[0]
+            resolve(definitionInfo)
           }
         })
       })
     },
-    constructBpmnFile(data, filename) {
-      const bpmn_object = data[0]
-      // const bpmn_id = bpmn_object.id
-      const bpmn_content = bpmn_object.content
-      const deployData = new FormData()
-      // 1.先将字符串转换成Buffer
-      const fileContent = Buffer.from(bpmn_content)
-      var blob = new Blob([fileContent], { type: 'text/xml' })
-      var file = new window.File([blob], filename, { type: 'text/xml' })
-      // 2.补上文件meta信息
-      deployData.append('file', file)
+    syncProcessDefinition(definitionInfo) {
+      console.log(this.rowTemporary)
+      const bpmnObject = this.rowTemporary.bpmn
+      const id = bpmnObject.id
+      bpmnObject.flowable_process_definition_id = definitionInfo.id
+      updateBpmn(id, bpmnObject).then(resp => {
+        if (resp.status === 200) {
+          console.log(resp)
+        }
+      })
     },
     handleDeploy_(row) {
       const params = {
@@ -285,7 +317,7 @@ export default {
       const queryData = {
         deploymentId: deploymentId
       }
-      apiGetProcessDefinitions(queryData).then(resp => {
+      listProcessDefinitions(queryData).then(resp => {
         if (resp.status === 200) {
           const definitionId = resp.data.data[0].id
           const flowable_id = this.bpmn_object['flowable_id']

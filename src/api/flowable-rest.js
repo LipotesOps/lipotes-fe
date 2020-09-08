@@ -56,7 +56,7 @@ export function queryFlowableTask(data) {
 }
 
 // 根据DeploymentId 获取definitionId
-export function apiGetProcessDefinitions(params) {
+export function listProcessDefinitions(params) {
   return request({
     baseURL: flowableRestUrl,
     url: '/repository/process-definitions',

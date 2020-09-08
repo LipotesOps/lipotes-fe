@@ -10,7 +10,7 @@ export function generalApi({ url: url, method: method, data: data, params: param
   })
 }
 
-export function fetchFlows(params) {
+export function fetchFlow(params) {
   return request({
     url: '/api/flow/',
     method: 'get',

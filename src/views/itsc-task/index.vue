@@ -33,7 +33,7 @@
           <span class="link-type" @click="handleUpdate(row)">{{ row.uniq_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="200" class-name="small-padding fixed-width">
+      <el-table-column label="Actions" align="center" width="200" class-name="small-padding">
         <template slot-scope="{row}">
           <el-button size="mini" type="success" @click="handleLaunch(row)">
             审批

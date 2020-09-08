@@ -16,7 +16,7 @@
 
 <script>
 import { startProcessInstance, queryFlowableTask } from '@/api/flowable-rest'
-import { fetchBpmn, createFlowInst, createTaskInst } from '@/api/itsc-flow'
+import { fetchFlow, createFlowInst, createTaskInst } from '@/api/itsc-flow'
 // import uuid from '@/utils/guid'
 
 export default {
@@ -29,7 +29,7 @@ export default {
     }
   },
   created() {
-    this.bpmn_uid = this.$route.params.bpmn_uid
+    this.flow_uuid = this.$route.params.flow_uuid
     this.getBpmnInfo()
   },
   methods: {
@@ -64,9 +64,7 @@ export default {
       return new Promise((resolve, reject) => {
         const data = {
           // flowable instacne id
-          uid: flowableProcessInstanceData.id,
-          // 等于definition id
-          bpmn_uid: flowableProcessInstanceData.processDefinitionId,
+          flowable_process_instance_id: flowableProcessInstanceData.id,
           start_time: flowableProcessInstanceData.startTime,
           start_user_id: 'easyops'
         }
@@ -97,8 +95,8 @@ export default {
       console.log(flowableTaskInstanceData)
       const { id, taskDefinitionKey, name, createTime } = flowableTaskInstanceData.data[0]
       const data = {
-        uid: id,
-        taskDefinitionKey: taskDefinitionKey,
+        flowable_task_instance_id: id,
+        task_definition_key: taskDefinitionKey,
         name: name,
         create_time: createTime
       }
@@ -113,14 +111,11 @@ export default {
     },
     getBpmnInfo() {
       const query = {
-        bpmn_uid: this.bpmn_uid
+        uuid: this.flow_uuid
       }
-      fetchBpmn(query).then(resp => {
+      fetchFlow(query).then(resp => {
         if (resp.status === 200) {
-          console.log()
-          const flowable_process_definition_id = resp.data[0].flowable_id
-          this.flowableProcessDefinitionId = flowable_process_definition_id
-          return
+          this.flowableProcessDefinitionId = resp.data.results[0].bpmn.flowable_process_definition_id
         }
       })
     }

@@ -7,9 +7,6 @@
       <el-button v-waves class="filter-item" popper-class="select-option" type="primary" icon="el-icon-search" @click="handleFilter">
         Search
       </el-button>
-      <el-button class="filter-item" popper-class="select-option" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        Add
-      </el-button>
       <el-button v-waves :loading="downloadLoading" class="filter-item" popper-class="select-option" type="primary" icon="el-icon-download" @click="handleDownload">
         Export
       </el-button>
@@ -25,32 +22,31 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="ID" prop="id" sortable="true" align="center" width="100">
+      <el-table-column label="ID" prop="id" sortable="true" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
+          <span>{{ row.uuid }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="流程名称" min-width="150px">
+      <el-table-column label="名称" min-width="100">
         <template slot-scope="{row}">
-          <el-tag>{{ row.status | typeFilter }}</el-tag>
-          <span class="link-type" @click="handleUpdate(row)">{{ row.uname }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="200" class-name="small-padding fixed-width">
+      <el-table-column label="Actions" align="center" min-width="50" class-name="small-padding">
         <template slot-scope="{row}">
           <el-button size="mini" type="success" @click="handleLaunch(row)">
             Launch
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="分类" width="110px" align="center">
+      <el-table-column label="分类" min-width="50" align="center">
         <template slot-scope="{row}">
-          <el-tag>{{ row.category | categoryFilter(flowCategoryKV) }}</el-tag>
+          <el-tag>{{ row.category | categoryFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="版本" width="110px" align="center">
+      <el-table-column label="Rev." align="center" min-width="50">
         <template slot-scope="{row}">
-          <span>{{ row.online_bpmn_key | versionFilter(bpmnVersionKeyValue) }}</span>
+          <span>{{ row.bpmn | bpmnFilter }}</span>
         </template>
       </el-table-column>
       <el-table-column label="BPMN" width="110px" align="center">
@@ -100,9 +96,8 @@
 </template>
 
 <script>
-import { updateFlow, createFlow, fetchCategory, fetchBpmn } from '@/api/itsc-flow'
+import { updateFlow, fetchCategory, fetchBpmn } from '@/api/itsc-flow'
 import { fetchServices } from '@/api/itsc-service'
-import uuid from '@/utils/guid'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -113,13 +108,6 @@ const flowStatusOptions = [
   { key: 'offline', display_name: '下线' },
   { key: 'del', display_name: '删除' }
 ]
-
-// arr to obj, such as { CN : "China", US : "USA" }
-const flowStatusKeyValue = flowStatusOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-},
-{})
 
 export default {
   name: 'FlowList',
@@ -134,14 +122,17 @@ export default {
       }
       return statusMap[status]
     },
-    typeFilter(category) {
-      return flowStatusKeyValue[category]
+    categoryFilter(category) {
+      if (category) {
+        return category.name
+      }
+      return '未分类'
     },
-    categoryFilter(type, flowCategoryKeyValue) {
-      return flowCategoryKeyValue[type]
-    },
-    versionFilter(uniq_key, bpmnVersionKeyValue) {
-      return bpmnVersionKeyValue[uniq_key]
+    bpmnFilter(bpmn) {
+      if (bpmn) {
+        return bpmn.tag
+      }
+      return '未绑定'
     }
   },
   data() {
@@ -207,7 +198,7 @@ export default {
       fetchCategory(queryData).then(
         response => {
           if (response.status === 200) {
-            this.flowCategoryOptions = response.data
+            this.flowCategoryOptions = response.data.results
             this.flowCategoryKeyValue = this.flowCategoryOptions.reduce((acc, cur) => {
               acc[cur.uid] = cur.uname
               return acc
@@ -222,7 +213,7 @@ export default {
       fetchBpmn(queryData).then(
         response => {
           if (response.status === 200) {
-            this.bpmnVersionOptions = response.data
+            this.bpmnVersionOptions = response.data.results
             this.bpmnVersionKeyValue = this.bpmnVersionOptions.reduce((acc, cur) => {
               acc[cur.uniq_key] = cur.version
               return acc
@@ -258,16 +249,7 @@ export default {
       this.getList()
     },
     handleLaunch(row) {
-      const bpmnData = {
-        bpmn_uid: row.version_id
-      }
-      fetchBpmn(bpmnData).then(
-        response => {
-          if (response.status === 200) {
-            this.$router.push({ name: 'service-start', params: { bpmn_uid: row.bpmn_uid }})
-          }
-        }
-      )
+      this.$router.push({ name: 'service-start', params: { flow_uuid: row.uuid }})
     },
     handleModifyStatus(row, status) {
       this.$message({
@@ -299,36 +281,6 @@ export default {
         online_bpmn_key: '',
         status: ''
       }
-    },
-    handleCreate() {
-      this.resetTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.temp.uniq_key = uuid()
-          this.temp.online_bpmn_key = 'first'
-          const tempData = Object.assign({}, this.temp)
-          createFlow(tempData).then((response) => {
-            const index = this.list.findIndex(v => v.id === this.temp.id)
-            this.list.splice(index, 1, this.temp)
-            this.dialogFormVisible = false
-            if (response.status === 200) {
-              this.$notify({
-                title: 'Success',
-                message: 'Create Successfully',
-                type: 'success',
-                duration: 2000
-              })
-            }
-          })
-        }
-      })
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj

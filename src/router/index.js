@@ -68,7 +68,7 @@ export const constantRoutes = [
       meta: { title: 'Workbench', icon: 'el-icon-monitor' }
     },
     {
-      path: 'start/:bpmn_uid',
+      path: 'start/:flow_uuid',
       name: 'service-start',
       component: () => import('@/views/workbench/service-start'),
       meta: { title: 'service-start', icon: 'el-icon-monitor' },

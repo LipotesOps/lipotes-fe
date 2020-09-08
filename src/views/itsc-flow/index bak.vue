@@ -36,7 +36,7 @@
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="200" class-name="small-padding fixed-width">
+      <el-table-column label="Actions" align="center" width="200" class-name="small-padding">
         <template slot-scope="{row}">
           <el-button size="mini" type="success" @click="handleDeploy(row)">
             Deploy
@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { fetchFlows, updateFlow, createFlow, fetchCategory, fetchBpmn, updateBpmn } from '@/api/itsc-flow'
+import { fetchFlow, updateFlow, createFlow, fetchCategory, fetchBpmn, updateBpmn } from '@/api/itsc-flow'
 import { createDeployment, listProcessDefinitions } from '@/api/flowable-rest'
 import uuid from '@/utils/guid'
 import waves from '@/directive/waves' // waves directive
@@ -239,7 +239,7 @@ export default {
     },
     getFlows() {
       this.listLoading = true
-      fetchFlows(this.listQuery).then(response => {
+      fetchFlow(this.listQuery).then(response => {
         this.flows = response.data.results
         this.total = response.data.count
 

@@ -36,7 +36,7 @@
       <el-table-column label="Actions" align="center" width="200" class-name="small-padding">
         <template slot-scope="{row}">
           <el-button size="mini" type="success" @click="handleAudit(row)">
-            审批
+            去审批
           </el-button>
         </template>
       </el-table-column>
@@ -142,6 +142,8 @@ export default {
       this.getTask()
     },
     handleAudit(row) {
+      this.$router.go
+      this.$router.push({ name: 'task-operation', params: { task_uuid: row.uuid }})
     },
     sortChange(data) {
       const { prop, order } = data

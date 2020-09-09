@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="service-container" style="margin: 0px; padding: 10px; background-color:White; border-radius: 8px">
+    <div class="app-content-container">
       <el-form :inline="true">
         <el-form-item label="工单标题">
           <el-input v-model="Title" required="true" />
@@ -98,7 +98,7 @@ export default {
         flowable_task_instance_id: id,
         task_definition_key: taskDefinitionKey,
         name: name,
-        create_time: createTime
+        flowable_created_time: createTime
       }
       createTaskInst(data).then(resp => {
         if (resp.status === 200) {

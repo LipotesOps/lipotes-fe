@@ -125,6 +125,15 @@ aside {
   // background-color: rgb(243, 244, 247);
 }
 
+//component-container全局样式
+.app-content-container {
+  margin: 0px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 8px
+  // background-color: rgb(243, 244, 247);
+}
+
 .components-container {
   margin: 30px 50px;
   position: relative;

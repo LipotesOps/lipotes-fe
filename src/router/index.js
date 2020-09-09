@@ -73,6 +73,13 @@ export const constantRoutes = [
       component: () => import('@/views/workbench/service-start'),
       meta: { title: 'service-start', icon: 'el-icon-monitor' },
       hidden: true
+    },
+    {
+      path: 'operation/:task_uuid',
+      name: 'task-operation',
+      component: () => import('@/views/workbench/task-operation'),
+      meta: { title: 'task-operation', icon: 'el-icon-monitor' },
+      hidden: true
     }
     ]
   },

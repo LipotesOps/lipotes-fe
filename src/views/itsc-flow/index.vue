@@ -37,7 +37,7 @@
       </el-table-column>
       <el-table-column label="Actions" align="center" min-width="50" class-name="small-padding">
         <template slot-scope="{row}">
-          <el-button size="mini" type="success" @click="handleDeploy(row)">
+          <el-button :disabled="row | isDeployedFilter" size="mini" type="success" @click="handleDeploy(row)">
             Deploy
           </el-button>
         </template>
@@ -125,7 +125,19 @@ export default {
         return bpmn.tag
       }
       return '未绑定'
+    },
+    isDeployedFilter(row) {
+      if (row.bpmn !== null) {
+        if (row.bpmn.status === 'deployed') {
+          return true
+        }
+      }
+      if (row.bpmn === null) {
+        return true
+      }
+      return false
     }
+
   },
   inject: ['reload'],
   data() {
@@ -171,7 +183,6 @@ export default {
     }
   },
   computed: {
-
   },
   created() {
     this.getFlow()
@@ -244,8 +255,6 @@ export default {
         createDeployment(deployData).then(
           resp => {
             if (resp.status === 201) {
-            // const deploymentId = resp.data.id
-            // this.getProcessDefinitionId(bpmn_id, deploymentId)
               this.$message({
                 message: 'flowable deploy success',
                 type: 'success'
@@ -276,67 +285,6 @@ export default {
       updateBpmn(id, bpmnObject).then(resp => {
         if (resp.status === 200) {
           console.log(resp)
-        }
-      })
-    },
-    handleDeploy_(row) {
-      const params = {
-        id: row.id
-      }
-      fetchBpmn(params).then(
-        response => {
-          if (response.status === 200) {
-            this.bpmn_object = response.data[0]
-            const bpmn_id = response.data[0].id
-            const bpmn_content = response.data[0].content
-            const filename = `${row.name}.bpmn20.xml`
-            const deployData = new FormData()
-            // 1.先将字符串转换成Buffer
-            const fileContent = Buffer.from(bpmn_content)
-            var blob = new Blob([fileContent], { type: 'text/xml' })
-            var file = new window.File([blob], filename, { type: 'text/xml' })
-            // 2.补上文件meta信息
-            deployData.append('file', file)
-            createDeployment(deployData).then(
-              resp => {
-                if (resp.status === 201) {
-                  const deploymentId = resp.data.id
-                  this.getProcessDefinitionId(bpmn_id, deploymentId)
-                  this.$message({
-                    message: 'flowable deploy success',
-                    type: 'success'
-                  })
-                }
-              }
-            )
-          }
-        }
-      )
-    },
-    getProcessDefinitionId(bpmn_id, deploymentId) {
-      const queryData = {
-        deploymentId: deploymentId
-      }
-      listProcessDefinitions(queryData).then(resp => {
-        if (resp.status === 200) {
-          const definitionId = resp.data.data[0].id
-          const flowable_id = this.bpmn_object['flowable_id']
-          if (!(flowable_id === '' || flowable_id === null)) {
-            this.$message({
-              message: 'already deployed',
-              type: 'warning'
-            })
-            return
-          }
-          this.bpmn_object['flowable_id'] = definitionId
-          updateBpmn(bpmn_id, this.bpmn_object).then(resp => {
-            if (resp.status === 200) {
-              this.$message({
-                message: 'update bpmn flowable_id success',
-                type: 'success'
-              })
-            }
-          })
         }
       })
     },

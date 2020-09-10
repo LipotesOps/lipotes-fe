@@ -10,11 +10,16 @@
         </el-form-item>
       </el-form>
     </div>
+    <div class="service-btn-area">
+      <el-button type="info" :plain="true" icon="fa-undo" @click="$router.go(-1)">返回</el-button>
+      <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="handleApprove">通过<i class="el-icon-upload el-icon--right" /></el-button>
+    </div>
   </div>
 </template>
 
 <script>
 import { fetchTask } from '@/api/itsc-flow'
+import { flowableTaskAction } from '@/api/flowable-rest'
 
 export default {
   data() {
@@ -37,12 +42,31 @@ export default {
           console.log(this.taskDetail)
         }
       })
+    },
+    handleApprove() {
+      const taskId = this.taskDetail.flowable_task_instance_id
+      const data = { action: 'complete' }
+      flowableTaskAction(taskId, data).then(resp => {
+        console.log()
+      })
     }
   }
 
 }
 </script>
 
-<style>
-
+<style lang="less" scoped>
+.service-btn-area {
+  margin-top: 15px;
+  // padding: 10px;
+  // background-color: white;
+  border-radius: 8px;
+  // position: absolute;
+  // top: 200px;
+  // right: 20px;
+  text-align: right;
+}
+.el-button {
+  align-content: right;
+}
 </style>

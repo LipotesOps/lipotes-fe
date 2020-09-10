@@ -39,6 +39,7 @@
         <template slot-scope="{row}">
           <el-button :disabled="row | isDeployedFilter" size="mini" type="success" @click="handleDeploy(row)">
             Deploy
+            <!-- {{ (row.bpmn ? ((row.bpmn.status==='deployed')? false:true): false) ?'Deploy' : 'Deployed' }} -->
           </el-button>
         </template>
       </el-table-column>

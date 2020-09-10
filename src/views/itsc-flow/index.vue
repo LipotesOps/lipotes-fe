@@ -38,8 +38,8 @@
       <el-table-column label="Actions" align="center" min-width="50" class-name="small-padding">
         <template slot-scope="{row}">
           <el-button :disabled="row | isDeployedFilter" size="mini" type="success" @click="handleDeploy(row)">
-            Deploy
             <!-- {{ (row.bpmn ? ((row.bpmn.status==='deployed')? false:true): false) ?'Deploy' : 'Deployed' }} -->
+            {{ row | isDeployedTextFilter }}
           </el-button>
         </template>
       </el-table-column>
@@ -137,6 +137,17 @@ export default {
         return true
       }
       return false
+    },
+    isDeployedTextFilter(row) {
+      if (row.bpmn !== null) {
+        if (row.bpmn.status === 'deployed') {
+          return 'Deployed'
+        }
+      }
+      if (row.bpmn === null) {
+        return 'No Bpmn'
+      }
+      return 'Deploy'
     }
 
   },

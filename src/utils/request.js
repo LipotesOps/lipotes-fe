@@ -8,7 +8,8 @@ const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   auth: { username: 'admin', password: '20200077' },
-  timeout: 5000 // request timeout
+  timeout: 5000, // request timeout
+  headers: { 'Cache-Control': 'no-cache' }
 })
 
 // request interceptor

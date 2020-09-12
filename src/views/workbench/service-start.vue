@@ -37,11 +37,11 @@ export default {
       // step1
       this.startFlowableProcessInstance()
         // step2
-        .then(this.createFlowInstance)
+        .then(this.createFlowInstance) // 发起一条流程实例
         // step3
-        .then(this.queryTaskInstance)
+        // .then(this.queryTaskInstance)
         // step4
-        .then(this.createTaskInstance)
+        // .then(this.createTaskInstance)
         .then(this.onSuccess)
         .catch((err) => {
           console.log(err || 'promise error')

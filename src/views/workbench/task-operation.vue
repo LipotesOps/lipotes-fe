@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
     <div class="app-content-title">
-      <h4 style="margin:0px">{{ taskDetail.flow_instance.flow_bpmn.flow.name }} - {{ taskDetail.name }}</h4>
+      <h4 style="margin:0px">{{ taskDetail | flowNameFilter }} - {{ taskDetail.name }}</h4>
     </div>
     <div class="app-content-container">
       <el-form :inline="true">
-        <el-form-item label="工单标题">
+        <el-form-item label="表单">
           <el-input v-model="Title" required="true" />
         </el-form-item>
       </el-form>
@@ -20,13 +20,23 @@
 <script>
 import { fetchTask } from '@/api/itsc-flow'
 import { flowableTaskAction } from '@/api/flowable-rest'
+import waves from '@/directive/waves' // waves directive
+var _ = require('lodash')
 
 export default {
+  directives: { waves },
+  filters: {
+    flowNameFilter(taskDetail) {
+      const flowName = _.get(taskDetail, 'flow_instance.flow_bpmn.flow.name', '未获取到流程定义名称')
+      return flowName
+    }
+  },
   data() {
     return {
       Title: '',
       task_uuid: '',
-      taskDetail: ''
+      taskDetail: '',
+      committing: false
     }
   },
   created() {
@@ -39,7 +49,7 @@ export default {
       fetchTask(query).then(resp => {
         if (resp.status === 200) {
           this.taskDetail = resp.data.results[0]
-          console.log(this.taskDetail)
+          console.log()
         }
       })
     },
@@ -47,8 +57,14 @@ export default {
       const taskId = this.taskDetail.flowable_task_instance_id
       const data = { action: 'complete' }
       flowableTaskAction(taskId, data).then(resp => {
-        console.log()
+        if (resp.status === 200) {
+          console.log()
+          this.onSuccess()
+        }
       })
+    },
+    onSuccess() {
+      this.$router.go(-1)
     }
   }
 

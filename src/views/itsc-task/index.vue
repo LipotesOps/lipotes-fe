@@ -127,7 +127,7 @@ export default {
   methods: {
     getTask() {
       this.listLoading = true
-      fetchTask({}).then(response => {
+      fetchTask(this.listQuery).then(response => {
         this.list = response.data.results
         this.total = response.data.count
 

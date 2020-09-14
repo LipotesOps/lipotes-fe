@@ -25,6 +25,7 @@ export default {
     return {
       Title: '',
       flowableProcessDefinitionId: '',
+      flowBpmnUUID: '',
       committing: false
     }
   },
@@ -66,7 +67,8 @@ export default {
           // flowable instacne id
           flowable_process_instance_id: flowableProcessInstanceData.id,
           start_time: flowableProcessInstanceData.startTime,
-          start_user_id: 'easyops'
+          start_user_id: 'easyops',
+          flow_bpmn: this.flowBpmnUUID
         }
         createFlowInst(data).then(resp => {
           console.log()
@@ -115,7 +117,9 @@ export default {
       }
       fetchFlow(query).then(resp => {
         if (resp.status === 200) {
-          this.flowableProcessDefinitionId = resp.data.results[0].bpmn.flowable_process_definition_id
+          const flowDetail = resp.data.results[0]
+          this.flowableProcessDefinitionId = flowDetail.bpmn.flowable_process_definition_id
+          this.flowBpmnUUID = flowDetail.bpmn.uuid
         }
       })
     }

@@ -6,7 +6,7 @@
     <div class="app-content-container">
       <el-form :inline="true">
         <el-form-item label="工单名称" required="true">
-          <el-input v-model="name" required="true" maxlength="10" show-word-limit style="border-radius:4px;width:150%;" />
+          <el-input v-model="name" required="true" maxlength="32" show-word-limit style="border-radius:4px;width:350%;" />
         </el-form-item>
       </el-form>
     </div>

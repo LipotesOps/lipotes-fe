@@ -5,8 +5,8 @@
     </div>
     <div class="app-content-container">
       <el-form :inline="true">
-        <el-form-item label="工单名称">
-          <el-input v-model="Title" required="true" />
+        <el-form-item label="工单名称" required="true">
+          <el-input v-model="name" required="true" maxlength="10" show-word-limit style="border-radius:4px;width:150%;" />
         </el-form-item>
       </el-form>
     </div>
@@ -26,7 +26,7 @@ export default {
   name: 'Workbench',
   data() {
     return {
-      Title: '',
+      name: '',
       flowableProcessDefinitionId: '',
       flowBpmnUUID: '',
       flowDetail: '',
@@ -69,6 +69,7 @@ export default {
       return new Promise((resolve, reject) => {
         const data = {
           // flowable instacne id
+          name: this.name,
           flowable_process_instance_id: flowableProcessInstanceData.id,
           start_time: flowableProcessInstanceData.startTime,
           start_user_id: 'easyops',

@@ -1,8 +1,11 @@
 <template>
   <div class="app-container">
+    <div class="app-content-title">
+      <h4 style="margin:0px">{{ flowDetail.name }}</h4>
+    </div>
     <div class="app-content-container">
       <el-form :inline="true">
-        <el-form-item label="工单标题">
+        <el-form-item label="工单名称">
           <el-input v-model="Title" required="true" />
         </el-form-item>
       </el-form>
@@ -26,6 +29,7 @@ export default {
       Title: '',
       flowableProcessDefinitionId: '',
       flowBpmnUUID: '',
+      flowDetail: '',
       committing: false
     }
   },
@@ -117,9 +121,9 @@ export default {
       }
       fetchFlow(query).then(resp => {
         if (resp.status === 200) {
-          const flowDetail = resp.data.results[0]
-          this.flowableProcessDefinitionId = flowDetail.bpmn.flowable_process_definition_id
-          this.flowBpmnUUID = flowDetail.bpmn.uuid
+          this.flowDetail = resp.data.results[0]
+          this.flowableProcessDefinitionId = this.flowDetail.bpmn.flowable_process_definition_id
+          this.flowBpmnUUID = this.flowDetail.bpmn.uuid
         }
       })
     }

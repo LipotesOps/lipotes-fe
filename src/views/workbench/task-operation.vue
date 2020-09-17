@@ -56,6 +56,13 @@ export default {
     handleApprove() {
       const taskId = this.taskDetail.flowable_task_instance_id
       const data = { action: 'complete' }
+      if (this.taskDetail.status === 'completed') {
+        this.$message({
+          message: '任务已完成，无须重复操作',
+          type: 'warning'
+        })
+        return
+      }
       completeTask(taskId, data).then(resp => {
         if (resp.status === 200) {
           this.onSuccess()

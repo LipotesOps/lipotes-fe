@@ -2,11 +2,13 @@
   <div class="app-container">
     <div class="app-content-container">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="待办" name="todo">
-          <todo />
+        <el-tab-pane label="待办" name="tab-pane">
+          <tab-pane status="running" />
         </el-tab-pane>
         <el-tab-pane label="待阅" name="toread">待阅</el-tab-pane>
-        <el-tab-pane label="已完成" name="done">已完成</el-tab-pane>
+        <el-tab-pane label="已完成" name="done">
+          <tab-pane status="completed" />
+        </el-tab-pane>
         <el-tab-pane label="待认领" name="toclaim">待认领</el-tab-pane>
       </el-tabs>
     </div>
@@ -14,13 +16,13 @@
 </template>
 
 <script>
-import todo from './todo'
+import TabPane from './tab-pane'
 export default {
   name: 'Workbench',
-  components: { todo },
+  components: { TabPane },
   data() {
     return {
-      activeName: 'todo'
+      activeName: 'tab-pane'
     }
   },
   created() {

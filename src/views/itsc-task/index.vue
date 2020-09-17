@@ -138,7 +138,10 @@ export default {
           }, 1.5 * 200)
         })
         .finally(resp => {
-          this.listLoading = false
+          // Just to simulate the time of the request
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 200)
         })
     },
     handleFilter() {

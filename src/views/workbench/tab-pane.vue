@@ -10,22 +10,32 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="工单编号" prop="num" sortable="true" align="center" min-width="50px">
+      <el-table-column label="工单编号" prop="num" sortable="true" align="center" min-width="30px">
         <template slot-scope="{row}">
           <router-link class="table-inline-router-link" :to="{ name: 'task-operation', params: { task_uuid: row.uuid }}">{{ row.flow_instance.num }}</router-link>
         </template>
       </el-table-column>
-      <el-table-column label="任务名称" prop="name" sortable="true" align="center" min-width="50px">
-        <template slot-scope="{row}">
-          <span>{{ row.name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="工单标题" prop="flow_instance.name" sortable="true" align="center" min-width="50px">
+      <el-table-column label="工单标题" prop="flow_instance.name" sortable="true" align="center" min-width="30px">
         <template slot-scope="{row}">
           <span>{{ row.flow_instance.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工单创建时间" prop="flow_instance.ctime" sortable="true" align="center" min-width="50px">
+      <el-table-column label="当前任务" prop="name" sortable="true" align="center" min-width="30px">
+        <template slot-scope="{row}">
+          <span>{{ row.name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="指派人" prop="name" sortable="true" align="center" min-width="30px">
+        <template slot-scope="{row}">
+          <span>{{ row.name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" prop="name" sortable="true" align="center" min-width="30px">
+        <template slot-scope="{row}">
+          <span>{{ row.status }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="工单创建时间" prop="flow_instance.ctime" sortable="true" align="center">
         <template slot-scope="{row}">
           <span>{{ row.flow_instance.ctime }}</span>
         </template>
@@ -40,8 +50,15 @@ import { fetchTask } from '@/api/itsc-flow'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'Todo',
+  name: 'TabPane',
   components: { Pagination },
+  props: {
+    status: {
+      type: String,
+      required: true,
+      default: 'running'
+    }
+  },
   data() {
     return {
       list: [],
@@ -51,7 +68,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        importance: undefined,
+        status: this.status,
         title: undefined,
         type: undefined,
         sort: '+id'
@@ -73,7 +90,10 @@ export default {
           }
         })
         .finally(resp => {
-          this.listLoading = false
+          // Just to simulate the time of the request
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 200)
         })
     },
     sortChange() {

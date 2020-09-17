@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="app-content-container">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="待办" name="todo">待办
+        <el-tab-pane label="待办" name="todo">
           <todo />
         </el-tab-pane>
         <el-tab-pane label="待阅" name="toread">待阅</el-tab-pane>

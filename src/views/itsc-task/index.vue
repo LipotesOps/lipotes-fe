@@ -127,15 +127,19 @@ export default {
   methods: {
     getTask() {
       this.listLoading = true
-      fetchTask(this.listQuery).then(response => {
-        this.list = response.data.results
-        this.total = response.data.count
+      fetchTask(this.listQuery)
+        .then(response => {
+          this.list = response.data.results
+          this.total = response.data.count
 
-        // Just to simulate the time of the request
-        setTimeout(() => {
+          // Just to simulate the time of the request
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 200)
+        })
+        .finally(resp => {
           this.listLoading = false
-        }, 1.5 * 200)
-      })
+        })
     },
     handleFilter() {
       this.listQuery.page = 1

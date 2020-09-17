@@ -146,7 +146,6 @@ export default {
       this.getTask()
     },
     handleAudit(row) {
-      this.$router.go
       this.$router.push({ name: 'task-operation', params: { task_uuid: row.uuid }})
     },
     sortChange(data) {

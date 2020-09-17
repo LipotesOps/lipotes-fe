@@ -12,7 +12,7 @@
     >
       <el-table-column label="工单编号" prop="num" sortable="true" align="center" min-width="50px">
         <template slot-scope="{row}">
-          <span>{{ row.flow_instance.num }}</span>
+          <router-link class="table-inline-router-link" :to="{ name: 'task-operation', params: { task_uuid: row.uuid }}">{{ row.flow_instance.num }}</router-link>
         </template>
       </el-table-column>
       <el-table-column label="任务名称" prop="name" sortable="true" align="center" min-width="50px">

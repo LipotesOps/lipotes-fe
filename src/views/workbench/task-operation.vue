@@ -19,7 +19,7 @@
 
 <script>
 import { fetchTask } from '@/api/itsc-flow'
-import { flowableTaskAction } from '@/api/flowable-rest'
+import { completeTask } from '@/api/itsc-flow'
 import waves from '@/directive/waves' // waves directive
 var _ = require('lodash')
 
@@ -56,9 +56,8 @@ export default {
     handleApprove() {
       const taskId = this.taskDetail.flowable_task_instance_id
       const data = { action: 'complete' }
-      flowableTaskAction(taskId, data).then(resp => {
+      completeTask(taskId, data).then(resp => {
         if (resp.status === 200) {
-          console.log()
           this.onSuccess()
         }
       })

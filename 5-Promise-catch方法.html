@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="UTF-8">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>catch方法</title>
+</head>
+
+<body>
+<script>
+const p = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        reject("出错了啦啦啦")
+    }, 1000)
+})
+p.catch(function(reason){
+    console.warn(reason)
+})
+</script>
+</body>
+</html>

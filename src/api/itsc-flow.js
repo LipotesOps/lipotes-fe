@@ -90,3 +90,12 @@ export function fetchTask(params) {
     params
   })
 }
+
+// complete a task
+export function completeTask(taskId, data) {
+  return request({
+    url: `/api/task-instance/${taskId}/complete/`,
+    method: 'post',
+    data
+  })
+}

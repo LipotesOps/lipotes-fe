@@ -48,6 +48,13 @@
           <el-tag>{{ row.category | categoryFilter }}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="表单" width="110px" align="center">
+        <template slot-scope="{row}">
+          <el-button :disabled="row | isCanBindFilter" size="mini" type="success" @click="handBind(row)">
+            设置
+          </el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="Rev." align="center" min-width="50">
         <template slot-scope="{row}">
           <span>{{ row.bpmn | bpmnFilter }}</span>
@@ -55,7 +62,7 @@
       </el-table-column>
       <el-table-column label="BPMN" width="110px" align="center">
         <template slot-scope="{row}">
-          <router-link :to="'/flow-manage/flow/edit?id='+row.id+'&uuid='+row.uuid+'&name='+row.name">查看/创建</router-link>
+          <router-link :disabled="true" class="table-inline-router-link" :to="'/flow-manage/flow/edit?id='+row.id+'&uuid='+row.uuid+'&name='+row.name">查看/创建</router-link>
         </template>
       </el-table-column>
     </el-table>
@@ -101,12 +108,14 @@ import uuid from '@/utils/guid'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+var _ = require('lodash')
 
 export default {
   name: 'FlowList',
   components: { Pagination },
   directives: { waves },
   filters: {
+
     statusFilter(status) {
       const statusMap = {
         published: 'success',
@@ -126,6 +135,13 @@ export default {
         return bpmn.tag
       }
       return '未绑定'
+    },
+    isCanBindFilter(row) {
+      const bpmnUuid = _.get(row, 'bpmn.uuid')
+      if (bpmnUuid) {
+        return false
+      }
+      return true
     },
     isDeployedFilter(row) {
       if (row.bpmn !== null) {
@@ -201,6 +217,9 @@ export default {
     this.getCategory()
   },
   methods: {
+    handBind(row) {
+      this.$router.push({ name: 'form-bind', params: { flow_uuid: row.uuid, bpmn_uuid: row.bpmn.uuid }})
+    },
     getCategory() {
       const queryData = {}
       fetchCategory(queryData).then(
@@ -223,15 +242,17 @@ export default {
     },
     getFlow() {
       this.listLoading = true
-      fetchFlow(this.listQuery).then(response => {
-        this.flows = response.data.results
-        this.total = response.data.count
-
-        // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 200)
-      })
+      fetchFlow(this.listQuery)
+        .then(response => {
+          this.flows = response.data.results
+          this.total = response.data.count
+        })
+        .finally(resp => {
+          // Just to simulate the time of the request
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 200)
+        })
     },
     handleFilter() {
       this.listQuery.page = 1

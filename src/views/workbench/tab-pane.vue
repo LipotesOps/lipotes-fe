@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { fetchTask } from '@/api/itsc-flow'
+import { fetchTaskInstance } from '@/api/itsc-flow'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -82,7 +82,7 @@ export default {
   methods: {
     getTask() {
       this.listLoading = true
-      fetchTask(this.listQuery)
+      fetchTaskInstance(this.listQuery)
         .then(resp => {
           if (resp.status === 200) {
             this.list = resp.data.results

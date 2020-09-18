@@ -83,7 +83,7 @@ export function createTaskInst(data) {
   })
 }
 
-export function fetchTask(params) {
+export function fetchTaskInstance(params) {
   return request({
     url: '/api/task-instance/',
     method: 'get',
@@ -97,5 +97,13 @@ export function completeTask(taskId, data) {
     url: `/api/task-instance/${taskId}/complete/`,
     method: 'post',
     data
+  })
+}
+
+export function fetchTask(params) {
+  return request({
+    url: '/api/task/',
+    method: 'get',
+    params
   })
 }

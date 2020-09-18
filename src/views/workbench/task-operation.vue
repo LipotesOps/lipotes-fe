@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { fetchTask } from '@/api/itsc-flow'
+import { fetchTaskInstance } from '@/api/itsc-flow'
 import { completeTask } from '@/api/itsc-flow'
 import waves from '@/directive/waves' // waves directive
 var _ = require('lodash')
@@ -46,7 +46,7 @@ export default {
   methods: {
     getTaskDetail() {
       const query = { uuid: this.task_uuid }
-      fetchTask(query).then(resp => {
+      fetchTaskInstance(query).then(resp => {
         if (resp.status === 200) {
           this.taskDetail = resp.data.results[0]
           console.log()

@@ -57,6 +57,13 @@ const flowManageRouter = {
       meta: { title: '表单设计', icon: 'documentation' }
     },
     {
+      path: 'form/flow/:flow_uuid/bpmn/:bpmn_uuid',
+      hidden: true,
+      component: () => import('@/views/form/form-bind'),
+      name: 'form-bind',
+      meta: { title: '表单绑定', icon: 'documentation' }
+    },
+    {
       path: 'jobs',
       component: () => import('@/views/itsc-task/index'),
       name: 'tasks-center',

@@ -294,6 +294,7 @@ export default {
       const bpmnObject = this.rowTemporary.bpmn
       const id = bpmnObject.id
       bpmnObject.flowable_process_definition_id = definitionInfo.id
+      bpmnObject.status = 'deployed'
       updateBpmn(id, bpmnObject).then(resp => {
         if (resp.status === 200) {
           console.log(resp)

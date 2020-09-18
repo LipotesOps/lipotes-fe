@@ -30,6 +30,25 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+        <el-form ref="dataForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+          <el-form-item label="Name" prop="name">
+            <el-input v-model="rowTemp.name" placeholder="Please select" />
+          </el-form-item>
+          <el-form-item label="Remark">
+            <el-input v-model="rowTemp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">
+            Cancel
+          </el-button>
+          <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+            Confirm
+          </el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -39,14 +58,33 @@ import { fetchFlow, fetchTask } from '@/api/itsc-flow'
 
 export default {
   name: 'FormBind',
+  inject: ['reload'],
   data() {
     return {
+      dialogFormVisible: false,
+      dialogStatus: '',
+      textMap: {
+        update: 'Edit',
+        create: 'Create'
+      },
       tableKey: 0,
       listLoading: true,
       flow_uuid: '',
       bpmn_uuid: '',
       flow: {},
-      tasks: []
+      tasks: [],
+      rules: {
+        type: [{ required: true, message: 'type is required', trigger: 'change' }],
+        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
+        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
+      },
+      rowTemp: {
+        id: undefined,
+        uuid: '',
+        name: '',
+        category: '',
+        bpmn: ''
+      }
     }
   },
   created() {
@@ -81,6 +119,14 @@ export default {
             this.tasks = resp.data.results
           }
         })
+    },
+    handleUpdate(row) {
+      this.rowTemp = Object.assign({}, row) // copy obj
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
     }
   }
 }

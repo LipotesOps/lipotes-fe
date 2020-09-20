@@ -52,9 +52,16 @@ const flowManageRouter = {
     },
     {
       path: 'form',
-      component: () => import('@/views/itsc-home/index'),
+      component: () => import('@/views/form/index'),
+      name: 'form-manage',
+      meta: { title: '表单管理', icon: 'documentation' }
+    },
+    {
+      path: 'form/:form_uuid/design',
+      hidden: true,
+      component: () => import('@/views/form/form-design'),
       name: 'form-design',
-      meta: { title: '表单设计', icon: 'documentation' }
+      meta: { title: '表单配置', icon: 'documentation' }
     },
     {
       path: 'form/flow/:flow_uuid/bpmn/:bpmn_uuid',

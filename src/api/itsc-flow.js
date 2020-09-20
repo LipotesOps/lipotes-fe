@@ -107,3 +107,43 @@ export function fetchTask(params) {
     params
   })
 }
+
+export function updateTask(id, data) {
+  return request({
+    url: `/api/task/${id}/`,
+    method: 'put',
+    data
+  })
+}
+
+export function fetchForm(params) {
+  return request({
+    url: '/api/form/',
+    method: 'get',
+    params
+  })
+}
+
+export function fetchFormContent(params) {
+  return request({
+    url: '/api/form-content/',
+    method: 'get',
+    params
+  })
+}
+
+export function updateForm(id, data) {
+  return request({
+    url: `/api/form/${id}/`,
+    method: 'put',
+    data
+  })
+}
+
+export function createForm(data) {
+  return request({
+    url: `/api/form/`,
+    method: 'post',
+    data
+  })
+}

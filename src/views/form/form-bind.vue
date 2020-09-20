@@ -33,8 +33,13 @@
 
       <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
         <el-form ref="dataForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-          <el-form-item label="Name" prop="name">
-            <el-input v-model="rowTemp.name" placeholder="Please select" />
+          <el-form-item label="名称" prop="name">
+            <el-input v-model="rowTemp.name" disabled placeholder="Please select" />
+          </el-form-item>
+          <el-form-item label="表单" prop="form">
+            <el-select v-model="rowTemp.form" class="filter-item" placeholder="Please select" clearable>
+              <el-option v-for="item in formArray" :key="item.id" :label="item.name" :value="item.uuid" />
+            </el-select>
           </el-form-item>
           <el-form-item label="Remark">
             <el-input v-model="rowTemp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
@@ -54,13 +59,14 @@
 </template>
 
 <script>
-import { fetchFlow, fetchTask } from '@/api/itsc-flow'
+import { fetchFlow, fetchTask, fetchForm, updateTask } from '@/api/itsc-flow'
 
 export default {
   name: 'FormBind',
   inject: ['reload'],
   data() {
     return {
+      formArray: [],
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -83,7 +89,8 @@ export default {
         uuid: '',
         name: '',
         category: '',
-        bpmn: ''
+        bpmn: '',
+        form: ''
       }
     }
   },
@@ -95,12 +102,19 @@ export default {
   },
   methods: {
     sortChange() {},
+    getForm(query = {}) {
+      fetchForm(query)
+        .then(resp => {
+          if (resp.status === 200) {
+            this.formArray = resp.data.results
+          }
+        })
+    },
     getFlow() {
       const queryData = { uuid: this.flow_uuid }
       fetchFlow(queryData)
         .then(resp => {
           if (resp.status === 200) {
-            console.log('dd')
             this.flow = resp.data.results[0]
           }
         })
@@ -121,11 +135,38 @@ export default {
         })
     },
     handleUpdate(row) {
+      // get forms abouted
+      const query = { flow: row.uuid }
+      this.getForm(query)
       this.rowTemp = Object.assign({}, row) // copy obj
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.rowTemp)
+          const flow_bpmn = tempData.flow_bpmn.uuid
+          tempData.flow_bpmn = flow_bpmn
+          const id = tempData.id
+          updateTask(id, tempData).then((response) => {
+            const index = this.tasks.findIndex(v => v.id === this.rowTemp.id)
+            this.tasks.splice(index, 1, this.rowTemp)
+            this.dialogFormVisible = false
+            if (response.status === 200) {
+              this.$notify({
+                title: 'Success',
+                message: '表单绑定成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.reload()
+            }
+          })
+        }
       })
     }
   }

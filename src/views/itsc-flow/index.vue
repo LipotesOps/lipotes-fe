@@ -62,7 +62,7 @@
       </el-table-column>
       <el-table-column label="BPMN" width="110px" align="center">
         <template slot-scope="{row}">
-          <router-link :disabled="true" class="table-inline-router-link" :to="'/flow-manage/flow/edit?id='+row.id+'&uuid='+row.uuid+'&name='+row.name">查看/创建</router-link>
+          <router-link class="table-inline-router-link" :to="'/flow-manage/flow/edit?id='+row.id+'&uuid='+row.uuid+'&name='+row.name">查看/创建</router-link>
         </template>
       </el-table-column>
     </el-table>
@@ -104,7 +104,6 @@
 <script>
 import { fetchFlow, updateFlow, createFlow, fetchCategory, fetchBpmn, updateBpmn } from '@/api/itsc-flow'
 import { createDeployment, listProcessDefinitions } from '@/api/flowable-rest'
-import uuid from '@/utils/guid'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -179,9 +178,6 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
         sort: '+id'
       },
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
@@ -243,9 +239,9 @@ export default {
     getFlow() {
       this.listLoading = true
       fetchFlow(this.listQuery)
-        .then(response => {
-          this.flows = response.data.results
-          this.total = response.data.count
+        .then(resp => {
+          this.flows = resp.data.results
+          this.total = resp.data.count
         })
         .finally(resp => {
           // Just to simulate the time of the request
@@ -356,7 +352,6 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.rowTemp.uuid = uuid()
           const tempData = Object.assign({}, this.rowTemp)
           createFlow(tempData).then((response) => {
             const index = this.flows.findIndex(v => v.id === this.rowTemp.id)

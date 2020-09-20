@@ -1,121 +1,120 @@
 <template>
-  <div class="container">
-    <div class="left-board">
-      <div class="logo-wrapper">
-        <div class="logo">
-          <img :src="logo" alt="logo"> Form Generator
-          <a class="github" href="https://github.com/JakHuang/form-generator" target="_blank">
-            <img src="https://github.githubassets.com/pinned-octocat.svg" alt>
-          </a>
-        </div>
-      </div>
-      <el-scrollbar class="left-scrollbar">
-        <div class="components-list">
-          <div v-for="(item, listIndex) in leftComponents" :key="listIndex">
-            <div class="components-title">
-              <svg-icon icon-class="component" />
-              {{ item.title }}
-            </div>
-            <draggable
-              class="components-draggable"
-              :list="item.list"
-              :group="{ name: 'componentsGroup', pull: 'clone', put: false }"
-              :clone="cloneComponent"
-              draggable=".components-item"
-              :sort="false"
-              @end="onEnd"
-            >
-              <div
-                v-for="(element, index) in item.list"
-                :key="index"
-                class="components-item"
-                @click="addComponent(element)"
-              >
-                <div class="components-body">
-                  <svg-icon :icon-class="element.__config__.tagIcon" />
-                  {{ element.__config__.label }}
-                </div>
+  <div class="app-container">
+    <div class="app-content-title">
+      <h4 style="margin:0px">表单配置</h4>
+    </div>
+
+    <div class="app-content-container">
+      <div class="left-board">
+        <el-scrollbar class="left-scrollbar">
+          <div class="components-list">
+            <div v-for="(item, listIndex) in leftComponents" :key="listIndex">
+              <div class="components-title">
+                <svg-icon icon-class="component" />
+                {{ item.title }}
               </div>
-            </draggable>
-          </div>
-        </div>
-      </el-scrollbar>
-    </div>
-
-    <div class="center-board">
-      <div class="action-bar">
-        <el-button icon="el-icon-video-play" type="text" @click="run">
-          运行
-        </el-button>
-        <el-button icon="el-icon-view" type="text" @click="showJson">
-          查看json
-        </el-button>
-        <el-button icon="el-icon-download" type="text" @click="download">
-          导出vue文件
-        </el-button>
-        <el-button class="copy-btn-main" icon="el-icon-document-copy" type="text" @click="copy">
-          复制代码
-        </el-button>
-        <el-button class="delete-btn" icon="el-icon-delete" type="text" @click="empty">
-          清空
-        </el-button>
-      </div>
-      <el-scrollbar class="center-scrollbar">
-        <el-row class="center-board-row" :gutter="formConf.gutter">
-          <el-form
-            :size="formConf.size"
-            :label-position="formConf.labelPosition"
-            :disabled="formConf.disabled"
-            :label-width="formConf.labelWidth + 'px'"
-          >
-            <draggable class="drawing-board" :list="drawingList" :animation="340" group="componentsGroup">
-              <draggable-item
-                v-for="(item, index) in drawingList"
-                :key="item.renderKey"
-                :drawing-list="drawingList"
-                :current-item="item"
-                :index="index"
-                :active-id="activeId"
-                :form-conf="formConf"
-                @activeItem="activeFormItem"
-                @copyItem="drawingItemCopy"
-                @deleteItem="drawingItemDelete"
-              />
-            </draggable>
-            <div v-show="!drawingList.length" class="empty-info">
-              从左侧拖入或点选组件进行表单设计
+              <draggable
+                class="components-draggable"
+                :list="item.list"
+                :group="{ name: 'componentsGroup', pull: 'clone', put: false }"
+                :clone="cloneComponent"
+                draggable=".components-item"
+                :sort="false"
+                @end="onEnd"
+              >
+                <div
+                  v-for="(element, index) in item.list"
+                  :key="index"
+                  class="components-item"
+                  @click="addComponent(element)"
+                >
+                  <div class="components-body">
+                    <svg-icon :icon-class="element.__config__.tagIcon" />
+                    {{ element.__config__.label }}
+                  </div>
+                </div>
+              </draggable>
             </div>
-          </el-form>
-        </el-row>
-      </el-scrollbar>
+          </div>
+        </el-scrollbar>
+      </div>
+
+      <div class="center-board">
+        <div class="action-bar">
+          <el-button icon="el-icon-video-play" type="text" @click="run">
+            运行
+          </el-button>
+          <el-button icon="el-icon-view" type="text" @click="showJson">
+            查看json
+          </el-button>
+          <el-button icon="el-icon-download" type="text" @click="download">
+            导出vue文件
+          </el-button>
+          <el-button class="copy-btn-main" icon="el-icon-document-copy" type="text" @click="copy">
+            复制代码
+          </el-button>
+          <el-button class="delete-btn" icon="el-icon-delete" type="text" @click="empty">
+            清空
+          </el-button>
+        </div>
+        <el-scrollbar class="center-scrollbar">
+          <el-row class="center-board-row" :gutter="formConf.gutter">
+            <el-form
+              :size="formConf.size"
+              :label-position="formConf.labelPosition"
+              :disabled="formConf.disabled"
+              :label-width="formConf.labelWidth + 'px'"
+            >
+              <draggable class="drawing-board" :list="drawingList" :animation="340" group="componentsGroup">
+                <draggable-item
+                  v-for="(item, index) in drawingList"
+                  :key="item.renderKey"
+                  :drawing-list="drawingList"
+                  :current-item="item"
+                  :index="index"
+                  :active-id="activeId"
+                  :form-conf="formConf"
+                  @activeItem="activeFormItem"
+                  @copyItem="drawingItemCopy"
+                  @deleteItem="drawingItemDelete"
+                />
+              </draggable>
+              <div v-show="!drawingList.length" class="empty-info">
+                从左侧拖入或点选组件进行表单设计
+              </div>
+            </el-form>
+          </el-row>
+        </el-scrollbar>
+      </div>
+
+      <right-panel
+        :active-data="activeData"
+        :form-conf="formConf"
+        :show-field="!!drawingList.length"
+        @tag-change="tagChange"
+      />
+
+      <form-drawer
+        :visible.sync="drawerVisible"
+        :form-data="formData"
+        size="100%"
+        :generate-conf="generateConf"
+      />
+      <json-drawer
+        size="60%"
+        :visible.sync="jsonDrawerVisible"
+        :json-str="JSON.stringify(formData)"
+        @refresh="refreshJson"
+      />
+      <code-type-dialog
+        :visible.sync="dialogVisible"
+        title="选择生成类型"
+        :show-file-name="showFileName"
+        @confirm="generate"
+      />
+      <input id="copyNode" type="hidden">
     </div>
 
-    <right-panel
-      :active-data="activeData"
-      :form-conf="formConf"
-      :show-field="!!drawingList.length"
-      @tag-change="tagChange"
-    />
-
-    <form-drawer
-      :visible.sync="drawerVisible"
-      :form-data="formData"
-      size="100%"
-      :generate-conf="generateConf"
-    />
-    <json-drawer
-      size="60%"
-      :visible.sync="jsonDrawerVisible"
-      :json-str="JSON.stringify(formData)"
-      @refresh="refreshJson"
-    />
-    <code-type-dialog
-      :visible.sync="dialogVisible"
-      title="选择生成类型"
-      :show-file-name="showFileName"
-      @confirm="generate"
-    />
-    <input id="copyNode" type="hidden">
   </div>
 </template>
 
@@ -124,32 +123,32 @@ import draggable from 'vuedraggable'
 import { debounce } from 'throttle-debounce'
 import { saveAs } from 'file-saver'
 import ClipboardJS from 'clipboard'
-import render from '@/components/render/render'
+import render from '@/components/FormGenerator/render/render'
 import FormDrawer from './FormDrawer'
 import JsonDrawer from './JsonDrawer'
 import RightPanel from './RightPanel'
 import {
   inputComponents, selectComponents, layoutComponents, formConf
-} from '@/components/generator/config'
+} from '@/components/FormGenerator/generator/config'
 import {
   exportDefault, beautifierConf, isNumberStr, titleCase, deepClone
-} from '@/utils/index'
+} from '@/utils/form-generator-utils/index'
 import {
   makeUpHtml, vueTemplate, vueScript, cssStyle
-} from '@/components/generator/html'
-import { makeUpJs } from '@/components/generator/js'
-import { makeUpCss } from '@/components/generator/css'
-import drawingDefalut from '@/components/generator/drawingDefalut'
-import logo from '@/assets/logo.png'
+} from '@/components/FormGenerator/generator/html'
+import { makeUpJs } from '@/components/FormGenerator/generator/js'
+import { makeUpCss } from '@/components/FormGenerator/generator/css'
+import drawingDefalut from '@/components/FormGenerator/generator/drawingDefalut'
+import logo from '@/assets/form-generator/logo.png'
 import CodeTypeDialog from './CodeTypeDialog'
 import DraggableItem from './DraggableItem'
 import {
   getDrawingList, saveDrawingList, getIdGlobal, saveIdGlobal, getFormConf
-} from '@/utils/db'
-import loadBeautifier from '@/utils/loadBeautifier'
+} from '@/utils/form-generator-utils/db'
+import loadBeautifier from '@/utils/form-generator-utils/loadBeautifier'
 
 let beautifier
-const emptyActiveData = { style: {}, autosize: {} }
+const emptyActiveData = { style: {}, autosize: {}}
 let oldActiveId
 let tempActiveData
 const drawingListInDB = getDrawingList()
@@ -207,11 +206,11 @@ export default {
   },
   watch: {
     // eslint-disable-next-line func-names
-    'activeData.__config__.label': function (val, oldVal) {
+    'activeData.__config__.label': function(val, oldVal) {
       if (
-        this.activeData.placeholder === undefined
-        || !this.activeData.__config__.tag
-        || oldActiveId !== this.activeId
+        this.activeData.placeholder === undefined ||
+        !this.activeData.__config__.tag ||
+        oldActiveId !== this.activeId
       ) {
         return
       }
@@ -419,5 +418,5 @@ export default {
 </script>
 
 <style lang='scss'>
-@import '@/styles/home';
+@import '@/styles/form-generator-styles/home';
 </style>

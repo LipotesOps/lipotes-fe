@@ -25,11 +25,11 @@
 </template>
 
 <script>
-import { beautifierConf } from '@/utils/index'
+import { beautifierConf } from '@/utils/form-generator-utils/index'
 import ClipboardJS from 'clipboard'
 import { saveAs } from 'file-saver'
-import loadMonaco from '@/utils/loadMonaco'
-import loadBeautifier from '@/utils/loadBeautifier'
+import loadMonaco from '@/utils/form-generator-utils/loadMonaco'
+import loadBeautifier from '@/utils/form-generator-utils/loadBeautifier'
 
 let beautifier
 let monaco
@@ -131,7 +131,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/mixin.scss';
+@import '@/styles/form-generator-styles/mixin.scss';
 
 ::v-deep .el-drawer__header {
   display: none;

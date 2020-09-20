@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import { loadScriptQueue } from '@/utils/loadScript'
+import { loadScriptQueue } from '@/utils/form-generator-utils/loadScript'
 import axios from 'axios'
-import Tinymce from '@/components/tinymce/index.vue'
+import Tinymce from '@/components/FormGenerator/tinymce/index.vue'
 
 Vue.component('tinymce', Tinymce)
 Vue.prototype.$axios = axios

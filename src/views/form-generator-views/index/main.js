@@ -4,7 +4,7 @@ import router from '@/router'
 import '@/styles/index.scss'
 import '@/icons'
 import axios from 'axios'
-import Tinymce from '@/components/tinymce/index.vue'
+import Tinymce from '@/components/FormGenerator/tinymce/index.vue'
 
 Vue.component('tinymce', Tinymce)
 

@@ -81,13 +81,13 @@ import ClipboardJS from 'clipboard'
 import { saveAs } from 'file-saver'
 import {
   makeUpHtml, vueTemplate, vueScript, cssStyle
-} from '@/components/generator/html'
-import { makeUpJs } from '@/components/generator/js'
-import { makeUpCss } from '@/components/generator/css'
-import { exportDefault, beautifierConf, titleCase } from '@/utils/index'
+} from '@/components/FormGenerator/generator/html'
+import { makeUpJs } from '@/components/FormGenerator/generator/js'
+import { makeUpCss } from '@/components/FormGenerator/generator/css'
+import { exportDefault, beautifierConf, titleCase } from '@/utils/form-generator-utils/index'
 import ResourceDialog from './ResourceDialog'
-import loadMonaco from '@/utils/loadMonaco'
-import loadBeautifier from '@/utils/loadBeautifier'
+import loadMonaco from '@/utils/form-generator-utils/loadMonaco'
+import loadBeautifier from '@/utils/form-generator-utils/loadBeautifier'
 
 const editorObj = {
   html: null,
@@ -291,7 +291,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/mixin.scss';
+@import '@/styles/form-generator-styles/mixin.scss';
 .tab-editor {
   position: absolute;
   top: 33px;

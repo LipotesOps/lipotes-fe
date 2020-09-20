@@ -1,4 +1,4 @@
-import { deepClone } from '@/utils'
+import { deepClone } from '@/utils/form-generator-utils'
 
 const componentChild = {}
 /**

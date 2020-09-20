@@ -60,7 +60,7 @@
   </div>
 </template>
 <script>
-import { deepClone } from '@/utils/index'
+import { deepClone } from '@/utils/form-generator-utils/index'
 
 export default {
   components: {},

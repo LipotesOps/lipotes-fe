@@ -53,7 +53,7 @@ $lighterBlue: #409EFF;
 
 .left-board {
   width: 260px;
-  position: absolute;
+  // position: absolute;
   left: 0;
   top: 0;
   height: 100vh;
@@ -76,7 +76,7 @@ $lighterBlue: #409EFF;
   box-sizing: border-box;
 }
 .empty-info{
-  position: absolute;
+  // position: absolute;
   top: 46%;
   left: 0;
   right: 0;
@@ -98,15 +98,15 @@ $lighterBlue: #409EFF;
     color: #F56C6C;
   }
 }
-.logo-wrapper{
-  position: relative;
-  height: 42px;
-  background: #fff;
-  border-bottom: 1px solid #f1e8e8;
-  box-sizing: border-box;
-}
+// .logo-wrapper{
+//   position: relative;
+//   height: 42px;
+//   background: #fff;
+//   border-bottom: 1px solid #f1e8e8;
+//   box-sizing: border-box;
+// }
 .logo{
-  position: absolute;
+  // position: absolute;
   left: 12px;
   top: 6px;
   line-height: 30px;
@@ -151,7 +151,7 @@ $lighterBlue: #409EFF;
     overflow: hidden;
     &::before {
       content: " ";
-      position: absolute;
+      // position: absolute;
       left: 0;
       right: 0;
       top: 0;
@@ -215,7 +215,7 @@ $lighterBlue: #409EFF;
     border: 1px dashed $lighterBlue;
   }
   .component-name{
-    position: absolute;
+    // position: absolute;
     top: 0;
     left: 0;
     font-size: 12px;
@@ -236,7 +236,7 @@ $lighterBlue: #409EFF;
   }
   & > .drawing-item-copy, & > .drawing-item-delete{
     display: none;
-    position: absolute;
+    // position: absolute;
     top: -10px;
     width: 22px;
     height: 22px;

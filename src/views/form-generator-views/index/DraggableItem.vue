@@ -1,20 +1,20 @@
 <script>
 import draggable from 'vuedraggable'
-import render from '@/components/render/render'
+import render from '@/components/FormGenerator/render/render'
 
 const components = {
   itemBtns(h, currentItem, index, list) {
     const { copyItem, deleteItem } = this.$listeners
     return [
-      <span class="drawing-item-copy" title="复制" onClick={event => {
+      <span class='drawing-item-copy' title='复制' onClick={event => {
         copyItem(currentItem, list); event.stopPropagation()
       }}>
-        <i class="el-icon-copy-document" />
+        <i class='el-icon-copy-document' />
       </span>,
-      <span class="drawing-item-delete" title="删除" onClick={event => {
+      <span class='drawing-item-delete' title='删除' onClick={event => {
         deleteItem(index, list); event.stopPropagation()
       }}>
-        <i class="el-icon-delete" />
+        <i class='el-icon-delete' />
       </span>
     ]
   }
@@ -52,16 +52,16 @@ const layouts = {
     let child = renderChildren.apply(this, arguments)
     if (currentItem.type === 'flex') {
       child = <el-row type={currentItem.type} justify={currentItem.justify} align={currentItem.align}>
-              {child}
-            </el-row>
+        {child}
+      </el-row>
     }
     return (
       <el-col span={config.span}>
         <el-row gutter={config.gutter} class={className}
           nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
-          <span class="component-name">{config.componentName}</span>
+          <span class='component-name'>{config.componentName}</span>
           <draggable list={config.children || []} animation={340}
-            group="componentsGroup" class="drag-wrapper">
+            group='componentsGroup' class='drag-wrapper'>
             {child}
           </draggable>
           {components.itemBtns.apply(this, arguments)}

@@ -643,7 +643,6 @@
 
 <script>
 import draggable from 'vuedraggable'
-import { isArray } from 'util'
 import TreeNodeDialog from '@/views/form-generator-views/index/TreeNodeDialog'
 import { isNumberStr } from '@/utils/form-generator-utils/index'
 import IconsDialog from './IconsDialog'
@@ -888,7 +887,7 @@ export default {
       return val
     },
     onDefaultValueInput(str) {
-      if (isArray(this.activeData.__config__.defaultValue)) {
+      if (Array.isArray(this.activeData.__config__.defaultValue)) {
         // 数组
         this.$set(
           this.activeData.__config__,

@@ -1,4 +1,3 @@
-import { Array } from 'util'
 // import { Array.isArray } from 'util'
 import { exportDefault, titleCase, deepClone } from '@/utils/form-generator-utils'
 import ruleTrigger from './ruleTrigger'

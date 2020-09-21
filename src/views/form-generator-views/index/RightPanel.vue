@@ -968,11 +968,13 @@ export default {
 
 <style lang="scss" scoped>
 .right-board {
-  width: 300px;
+  width: 350px;
   position: absolute;
   right: 0;
   top: 0;
   padding-top: 3px;
+  padding-top: 60px;
+  padding-right: 35px;
   .field-box {
     position: relative;
     height: calc(100vh - 42px);

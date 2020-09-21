@@ -59,8 +59,8 @@ const flowManageRouter = {
     {
       path: 'form/:form_uuid/design',
       hidden: true,
-      // component: () => import('@/views/form/form-design'),
-      component: () => import('@/views/form-generator-views/index/Home'),
+      component: () => import('@/views/form/form-design'),
+      // component: () => import('@/views/form-generator-views/index/Home'),
       name: 'form-design',
       meta: { title: '表单配置', icon: 'documentation' }
     },

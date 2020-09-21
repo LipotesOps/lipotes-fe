@@ -4,7 +4,7 @@
       <h4 style="margin:0px">表单配置</h4>
     </div>
     <div class="app-content-container">
-      to design form
+      <k-form-design />
     </div>
   </div>
 </template>

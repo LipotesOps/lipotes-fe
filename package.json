@@ -23,6 +23,7 @@
     "element-ui": "2.13.2",
     "file-saver": "^2.0.2",
     "js-cookie": "2.2.0",
+    "k-form-design": "^3.6.1",
     "less-loader": "^6.2.0",
     "lodash": "^4.17.20",
     "monaco-editor": "^0.20.0",

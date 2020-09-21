@@ -8,11 +8,16 @@ import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
 
-// form generator
-import '@/styles/form-generator-styles/index.scss'
-import '@/icons'
+// k-form-design
+import KFormDesign from 'k-form-design'
+import 'k-form-design/lib/k-form-design.css'
+Vue.use(KFormDesign)
 
-import Tinymce from '@/components/FormGenerator/tinymce/index.vue'
+// form generator
+// import '@/styles/form-generator-styles/index.scss'
+// import '@/icons'
+
+// import Tinymce from '@/components/FormGenerator/tinymce/index.vue'
 
 import App from './App'
 import store from './store'
@@ -21,7 +26,7 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-Vue.component('tinymce', Tinymce)
+// Vue.component('tinymce', Tinymce)
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import loadTinymce from '@/utils/loadTinymce'
+import loadTinymce from '@/utils/form-generator-utils/loadTinymce'
 import { plugins, toolbar } from './config'
 import { debounce } from 'throttle-debounce'
 

@@ -1,0 +1,28 @@
+{
+	"list": [
+		{
+			"type": "alert",
+			"label": "新建表单",
+			"options": {
+				"type": "error",
+				"description": "第一次创建表单内容",
+				"showIcon": false,
+				"banner": false,
+				"hidden": false,
+				"closable": false
+			},
+			"key": "alert_1600782007088"
+		}
+	],
+	"config": {
+		"layout": "horizontal",
+		"labelCol": {
+			"span": 4
+		},
+		"wrapperCol": {
+			"span": 18
+		},
+		"hideRequiredMark": false,
+		"customStyle": ""
+	}
+}

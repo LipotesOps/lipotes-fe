@@ -4,6 +4,7 @@ module.exports = {
     '@vue/cli-plugin-babel/preset'
     // '@vue/app'
   ],
+  // 按需加载
   plugins: [
     [
       'import',

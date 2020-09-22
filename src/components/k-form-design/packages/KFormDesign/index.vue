@@ -375,7 +375,7 @@ export default {
     },
     handleReset() {
       // 清空
-      this.$confirm({
+      this.$confirm_ant({
         title: '警告',
         content: '是否确认清空内容?',
         okText: '是',
@@ -385,6 +385,9 @@ export default {
           this.data.list = []
           this.handleSetSelectItem({ key: '' })
           this.$message.success('已清空')
+        },
+        onCancel: () => {
+          console.log('cancle')
         }
       })
     },

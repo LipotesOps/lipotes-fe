@@ -213,7 +213,7 @@ export default {
         const ast = parse(jsCodeStr, { sourceType: 'module' })
         const astBody = ast.program.body
         if (astBody.length > 1) {
-          this.$confirm(
+          this.$confirm_ant(
             'js格式不能识别，仅支持修改export default的对象内容',
             '提示',
             {

@@ -35,4 +35,4 @@ export default `{
 		"hideRequiredMark": false,
 		"customStyle": ""
 	}
-}`;
+}`

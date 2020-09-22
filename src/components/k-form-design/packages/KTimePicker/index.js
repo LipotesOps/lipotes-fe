@@ -1,2 +1,2 @@
-import TimePicker from "./timePicker.vue";
-export default TimePicker;
+import TimePicker from './timePicker.vue'
+export default TimePicker

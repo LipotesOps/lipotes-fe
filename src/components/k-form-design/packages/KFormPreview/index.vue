@@ -2,15 +2,15 @@
   <a-modal
     title="预览"
     :visible="visible"
+    style="top:20px;"
+    ok-text="获取数据"
+    cancel-text="关闭"
+    :destroy-on-close="true"
+    :width="`${previewWidth}px`"
     @ok="handleGetData"
     @cancel="handleCancel"
-    okText="获取数据"
-    cancelText="关闭"
-    style="top:20px;"
-    :destroyOnClose="true"
-    :width="`${previewWidth}px`"
   >
-    <k-form-build :value="jsonData" @submit="handleSubmit" ref="KFormBuild" />
+    <k-form-build ref="KFormBuild" :value="jsonData" @submit="handleSubmit" />
     <jsonModel ref="jsonModel" />
   </a-modal>
 </template>
@@ -19,43 +19,43 @@
  * author kcz
  * date 2019-11-20
  */
-import jsonModel from "../KFormDesign/module/jsonModal";
+import jsonModel from '../KFormDesign/module/jsonModal'
 export default {
-  name: "KFormPreview",
+  name: 'KFormPreview',
+  components: {
+    jsonModel
+  },
   data() {
     return {
       visible: false,
       previewWidth: 850,
       jsonData: {}
-    };
-  },
-  components: {
-    jsonModel
+    }
   },
   methods: {
     handleSubmit(p) {
       p.then(res => {
-        console.log(res, "获取数据成功");
-        this.$refs.jsonModel.jsonData = res;
-        this.$refs.jsonModel.visible = true;
+        console.log(res, '获取数据成功')
+        this.$refs.jsonModel.jsonData = res
+        this.$refs.jsonModel.visible = true
       }).catch(err => {
-        console.log(err, "获取数据失败");
-      });
+        console.log(err, '获取数据失败')
+      })
     },
     handleGetData() {
       this.$refs.KFormBuild.getData()
         .then(res => {
-          console.log(res, "获取数据成功");
-          this.$refs.jsonModel.jsonData = res;
-          this.$refs.jsonModel.visible = true;
+          console.log(res, '获取数据成功')
+          this.$refs.jsonModel.jsonData = res
+          this.$refs.jsonModel.visible = true
         })
         .catch(err => {
-          console.log(err, "获取数据失败");
-        });
+          console.log(err, '获取数据失败')
+        })
     },
     handleCancel() {
-      this.visible = false;
+      this.visible = false
     }
   }
-};
+}
 </script>

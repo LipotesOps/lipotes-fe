@@ -61,7 +61,7 @@
         </a>
       </a-tooltip>
       <!-- 按钮左侧插槽 start -->
-      <slot name="left-action"></slot>
+      <slot name="left-action" />
       <!-- 按钮左侧插槽 end -->
     </div>
     <!-- 操作左侧区域 end -->
@@ -69,7 +69,7 @@
     <!-- 操作右侧区域 start -->
     <div class="right-btn-box">
       <!-- 按钮右侧插槽 start -->
-      <slot name="right-action"></slot>
+      <slot name="right-action" />
       <!-- 按钮右侧插槽 end -->
 
       <a-tooltip title="关闭">
@@ -90,13 +90,13 @@ export default {
     toolbars: {
       type: Array,
       default: () => [
-        "save",
-        "preview",
-        "importJson",
-        "exportJson",
-        "exportCode",
-        "reset",
-        "close"
+        'save',
+        'preview',
+        'importJson',
+        'exportJson',
+        'exportCode',
+        'reset',
+        'close'
       ]
     },
     showToolbarsText: {
@@ -104,5 +104,5 @@ export default {
       default: false
     }
   }
-};
+}
 </script>

@@ -3,13 +3,13 @@
     title="JSON数据"
     :footer="null"
     :visible="visible"
-    @cancel="handleCancel"
-    :destroyOnClose="true"
-    wrapClassName="code-modal-9136076486841527"
     style="top:20px;"
+    :destroy-on-close="true"
+    wrap-class-name="code-modal-9136076486841527"
     width="850px"
+    @cancel="handleCancel"
   >
-    <previewCode :editorJson="editorJson" />
+    <previewCode :editor-json="editorJson" />
   </a-modal>
 </template>
 <script>
@@ -18,30 +18,30 @@
  * date 2019-11-20
  * description 生成json Modal
  */
-import previewCode from "../../PreviewCode/index";
+import previewCode from '../../PreviewCode/index'
 export default {
-  name: "JsonModal",
+  name: 'JsonModal',
+  components: {
+    previewCode
+  },
   data() {
     return {
       visible: false,
-      editorJson: "",
+      editorJson: '',
       jsonData: {}
-    };
+    }
   },
   watch: {
     visible(val) {
       if (val) {
-        this.editorJson = JSON.stringify(this.jsonData, null, "\t");
+        this.editorJson = JSON.stringify(this.jsonData, null, '\t')
       }
     }
   },
-  components: {
-    previewCode
-  },
   methods: {
     handleCancel() {
-      this.visible = false;
+      this.visible = false
     }
   }
-};
+}
 </script>

@@ -6,15 +6,15 @@
  * @LastEditTime: 2020-03-26 20:18:56
  -->
 <template>
-  <header class="header" v-text="title"></header>
+  <header class="header" v-text="title" />
 </template>
 <script>
 export default {
   props: {
     title: {
       type: String,
-      default: "表单设计器 --by kcz"
+      default: '表单设计器'
     }
   }
-};
+}
 </script>

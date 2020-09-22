@@ -9,11 +9,11 @@
 <template>
   <div
     class="drag-move-box"
-    @click.stop="$emit('handleSelectItem', record)"
     :class="{ active: record.key === selectItem.key }"
+    @click.stop="$emit('handleSelectItem', record)"
   >
     <div class="form-item-box">
-      <kFormItem :formConfig="config" :record="record" />
+      <kFormItem :form-config="config" :record="record" />
     </div>
     <div v-if="!hideModel" class="show-key-box" v-text="record.model" />
     <div
@@ -38,8 +38,11 @@
  * date 2019-11-20
  * description 通过json生成的单个表单节点
  */
-import kFormItem from "../../KFormItem/index";
+import kFormItem from '../../KFormItem/index'
 export default {
+  components: {
+    kFormItem
+  },
   props: {
     record: {
       type: Object,
@@ -57,9 +60,6 @@ export default {
       type: Boolean,
       default: false
     }
-  },
-  components: {
-    kFormItem
   }
-};
+}
 </script>

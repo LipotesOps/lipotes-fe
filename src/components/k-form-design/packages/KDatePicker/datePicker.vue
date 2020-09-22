@@ -8,54 +8,54 @@
 <template>
   <!-- 月份选择 -->
   <a-month-picker
-    :style="`width:${record.options.width}`"
     v-if="
       record.type === 'date' &&
         record.options.format === 'YYYY-MM' &&
         record.options.range === false
     "
+    :style="`width:${record.options.width}`"
     :disabled="record.options.disabled || parentDisabled"
-    :allowClear="record.options.clearable"
+    :allow-clear="record.options.clearable"
     :placeholder="record.options.placeholder"
     :format="record.options.format"
-    @change="handleSelectChange"
     :value="date"
+    @change="handleSelectChange"
   />
   <!-- 日期选择 -->
   <a-date-picker
-    :style="`width:${record.options.width}`"
     v-else-if="record.type === 'date' && record.options.range === false"
+    :style="`width:${record.options.width}`"
     :disabled="record.options.disabled || parentDisabled"
     :show-time="record.options.showTime"
-    :allowClear="record.options.clearable"
+    :allow-clear="record.options.clearable"
     :placeholder="record.options.placeholder"
     :format="record.options.format"
-    @change="handleSelectChange"
     :value="date"
+    @change="handleSelectChange"
   />
 
   <!-- 范围日期选择 -->
   <a-range-picker
-    :style="`width:${record.options.width}`"
     v-else-if="record.type === 'date' && record.options.range === true"
+    :style="`width:${record.options.width}`"
     :show-time="record.options.showTime"
     :disabled="record.options.disabled || parentDisabled"
-    :allowClear="record.options.clearable"
+    :allow-clear="record.options.clearable"
     :placeholder="record.options.rangePlaceholder"
     :format="record.options.format"
-    @change="handleSelectChange"
     :value="date"
+    @change="handleSelectChange"
   />
 </template>
 <script>
-import moment from "moment";
+import moment from 'moment'
 export default {
   // eslint-disable-next-line vue/require-prop-types
-  props: ["record", "value", "parentDisabled"],
+  props: ['record', 'value', 'parentDisabled'],
   data() {
     return {
       // date: undefined
-    };
+    }
   },
   computed: {
     date() {
@@ -63,27 +63,27 @@ export default {
         !this.value ||
         (this.record.options.range && this.value.length === 0)
       ) {
-        return undefined;
+        return undefined
       } else if (this.record.options.range) {
-        return this.value.map(item => moment(item, this.record.options.format));
+        return this.value.map(item => moment(item, this.record.options.format))
       } else {
-        return moment(this.value, this.record.options.format);
+        return moment(this.value, this.record.options.format)
       }
     }
   },
   methods: {
     handleSelectChange(val) {
-      let date;
+      let date
       if (!val || (this.record.options.range && val.length === 0)) {
-        date = "";
+        date = ''
       } else if (this.record.options.range) {
-        date = val.map(item => item.format(this.record.options.format));
+        date = val.map(item => item.format(this.record.options.format))
       } else {
-        date = val.format(this.record.options.format);
+        date = val.format(this.record.options.format)
       }
-      this.$emit("change", date);
-      this.$emit("input", date);
+      this.$emit('change', date)
+      this.$emit('input', date)
     }
   }
-};
+}
 </script>

@@ -1,49 +1,59 @@
 <template>
   <div class="option-change-container">
     <a-row v-if="type === 'option'" :gutter="8">
-      <div class="option-change-box" v-for="(val, index) in value" :key="index">
-        <a-col :span="9"
-          ><a-input v-model="val.label" placeholder="名称"
+      <div v-for="(val, index) in value" :key="index" class="option-change-box">
+        <a-col
+          :span="9"
+        ><a-input
+          v-model="val.label"
+          placeholder="名称"
         /></a-col>
-        <a-col :span="9"><a-input v-model="val.value" placeholder="值"/></a-col>
-        <a-col :span="6"
-          ><div @click="handleDelete(index)" class="option-delete-box">
-            <a-icon type="delete" /></div
-        ></a-col>
+        <a-col :span="9"><a-input v-model="val.value" placeholder="值" /></a-col>
+        <a-col
+          :span="6"
+        ><div class="option-delete-box" @click="handleDelete(index)">
+          <a-icon type="delete" /></div></a-col>
       </div>
       <a-col :span="24"><a @click="handleAdd">添加</a></a-col>
     </a-row>
 
     <a-row v-if="type === 'rules'" :gutter="8">
       <span v-for="(val, index) in value" :key="index">
-        <div class="option-change-box" v-if="index !== 0">
-          <a-col :span="18"
-            ><a-input v-model="val.message" placeholder="提示信息"
+        <div v-if="index !== 0" class="option-change-box">
+          <a-col
+            :span="18"
+          ><a-input
+            v-model="val.message"
+            placeholder="提示信息"
           /></a-col>
-          <a-col :span="18"
-            ><a-input v-model="val.pattern" placeholder="正则表达式pattern"
+          <a-col
+            :span="18"
+          ><a-input
+            v-model="val.pattern"
+            placeholder="正则表达式pattern"
           /></a-col>
-          <a-col :span="6"
-            ><div @click="handleDelete(index)" class="option-delete-box">
-              <a-icon type="delete" /></div
-          ></a-col>
+          <a-col
+            :span="6"
+          ><div class="option-delete-box" @click="handleDelete(index)">
+            <a-icon type="delete" /></div></a-col>
         </div>
       </span>
       <a-col :span="24"><a @click="handleAddRules">增加校验</a></a-col>
     </a-row>
     <a-row v-else-if="type === 'colspan'" :gutter="8">
-      <div class="option-change-box" v-for="(val, index) in value" :key="index">
-        <a-col :span="18"
-          ><a-input-number
-            style="width:100%"
-            :max="24"
-            v-model="val.span"
-            placeholder="名称"
+      <div v-for="(val, index) in value" :key="index" class="option-change-box">
+        <a-col
+          :span="18"
+        ><a-input-number
+          v-model="val.span"
+          style="width:100%"
+          :max="24"
+          placeholder="名称"
         /></a-col>
-        <a-col :span="6"
-          ><div @click="handleDelete(index)" class="option-delete-box">
-            <a-icon type="delete" /></div
-        ></a-col>
+        <a-col
+          :span="6"
+        ><div class="option-delete-box" @click="handleDelete(index)">
+          <a-icon type="delete" /></div></a-col>
       </div>
       <a-col :span="24"><a @click="handleAddCol">添加</a></a-col>
     </a-row>
@@ -56,7 +66,7 @@
  * description 修改多选、下拉、单选等控件options的组件，添加移除校验规制的组件
  */
 export default {
-  name: "KChangeOption",
+  name: 'KChangeOption',
   props: {
     value: {
       type: Array,
@@ -64,51 +74,51 @@ export default {
     },
     type: {
       type: String,
-      default: "option"
+      default: 'option'
     }
   },
   methods: {
     handleAdd() {
       // 添加
-      let addData = [
+      const addData = [
         ...this.value,
         {
-          value: "",
-          label: ""
+          value: '',
+          label: ''
         }
-      ];
-      this.$emit("input", addData);
+      ]
+      this.$emit('input', addData)
     },
     handleAddCol() {
       // 添加栅格Col
-      let addData = [
+      const addData = [
         ...this.value,
         {
           span: 12,
           list: []
         }
-      ];
-      this.$emit("input", addData);
+      ]
+      this.$emit('input', addData)
     },
     handleAddRules() {
-      let addData = [
+      const addData = [
         ...this.value,
         {
-          pattern: "",
-          message: ""
+          pattern: '',
+          message: ''
         }
-      ];
-      this.$emit("input", addData);
+      ]
+      this.$emit('input', addData)
     },
     handleDelete(deleteIndex) {
       // 删除
       this.$emit(
-        "input",
+        'input',
         this.value.filter((val, index) => index !== deleteIndex)
-      );
+      )
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .option-change-container {

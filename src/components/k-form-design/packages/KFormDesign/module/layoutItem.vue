@@ -15,6 +15,7 @@
       >
         <div class="batch-label">动态表格</div>
         <draggable
+          v-model="record.list"
           tag="div"
           class="draggable-box"
           v-bind="{
@@ -23,7 +24,6 @@
             animation: 180,
             handle: '.drag-move'
           }"
-          v-model="record.list"
           @start="$emit('dragStart', $event, record.list)"
           @add="$emit('handleColAdd', $event, record.list)"
         >
@@ -32,9 +32,9 @@
               v-for="item in record.list"
               :key="item.key"
               class="drag-move"
-              :selectItem.sync="selectItem"
+              :select-item.sync="selectItem"
               :record="item"
-              :hideModel="hideModel"
+              :hide-model="hideModel"
               :config="config"
               @handleSelectItem="handleSelectItem"
               @handleColAdd="handleColAdd"
@@ -70,12 +70,13 @@
       >
         <a-row class="grid-row" :gutter="record.options.gutter">
           <a-col
-            class="grid-col"
             v-for="(colItem, idnex) in record.columns"
             :key="idnex"
+            class="grid-col"
             :span="colItem.span || 0"
           >
             <draggable
+              v-model="colItem.list"
               tag="div"
               class="draggable-box"
               v-bind="{
@@ -84,20 +85,19 @@
                 animation: 180,
                 handle: '.drag-move'
               }"
-              v-model="colItem.list"
               @start="$emit('dragStart', $event, colItem.list)"
               @add="$emit('handleColAdd', $event, colItem.list)"
             >
               <transition-group tag="div" name="list" class="list-main">
                 <layoutItem
-                  class="drag-move"
                   v-for="item in colItem.list"
                   :key="item.key"
-                  :selectItem.sync="selectItem"
-                  :startType="startType"
-                  :insertAllowedType="insertAllowedType"
+                  class="drag-move"
+                  :select-item.sync="selectItem"
+                  :start-type="startType"
+                  :insert-allowed-type="insertAllowedType"
                   :record="item"
-                  :hideModel="hideModel"
+                  :hide-model="hideModel"
                   :config="config"
                   @handleSelectItem="handleSelectItem"
                   @handleColAdd="handleColAdd"
@@ -137,6 +137,7 @@
         <a-card class="grid-row" :title="record.label">
           <div class="grid-col">
             <draggable
+              v-model="record.list"
               tag="div"
               class="draggable-box"
               v-bind="{
@@ -145,20 +146,19 @@
                 animation: 180,
                 handle: '.drag-move'
               }"
-              v-model="record.list"
               @start="$emit('dragStart', $event, record.list)"
               @add="$emit('handleColAdd', $event, record.list)"
             >
               <transition-group tag="div" name="list" class="list-main">
                 <layoutItem
-                  class="drag-move"
                   v-for="item in record.list"
                   :key="item.key"
-                  :selectItem.sync="selectItem"
-                  :startType="startType"
-                  :insertAllowedType="insertAllowedType"
+                  class="drag-move"
+                  :select-item.sync="selectItem"
+                  :start-type="startType"
+                  :insert-allowed-type="insertAllowedType"
                   :record="item"
-                  :hideModel="hideModel"
+                  :hide-model="hideModel"
                   :config="config"
                   @handleSelectItem="handleSelectItem"
                   @handleColAdd="handleColAdd"
@@ -206,9 +206,9 @@
         >
           <tr v-for="(trItem, trIndex) in record.trs" :key="trIndex">
             <td
-              class="table-td"
               v-for="(tdItem, tdIndex) in trItem.tds"
               :key="tdIndex"
+              class="table-td"
               :colspan="tdItem.colspan"
               :rowspan="tdItem.rowspan"
               @contextmenu.prevent="
@@ -216,6 +216,7 @@
               "
             >
               <draggable
+                v-model="tdItem.list"
                 tag="div"
                 class="draggable-box"
                 v-bind="{
@@ -224,20 +225,19 @@
                   animation: 180,
                   handle: '.drag-move'
                 }"
-                v-model="tdItem.list"
                 @start="$emit('dragStart', $event, tdItem.list)"
                 @add="$emit('handleColAdd', $event, tdItem.list)"
               >
                 <transition-group tag="div" name="list" class="list-main">
                   <layoutItem
-                    class="drag-move"
                     v-for="item in tdItem.list"
                     :key="item.key"
-                    :selectItem.sync="selectItem"
-                    :startType="startType"
-                    :insertAllowedType="insertAllowedType"
+                    class="drag-move"
+                    :select-item.sync="selectItem"
+                    :start-type="startType"
+                    :insert-allowed-type="insertAllowedType"
                     :record="item"
-                    :hideModel="hideModel"
+                    :hide-model="hideModel"
                     :config="config"
                     @handleSelectItem="handleSelectItem"
                     @handleColAdd="handleColAdd"
@@ -271,10 +271,10 @@
     <template v-else>
       <formNode
         :key="record.key"
-        :selectItem.sync="selectItem"
+        :select-item.sync="selectItem"
         :record="record"
         :config="config"
-        :hideModel="hideModel"
+        :hide-model="hideModel"
         @handleSelectItem="handleSelectItem"
         @handleCopy="$emit('handleCopy')"
         @handleDetele="$emit('handleDetele')"
@@ -289,10 +289,14 @@
  * date 2019-11-20
  * description 使用递归组件调用自己，生成布局结构及表单
  */
-import draggable from "vuedraggable";
-import formNode from "./formNode";
+import draggable from 'vuedraggable'
+import formNode from './formNode'
 export default {
-  name: "layoutItem",
+  name: 'LayoutItem',
+  components: {
+    formNode,
+    draggable
+  },
   props: {
     record: {
       type: Object,
@@ -321,23 +325,19 @@ export default {
   },
   computed: {
     insertAllowed() {
-      return this.insertAllowedType.includes(this.startType);
+      return this.insertAllowedType.includes(this.startType)
     }
-  },
-  components: {
-    formNode,
-    draggable
   },
   methods: {
     handleShowRightMenu(e, record, trIndex, tdIndex) {
-      this.$emit("handleShowRightMenu", e, record, trIndex, tdIndex);
+      this.$emit('handleShowRightMenu', e, record, trIndex, tdIndex)
     },
     handleSelectItem(record) {
-      this.$emit("handleSelectItem", record);
+      this.$emit('handleSelectItem', record)
     },
     handleColAdd(e, list) {
-      this.$emit("handleColAdd", e, list);
+      this.$emit('handleColAdd', e, list)
     }
   }
-};
+}
 </script>

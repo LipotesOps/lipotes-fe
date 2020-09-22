@@ -1,2 +1,2 @@
-import KBatch from "./batch.vue";
-export default KBatch;
+import KBatch from './batch.vue'
+export default KBatch

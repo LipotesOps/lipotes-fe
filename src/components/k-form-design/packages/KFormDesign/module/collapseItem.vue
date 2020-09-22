@@ -24,24 +24,25 @@
       @click="$emit('handleListPush', val)"
     >
       <svg v-if="val.icon" class="icon" aria-hidden="true">
-        <use :xlink:href="`#${val.icon}`"></use>
+        <use :xlink:href="`#${val.icon}`" />
       </svg>
       {{ val.label }}
     </li>
   </draggable>
 </template>
 <script>
-import draggable from "vuedraggable";
+import draggable from 'vuedraggable'
 export default {
-  name: "collapseItem",
-  props: ["list"],
+  name: 'CollapseItem',
   components: {
     draggable
   },
+  // eslint-disable-next-line
+  props: ['list'],
   methods: {
     handleStart(e, list) {
-      this.$emit("start", list[e.oldIndex].type);
+      this.$emit('start', list[e.oldIndex].type)
     }
   }
-};
+}
 </script>

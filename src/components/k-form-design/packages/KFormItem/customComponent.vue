@@ -7,16 +7,7 @@
     "
   >
     <component
-      :record="record"
-      :style="`width:${record.options.width}`"
-      @change="handleChange"
-      :disabled="disabled"
-      :dynamicData="dynamicData"
-      :height="
-        typeof record.options.height !== 'undefined'
-          ? record.options.height
-          : ''
-      "
+      :is="customComponent"
       v-decorator="[
         record.model,
         {
@@ -24,31 +15,41 @@
           rules: record.rules
         }
       ]"
-      :is="customComponent"
-    ></component>
+      :record="record"
+      :style="`width:${record.options.width}`"
+      :disabled="disabled"
+      :dynamic-data="dynamicData"
+      :height="
+        typeof record.options.height !== 'undefined'
+          ? record.options.height
+          : ''
+      "
+      @change="handleChange"
+    />
   </a-form-item>
 </template>
 <script>
 export default {
-  name: "customComponent",
-  props: ["record", "formConfig", "disabled", "dynamicData"],
+  name: 'CustomComponent',
+  // eslint-disable-next-line
+  props: ['record', 'formConfig', 'disabled', 'dynamicData'],
   computed: {
     customComponent() {
       // 计算需要显示的组件
-      let customComponentList = {};
+      const customComponentList = {}
       if (window.$customComponentList) {
         // 将数组映射成json
         window.$customComponentList.forEach(item => {
-          customComponentList[item.type] = item.component;
-        });
+          customComponentList[item.type] = item.component
+        })
       }
-      return customComponentList[this.record.type];
+      return customComponentList[this.record.type]
     }
   },
   methods: {
     handleChange(value, key) {
-      this.$emit("change", value, key);
+      this.$emit('change', value, key)
     }
   }
-};
+}
 </script>

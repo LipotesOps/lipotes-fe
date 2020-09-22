@@ -2,10 +2,10 @@
  * author kcz
  * date 2019-11-20
  */
-import KFormPreview from "./index.vue";
+import KFormPreview from './index.vue'
 
 KFormPreview.install = function(Vue) {
-  Vue.component(KFormPreview.name, KFormPreview);
-};
+  Vue.component(KFormPreview.name, KFormPreview)
+}
 
-export default KFormPreview;
+export default KFormPreview

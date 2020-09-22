@@ -31,28 +31,28 @@
   >
     <!-- 单行文本 -->
     <a-input
-      :style="`width:${record.options.width}`"
       v-if="record.type === 'input'"
+      :style="`width:${record.options.width}`"
       :disabled="record.options.disabled || parentDisabled"
       :placeholder="record.options.placeholder"
       :type="record.options.type"
-      :allowClear="record.options.clearable"
-      :maxLength="record.options.maxLength"
+      :allow-clear="record.options.clearable"
+      :max-length="record.options.maxLength"
       :value="value"
       @change="handleChange($event.target.value)"
     />
     <!-- 多行文本 -->
     <a-textarea
-      :style="`width:${record.options.width}`"
       v-else-if="record.type === 'textarea'"
-      :autoSize="{
+      :style="`width:${record.options.width}`"
+      :auto-size="{
         minRows: record.options.minRows,
         maxRows: record.options.maxRows
       }"
       :disabled="record.options.disabled || parentDisabled"
       :placeholder="record.options.placeholder"
-      :allowClear="record.options.clearable"
-      :maxLength="record.options.maxLength"
+      :allow-clear="record.options.clearable"
+      :max-length="record.options.maxLength"
       :rows="4"
       :value="value"
       @change="handleChange($event.target.value)"
@@ -61,7 +61,7 @@
     <!-- 日期选择 -->
     <KDatePicker
       v-else-if="record.type === 'date'"
-      :parentDisabled="parentDisabled"
+      :parent-disabled="parentDisabled"
       :record="record"
       :value="value"
       @change="handleChange"
@@ -69,7 +69,7 @@
     <!-- 时间选择 -->
     <KTimePicker
       v-else-if="record.type === 'time'"
-      :parentDisabled="parentDisabled"
+      :parent-disabled="parentDisabled"
       :record="record"
       :value="value"
       @change="handleChange"
@@ -90,7 +90,7 @@
       "
       :precision="
         record.options.precision > 50 ||
-        (!record.options.precision && record.options.precision !== 0)
+          (!record.options.precision && record.options.precision !== 0)
           ? null
           : record.options.precision
       "
@@ -107,8 +107,8 @@
         !record.options.dynamic
           ? record.options.options
           : dynamicData[record.options.dynamicKey]
-          ? dynamicData[record.options.dynamicKey]
-          : []
+            ? dynamicData[record.options.dynamicKey]
+            : []
       "
       :disabled="record.options.disabled || parentDisabled"
       :placeholder="record.options.placeholder"
@@ -122,8 +122,8 @@
         !record.options.dynamic
           ? record.options.options
           : dynamicData[record.options.dynamicKey]
-          ? dynamicData[record.options.dynamicKey]
-          : []
+            ? dynamicData[record.options.dynamicKey]
+            : []
       "
       :disabled="record.options.disabled || parentDisabled"
       :placeholder="record.options.placeholder"
@@ -136,25 +136,25 @@
       :count="record.options.max"
       :disabled="record.options.disabled || parentDisabled"
       :placeholder="record.options.placeholder"
-      :allowHalf="record.options.allowHalf"
+      :allow-half="record.options.allowHalf"
       :value="value"
       @change="handleChange"
     />
     <!-- 下拉选框 -->
     <a-select
-      :style="`width:${record.options.width}`"
       v-else-if="record.type === 'select'"
+      :style="`width:${record.options.width}`"
       :placeholder="record.options.placeholder"
-      :showSearch="record.options.filterable"
+      :show-search="record.options.filterable"
       :options="
         !record.options.dynamic
           ? record.options.options
           : dynamicData[record.options.dynamicKey]
-          ? dynamicData[record.options.dynamicKey]
-          : []
+            ? dynamicData[record.options.dynamicKey]
+            : []
       "
       :disabled="record.options.disabled || parentDisabled"
-      :allowClear="record.options.clearable"
+      :allow-clear="record.options.clearable"
       :mode="record.options.multiple ? 'multiple' : ''"
       :value="value"
       @change="handleChange"
@@ -182,7 +182,7 @@
           @change="handleChange"
         />
       </div>
-      <div class="number" v-if="record.options.showInput">
+      <div v-if="record.options.showInput" class="number">
         <a-input-number
           style="width:100%"
           :disabled="record.options.disabled || parentDisabled"
@@ -198,7 +198,7 @@
     <UploadImg
       v-else-if="record.type === 'uploadImg'"
       :style="`width:${record.options.width}`"
-      :parentDisabled="parentDisabled"
+      :parent-disabled="parentDisabled"
       :record="record"
       :config="config"
       :value="value"
@@ -208,8 +208,8 @@
     <UploadFile
       v-else-if="record.type === 'uploadFile'"
       :style="`width:${record.options.width}`"
-      :parentDisabled="parentDisabled"
-      :dynamicData="dynamicData"
+      :parent-disabled="parentDisabled"
+      :dynamic-data="dynamicData"
       :config="config"
       :record="record"
       :value="value"
@@ -221,17 +221,17 @@
       :style="`width:${record.options.width}`"
       :placeholder="record.options.placeholder"
       :multiple="record.options.multiple"
-      :showSearch="record.options.showSearch"
-      :treeCheckable="record.options.treeCheckable"
-      :treeData="
+      :show-search="record.options.showSearch"
+      :tree-checkable="record.options.treeCheckable"
+      :tree-data="
         !record.options.dynamic
           ? record.options.options
           : dynamicData[record.options.dynamicKey]
-          ? dynamicData[record.options.dynamicKey]
-          : []
+            ? dynamicData[record.options.dynamicKey]
+            : []
       "
       :disabled="record.options.disabled || parentDisabled"
-      :allowClear="record.options.clearable"
+      :allow-clear="record.options.clearable"
       :value="value"
       @change="handleChange"
     />
@@ -240,16 +240,16 @@
       v-else-if="record.type === 'cascader'"
       :style="`width:${record.options.width}`"
       :placeholder="record.options.placeholder"
-      :showSearch="record.options.showSearch"
+      :show-search="record.options.showSearch"
       :options="
         !record.options.dynamic
           ? record.options.options
           : dynamicData[record.options.dynamicKey]
-          ? dynamicData[record.options.dynamicKey]
-          : []
+            ? dynamicData[record.options.dynamicKey]
+            : []
       "
       :disabled="record.options.disabled || parentDisabled"
-      :allowClear="record.options.clearable"
+      :allow-clear="record.options.clearable"
       :value="value"
       @change="handleChange"
     />
@@ -260,14 +260,14 @@
       <label
         :class="{ 'ant-form-item-required': record.options.showRequiredMark }"
         v-text="record.label"
-      ></label>
+      />
     </div>
   </a-form-model-item>
   <!-- html -->
   <div
     v-else-if="record.type === 'html'"
     v-html="record.options.defaultValue"
-  ></div>
+  />
 
   <div v-else>
     <!-- 空 -->
@@ -280,42 +280,36 @@
  */
 // import moment from "moment";
 
-import UploadFile from "../../UploadFile";
-import UploadImg from "../../UploadImg";
-import KDatePicker from "../../KDatePicker";
-import KTimePicker from "../../KTimePicker";
+import UploadFile from '../../UploadFile'
+import UploadImg from '../../UploadImg'
+import KDatePicker from '../../KDatePicker'
+import KTimePicker from '../../KTimePicker'
 export default {
-  name: "KFormItem",
-  props: [
-    "record",
-    "domains",
-    "index",
-    "value",
-    "parentDisabled",
-    "dynamicData",
-    "config"
-  ],
+  name: 'KFormItem',
   components: {
     UploadImg,
     UploadFile,
     KDatePicker,
     KTimePicker
   },
+  // eslint-disable-next-line
+  props: ['record', 'domains', 'index', 'value', 'parentDisabled', 'dynamicData', 'config'
+  ],
   computed: {
     customList() {
       if (window.$customComponentList) {
-        return window.$customComponentList.map(item => item.type);
+        return window.$customComponentList.map(item => item.type)
       } else {
-        return [];
+        return []
       }
     }
   },
   methods: {
     handleChange(e) {
-      this.$emit("input", e);
+      this.$emit('input', e)
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .slider-box {

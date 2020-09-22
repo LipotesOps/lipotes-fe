@@ -7,17 +7,18 @@
  -->
 <template>
   <div class="form-panel">
-    <p class="hint-text" v-show="data.list.length === 0">
+    <p v-show="data.list.length === 0" class="hint-text">
       从左侧选择控件添加
     </p>
     <a-form
       class="a-form-box k-form-build"
       :form="form"
       :layout="data.config.layout"
-      :hideRequiredMark="data.config.hideRequiredMark"
+      :hide-required-mark="data.config.hideRequiredMark"
       :style="data.config.customStyle"
     >
       <draggable
+        v-model="data.list"
         tag="div"
         class="draggable-box"
         v-bind="{
@@ -26,21 +27,20 @@
           animation: 180,
           handle: '.drag-move'
         }"
-        v-model="data.list"
         @add="deepClone"
         @start="dragStart($event, data.list)"
       >
         <transition-group tag="div" name="list" class="list-main">
           <layoutItem
-            class="drag-move"
             v-for="record in data.list"
             :key="record.key"
+            class="drag-move"
             :record="record"
             :config="data.config"
-            :selectItem.sync="selectItem"
-            :startType="startType"
-            :insertAllowedType="insertAllowedType"
-            :hideModel="hideModel"
+            :select-item.sync="selectItem"
+            :start-type="startType"
+            :insert-allowed-type="insertAllowedType"
+            :hide-model="hideModel"
             @dragStart="dragStart"
             @handleSelectItem="handleSelectItem"
             @handleCopy="handleCopy"
@@ -69,40 +69,14 @@
   </div>
 </template>
 <script>
-import draggable from "vuedraggable";
-import layoutItem from "./layoutItem";
-import "codemirror/mode/javascript/javascript";
+import draggable from 'vuedraggable'
+import layoutItem from './layoutItem'
+import 'codemirror/mode/javascript/javascript'
 export default {
-  name: "KCenter",
-  data() {
-    return {
-      form: this.$form.createForm(this),
-      insertAllowedType: [
-        "input",
-        "textarea",
-        "number",
-        "select",
-        "checkbox",
-        "radio",
-        "date",
-        "time",
-        "rate",
-        "slider",
-        "uploadFile",
-        "uploadImg",
-        "cascader",
-        "treeSelect",
-        "switch",
-        "text",
-        "html"
-      ],
-      rightMenuSelectValue: {},
-      showRightMenu: false,
-      menuTop: 0,
-      menuLeft: 0,
-      trIndex: 0,
-      tdIndex: 0
-    };
+  name: 'KCenter',
+  components: {
+    draggable,
+    layoutItem
   },
   props: {
     noModel: {
@@ -126,82 +100,122 @@ export default {
       default: false
     }
   },
-  components: {
-    draggable,
-    layoutItem
+  data() {
+    return {
+      form: this.$form.createForm(this),
+      insertAllowedType: [
+        'input',
+        'textarea',
+        'number',
+        'select',
+        'checkbox',
+        'radio',
+        'date',
+        'time',
+        'rate',
+        'slider',
+        'uploadFile',
+        'uploadImg',
+        'cascader',
+        'treeSelect',
+        'switch',
+        'text',
+        'html'
+      ],
+      rightMenuSelectValue: {},
+      showRightMenu: false,
+      menuTop: 0,
+      menuLeft: 0,
+      trIndex: 0,
+      tdIndex: 0
+    }
+  },
+  mounted() {
+    // 添加监听取消右键菜单
+    document.addEventListener('click', this.handleRemoveRightMenu, true)
+    document.addEventListener('contextmenu', this.handleRemoveRightMenu, true)
+  },
+  destroyed() {
+    // 移除监听
+    document.removeEventListener('click', this.handleRemoveRightMenu, true)
+    document.removeEventListener(
+      'contextmenu',
+      this.handleRemoveRightMenu,
+      true
+    )
   },
   methods: {
     deepClone(evt) {
-      const newIndex = evt.newIndex;
+      const newIndex = evt.newIndex
       // json深拷贝一次
-      const listString = JSON.stringify(this.data.list);
-      this.data.list = JSON.parse(listString);
+      const listString = JSON.stringify(this.data.list)
+      this.data.list = JSON.parse(listString)
       // 删除icon及compoent属性
-      delete this.data.list[newIndex].icon;
-      delete this.data.list[newIndex].component;
-      this.$emit("handleSetSelectItem", this.data.list[newIndex]);
+      delete this.data.list[newIndex].icon
+      delete this.data.list[newIndex].component
+      this.$emit('handleSetSelectItem', this.data.list[newIndex])
     },
     handleColAdd(evt, columns, isCopy = false) {
       // 重置或者生成key值
-      const newIndex = evt.newIndex;
-      const key = columns[newIndex].type + "_" + new Date().getTime();
-      if (columns[newIndex].key === "" || isCopy) {
+      const newIndex = evt.newIndex
+      const key = columns[newIndex].type + '_' + new Date().getTime()
+      if (columns[newIndex].key === '' || isCopy) {
         this.$set(columns, newIndex, {
           ...columns[newIndex],
           key,
           model: key
-        });
+        })
         if (this.noModel.includes(columns[newIndex].type)) {
           // 删除不需要的model属性
-          delete columns[newIndex].model;
+          delete columns[newIndex].model
         }
-        if (typeof columns[newIndex].options !== "undefined") {
+        if (typeof columns[newIndex].options !== 'undefined') {
           // 深拷贝options
-          const optionsStr = JSON.stringify(columns[newIndex].options);
-          columns[newIndex].options = JSON.parse(optionsStr);
+          const optionsStr = JSON.stringify(columns[newIndex].options)
+          columns[newIndex].options = JSON.parse(optionsStr)
         }
-        if (typeof columns[newIndex].rules !== "undefined") {
+        if (typeof columns[newIndex].rules !== 'undefined') {
           // 深拷贝rules
-          const rulesStr = JSON.stringify(columns[newIndex].rules);
-          columns[newIndex].rules = JSON.parse(rulesStr);
+          const rulesStr = JSON.stringify(columns[newIndex].rules)
+          columns[newIndex].rules = JSON.parse(rulesStr)
         }
-        if (typeof columns[newIndex].list !== "undefined") {
+        if (typeof columns[newIndex].list !== 'undefined') {
           // 深拷贝list
-          columns[newIndex].list = [];
+          columns[newIndex].list = []
         }
-        if (typeof columns[newIndex].columns !== "undefined") {
+        if (typeof columns[newIndex].columns !== 'undefined') {
           // 深拷贝columns
-          const columnsStr = JSON.stringify(columns[newIndex].columns);
-          columns[newIndex].columns = JSON.parse(columnsStr);
+          const columnsStr = JSON.stringify(columns[newIndex].columns)
+          columns[newIndex].columns = JSON.parse(columnsStr)
           // 复制时，清空数据
           columns[newIndex].columns.forEach(item => {
-            item.list = [];
-          });
+            item.list = []
+          })
         }
-        if (columns[newIndex].type === "table") {
+        if (columns[newIndex].type === 'table') {
           // 深拷贝trs
-          const trsStr = JSON.stringify(columns[newIndex].trs);
-          columns[newIndex].trs = JSON.parse(trsStr);
+          const trsStr = JSON.stringify(columns[newIndex].trs)
+          columns[newIndex].trs = JSON.parse(trsStr)
           // 复制时，清空数据
           columns[newIndex].trs.forEach(item => {
             item.tds.forEach(val => {
-              val.list = [];
-            });
-          });
+              val.list = []
+            })
+          })
         }
       }
       // 深拷贝数据
-      const listString = JSON.stringify(columns[newIndex]);
-      columns[newIndex] = JSON.parse(listString);
-      this.$emit("handleSetSelectItem", columns[newIndex]);
+      const listString = JSON.stringify(columns[newIndex])
+      columns[newIndex] = JSON.parse(listString)
+      this.$emit('handleSetSelectItem', columns[newIndex])
     },
     dragStart(evt, list) {
       // 拖拽结束,自动选择拖拽的控件项
-      this.$emit("handleSetSelectItem", list[evt.oldIndex]);
+      this.$emit('handleSetSelectItem', list[evt.oldIndex])
     },
     handleSelectItem(record) {
       // 修改选择Item
-      this.$emit("handleSetSelectItem", record);
+      this.$emit('handleSetSelectItem', record)
     },
     handleCopy(isCopy = true, data) {
       const traverse = array => {
@@ -209,85 +223,85 @@ export default {
           if (element.key === this.selectItem.key) {
             if (isCopy) {
               // 复制添加到选择节点后面
-              array.splice(index + 1, 0, element);
+              array.splice(index + 1, 0, element)
             } else {
               // 双击添加到选择节点后面
-              array.splice(index + 1, 0, data);
+              array.splice(index + 1, 0, data)
             }
             // 复制完成，重置key值
             const evt = {
               newIndex: index + 1
-            };
-            this.handleColAdd(evt, array, true);
-            return;
+            }
+            this.handleColAdd(evt, array, true)
+            return
           }
-          if (element.type === "grid") {
+          if (element.type === 'grid') {
             // 栅格布局
             element.columns.forEach(item => {
-              traverse(item.list);
-            });
-          } else if (element.type === "card") {
+              traverse(item.list)
+            })
+          } else if (element.type === 'card') {
             // 卡片布局
-            traverse(element.list);
-          } else if (element.type === "batch") {
+            traverse(element.list)
+          } else if (element.type === 'batch') {
             // 动态表格内复制
             if (!isCopy && !this.insertAllowedType.includes(data.type)) {
               // 插入不允许的字段时，直接return false
-              return false;
+              return false
             }
-            traverse(element.list);
+            traverse(element.list)
           }
-          if (element.type === "table") {
+          if (element.type === 'table') {
             // 表格布局
             element.trs.forEach(item => {
               item.tds.forEach(val => {
-                traverse(val.list);
-              });
-            });
+                traverse(val.list)
+              })
+            })
           }
-        });
-      };
-      traverse(this.data.list);
+        })
+      }
+      traverse(this.data.list)
     },
     handleDetele() {
       // 删除已选择
       const traverse = array => {
         array = array.filter((element, index) => {
-          if (element.type === "grid") {
+          if (element.type === 'grid') {
             // 栅格布局
             element.columns.forEach(item => {
-              item.list = traverse(item.list);
-            });
+              item.list = traverse(item.list)
+            })
           }
-          if (element.type === "card" || element.type === "batch") {
+          if (element.type === 'card' || element.type === 'batch') {
             // 卡片布局
-            element.list = traverse(element.list);
+            element.list = traverse(element.list)
           }
-          if (element.type === "table") {
+          if (element.type === 'table') {
             // 表格布局
             element.trs.forEach(item => {
               item.tds.forEach(val => {
-                val.list = traverse(val.list);
-              });
-            });
+                val.list = traverse(val.list)
+              })
+            })
           }
           if (element.key !== this.selectItem.key) {
-            return true;
+            return true
           } else {
             if (array.length === 1) {
-              this.handleSelectItem({ key: "" });
+              this.handleSelectItem({ key: '' })
             } else if (array.length - 1 > index) {
-              this.handleSelectItem(array[index + 1]);
+              this.handleSelectItem(array[index + 1])
             } else {
-              this.handleSelectItem(array[index - 1]);
+              this.handleSelectItem(array[index - 1])
             }
-            return false;
+            return false
           }
-        });
-        return array;
-      };
+        })
+        return array
+      }
 
-      this.data.list = traverse(this.data.list);
+      this.data.list = traverse(this.data.list)
     },
     handleDownMerge() {
       // 向下合并
@@ -297,44 +311,44 @@ export default {
             .rowspan <=
         this.trIndex
       ) {
-        this.$message.error("当前是最后一行，无法向下合并");
-        return false;
+        this.$message.error('当前是最后一行，无法向下合并')
+        return false
       }
 
       // 计算rowspan超过自身的td
-      let rows = 0;
+      let rows = 0
       this.rightMenuSelectValue.trs[this.trIndex].tds.forEach(
         (element, index) => {
           if (index >= this.tdIndex) {
-            return false;
+            return false
           }
           if (
             element.rowspan >
             this.rightMenuSelectValue.trs[this.trIndex].tds[this.tdIndex]
               .rowspan
           ) {
-            rows += 1;
+            rows += 1
           }
         }
-      );
+      )
       if (
         this.rightMenuSelectValue.trs[this.trIndex].tds[this.tdIndex]
           .colspan !==
         this.rightMenuSelectValue.trs[this.trIndex + 1].tds[this.tdIndex - rows]
           .colspan
       ) {
-        this.$message.error("当前表格无法向下合并");
-        return false;
+        this.$message.error('当前表格无法向下合并')
+        return false
       }
 
       this.rightMenuSelectValue.trs[this.trIndex].tds[
         this.tdIndex
-      ].rowspan += 1;
+      ].rowspan += 1
       this.rightMenuSelectValue.trs[
         this.trIndex + 1
       ].tds = this.rightMenuSelectValue.trs[this.trIndex + 1].tds.filter(
         (item, index) => index !== this.tdIndex - rows
-      );
+      )
 
       // }
     },
@@ -343,16 +357,16 @@ export default {
       const sumCols = this.rightMenuSelectValue.trs[this.trIndex].tds
         .map(item => item.colspan)
         .reduce(function(partial, value) {
-          return partial + value;
-        });
+          return partial + value
+        })
       if (
         sumCols -
           this.rightMenuSelectValue.trs[this.trIndex].tds[this.tdIndex]
             .colspan <=
         this.tdIndex
       ) {
-        this.$message.error("当前是最后一列，无法向右合并");
-        return false;
+        this.$message.error('当前是最后一列，无法向右合并')
+        return false
       }
       if (
         this.rightMenuSelectValue.trs[this.trIndex].tds[this.tdIndex]
@@ -360,23 +374,23 @@ export default {
         this.rightMenuSelectValue.trs[this.trIndex].tds[this.tdIndex + 1]
           .rowspan
       ) {
-        this.$message.error("当前表格无法向右合并");
-        return false;
+        this.$message.error('当前表格无法向右合并')
+        return false
       }
 
       this.rightMenuSelectValue.trs[this.trIndex].tds[
         this.tdIndex
       ].colspan += this.rightMenuSelectValue.trs[this.trIndex].tds[
         this.tdIndex + 1
-      ].colspan;
+      ].colspan
 
       this.rightMenuSelectValue.trs[
         this.trIndex
       ].tds = this.rightMenuSelectValue.trs[this.trIndex].tds.filter(
         (item, index) => {
-          return index !== this.tdIndex + 1;
+          return index !== this.tdIndex + 1
         }
-      );
+      )
       // }
     },
     handleAddCol() {
@@ -386,8 +400,8 @@ export default {
           colspan: 1,
           rowspan: 1,
           list: []
-        });
-      });
+        })
+      })
     },
     handleAddRow() {
       // 增加行
@@ -395,54 +409,40 @@ export default {
       const sumCols = this.rightMenuSelectValue.trs[0].tds
         .map(item => item.colspan)
         .reduce(function(partial, value) {
-          return partial + value;
-        });
-      const rowJson = { tds: [] };
+          return partial + value
+        })
+      const rowJson = { tds: [] }
       for (let i = 0; i < sumCols; i++) {
         rowJson.tds.push({
           colspan: 1,
           rowspan: 1,
           list: []
-        });
+        })
       }
-      this.rightMenuSelectValue.trs.splice(this.trIndex + 1, 0, rowJson);
+      this.rightMenuSelectValue.trs.splice(this.trIndex + 1, 0, rowJson)
     },
     handleShowRightMenu(e, val, trIndex, tdIndex) {
       // 显示右键菜单
-      e.stopPropagation();
+      e.stopPropagation()
       // this.fileItem = item
       // 显示
-      this.showRightMenu = true;
+      this.showRightMenu = true
 
       // 定位
-      this.menuTop = e.clientY;
-      this.menuLeft = e.clientX;
+      this.menuTop = e.clientY
+      this.menuLeft = e.clientX
       // this.rightMenuType = type
       // this.rightId = id
-      this.activeArr = [val];
-      this.rightMenuSelectValue = val;
-      this.trIndex = trIndex;
-      this.tdIndex = tdIndex;
-      return false;
+      this.activeArr = [val]
+      this.rightMenuSelectValue = val
+      this.trIndex = trIndex
+      this.tdIndex = tdIndex
+      return false
     },
     handleRemoveRightMenu() {
       // 取消右键菜单
-      this.showRightMenu = false;
+      this.showRightMenu = false
     }
-  },
-  mounted() {
-    // 添加监听取消右键菜单
-    document.addEventListener("click", this.handleRemoveRightMenu, true);
-    document.addEventListener("contextmenu", this.handleRemoveRightMenu, true);
-  },
-  destroyed() {
-    // 移除监听
-    document.removeEventListener("click", this.handleRemoveRightMenu, true);
-    document.removeEventListener(
-      "contextmenu",
-      this.handleRemoveRightMenu,
-      true
-    );
   }
-};
+}
 </script>

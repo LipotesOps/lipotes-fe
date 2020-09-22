@@ -1,5 +1,5 @@
 <template>
-  <a-checkbox :val="_val" @change="handleChange" :checked="chackboxVal">
+  <a-checkbox :val="_val" :checked="chackboxVal" @change="handleChange">
     {{ label }}
   </a-checkbox>
 </template>
@@ -10,12 +10,7 @@
  * description 多选框组件,改成v-model Boolean值
  */
 export default {
-  name: "kCheckbox",
-  data() {
-    return {
-      chackboxVal: false
-    };
-  },
+  name: 'KCheckbox',
   props: {
     value: {
       type: Boolean,
@@ -23,22 +18,27 @@ export default {
     },
     label: {
       type: String,
-      default: ""
+      default: ''
+    }
+  },
+  data() {
+    return {
+      chackboxVal: false
     }
   },
   computed: {
     _val() {
-      this.handleSetChackboxVal(this.value);
-      return this.value;
+      this.handleSetChackboxVal(this.value)
+      return this.value
     }
   },
   methods: {
     handleChange(e) {
-      this.$emit("input", e.target.checked);
+      this.$emit('input', e.target.checked)
     },
     handleSetChackboxVal(val) {
-      this.chackboxVal = val;
+      this.chackboxVal = val
     }
   }
-};
+}
 </script>

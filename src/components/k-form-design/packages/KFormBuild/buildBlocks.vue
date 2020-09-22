@@ -6,22 +6,22 @@
     :gutter="record.options.gutter"
   >
     <a-col
-      class="grid-col"
       v-for="(colItem, idnex) in record.columns"
       :key="idnex"
+      class="grid-col"
       :span="colItem.span || 0"
     >
       <buildBlocks
+        v-for="item in colItem.list"
         ref="nestedComponents"
+        :key="item.key"
+        :disabled="disabled"
+        :dynamic-data="dynamicData"
+        :record="item"
+        :form-config="formConfig"
+        :config="config"
         @handleReset="$emit('handleReset')"
         @change="handleChange"
-        v-for="item in colItem.list"
-        :disabled="disabled"
-        :dynamicData="dynamicData"
-        :key="item.key"
-        :record="item"
-        :formConfig="formConfig"
-        :config="config"
       />
     </a-col>
   </a-row>
@@ -32,16 +32,16 @@
     :title="record.label"
   >
     <buildBlocks
+      v-for="item in record.list"
       ref="nestedComponents"
+      :key="item.key"
+      :disabled="disabled"
+      :dynamic-data="dynamicData"
+      :record="item"
+      :form-config="formConfig"
+      :config="config"
       @handleReset="$emit('handleReset')"
       @change="handleChange"
-      v-for="item in record.list"
-      :disabled="disabled"
-      :dynamicData="dynamicData"
-      :key="item.key"
-      :record="item"
-      :formConfig="formConfig"
-      :config="config"
     />
   </a-card>
   <!-- 表格布局 -->
@@ -57,23 +57,23 @@
   >
     <tr v-for="(trItem, trIndex) in record.trs" :key="trIndex">
       <td
-        class="table-td"
         v-for="(tdItem, tdIndex) in trItem.tds"
         :key="tdIndex"
+        class="table-td"
         :colspan="tdItem.colspan"
         :rowspan="tdItem.rowspan"
       >
         <buildBlocks
+          v-for="item in tdItem.list"
           ref="nestedComponents"
+          :key="item.key"
+          :disabled="disabled"
+          :dynamic-data="dynamicData"
+          :record="item"
+          :form-config="formConfig"
+          :config="config"
           @handleReset="$emit('handleReset')"
           @change="handleChange"
-          v-for="item in tdItem.list"
-          :disabled="disabled"
-          :dynamicData="dynamicData"
-          :key="item.key"
-          :record="item"
-          :formConfig="formConfig"
-          :config="config"
         />
       </td>
     </tr>
@@ -82,14 +82,14 @@
   <KFormItem
     v-else
     ref="nestedComponents"
+    :key="record.key"
+    :disabled="disabled"
+    :dynamic-data="dynamicData"
+    :record="record"
+    :form-config="formConfig"
+    :config="config"
     @handleReset="$emit('handleReset')"
     @change="handleChange"
-    :disabled="disabled"
-    :dynamicData="dynamicData"
-    :key="record.key"
-    :record="record"
-    :formConfig="formConfig"
-    :config="config"
   />
 </template>
 <script>
@@ -97,9 +97,12 @@
  * author kcz
  * date 2019-11-20
  */
-import KFormItem from "../KFormItem/index";
+import KFormItem from '../KFormItem/index'
 export default {
-  name: "buildBlocks",
+  name: 'BuildBlocks',
+  components: {
+    KFormItem
+  },
   props: {
     record: {
       type: Object,
@@ -122,32 +125,29 @@ export default {
       default: false
     }
   },
-  components: {
-    KFormItem
-  },
   methods: {
     validationSubform() {
       // 验证动态表格
-      let nestedComponents = this.$refs.nestedComponents;
+      const nestedComponents = this.$refs.nestedComponents
       if (
-        typeof nestedComponents === "object" &&
+        typeof nestedComponents === 'object' &&
         nestedComponents instanceof Array
       ) {
         for (let i = 0; nestedComponents.length > i; i++) {
           if (!nestedComponents[i].validationSubform()) {
-            return false;
+            return false
           }
         }
-        return true;
-      } else if (typeof nestedComponents !== "undefined") {
-        return nestedComponents.validationSubform();
+        return true
+      } else if (typeof nestedComponents !== 'undefined') {
+        return nestedComponents.validationSubform()
       } else {
-        return true;
+        return true
       }
     },
     handleChange(value, key) {
-      this.$emit("change", value, key);
+      this.$emit('change', value, key)
     }
   }
-};
+}
 </script>

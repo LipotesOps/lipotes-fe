@@ -14,9 +14,9 @@
     <a-table
       class="batch-table"
       :pagination="false"
-      :rowKey="record => record.key"
+      :row-key="record => record.key"
       :columns="columns"
-      :dataSource="dynamicValidateForm.domains"
+      :data-source="dynamicValidateForm.domains"
       bordered
       :scroll="{
         x: listLength * 190 + 80 + (!record.options.hideSequence ? 60 : 0),
@@ -30,13 +30,13 @@
       >
         <KFormModelItem
           :key="item.key + '1'"
+          v-model="record[item.model]"
           :record="item"
           :config="config"
-          :parentDisabled="disabled"
+          :parent-disabled="disabled"
           :index="index"
           :domains="dynamicValidateForm.domains"
-          :dynamicData="dynamicData"
-          v-model="record[item.model]"
+          :dynamic-data="dynamicData"
           @input="handleInput"
         />
       </template>
@@ -56,47 +56,38 @@
 </template>
 
 <script>
-import KFormModelItem from "./module/KFormModelItem";
+import KFormModelItem from './module/KFormModelItem'
 export default {
-  name: "KBatch",
-  props: ["record", "value", "dynamicData", "config", "parentDisabled"],
+  name: 'KBatch',
 
   components: {
     KFormModelItem
   },
-  watch: {
-    value: {
-      // value 需要深度监听及默认先执行handler函数
-      handler(val) {
-        this.dynamicValidateForm.domains = val || [];
-      },
-      immediate: true,
-      deep: true
-    }
-  },
+  // eslint-disable-next-line
+  props: ['record', 'value', 'dynamicData', 'config', 'parentDisabled'],
   data() {
     return {
       dynamicValidateForm: {
         domains: []
       }
-    };
+    }
   },
   computed: {
     listLength() {
-      return this.record.list.filter(item => !item.options.hidden).length;
+      return this.record.list.filter(item => !item.options.hidden).length
     },
     columns() {
-      let columns = [];
+      const columns = []
       if (!this.record.options.hideSequence) {
         columns.push({
-          title: "序号",
-          dataIndex: "sequence_index_number",
-          width: "60px",
-          align: "center",
+          title: '序号',
+          dataIndex: 'sequence_index_number',
+          width: '60px',
+          align: 'center',
           customRender: (text, record, index) => {
-            return index + 1;
+            return index + 1
           }
-        });
+        })
       }
 
       columns.push(
@@ -106,61 +97,71 @@ export default {
             return {
               title: item.label,
               dataIndex: item.key,
-              width: index === this.record.list.length - 1 ? "" : "190px",
+              width: index === this.record.list.length - 1 ? '' : '190px',
               scopedSlots: { customRender: item.key }
-            };
+            }
           })
-      );
+      )
 
       columns.push({
-        title: "操作",
-        dataIndex: "dynamic-delete-button",
-        fixed: "right",
-        width: "80px",
-        align: "center",
-        scopedSlots: { customRender: "dynamic-delete-button" }
-      });
+        title: '操作',
+        dataIndex: 'dynamic-delete-button',
+        fixed: 'right',
+        width: '80px',
+        align: 'center',
+        scopedSlots: { customRender: 'dynamic-delete-button' }
+      })
 
-      return columns;
+      return columns
     },
     disabled() {
-      return this.record.options.disabled || this.parentDisabled;
+      return this.record.options.disabled || this.parentDisabled
+    }
+  },
+  watch: {
+    value: {
+      // value 需要深度监听及默认先执行handler函数
+      handler(val) {
+        this.dynamicValidateForm.domains = val || []
+      },
+      immediate: true,
+      deep: true
     }
   },
   methods: {
     validationSubform() {
-      let verification;
+      let verification
       this.$refs.dynamicValidateForm.validate(valid => {
-        verification = valid;
-      });
-      return verification;
+        verification = valid
+      })
+      return verification
     },
     resetForm() {
-      this.$refs.dynamicValidateForm.resetFields();
+      this.$refs.dynamicValidateForm.resetFields()
     },
     removeDomain(item) {
-      const index = this.dynamicValidateForm.domains.indexOf(item);
+      const index = this.dynamicValidateForm.domains.indexOf(item)
       if (index !== -1) {
-        this.dynamicValidateForm.domains.splice(index, 1);
+        this.dynamicValidateForm.domains.splice(index, 1)
       }
     },
     addDomain() {
-      let data = {};
+      const data = {}
       this.record.list.forEach(item => {
-        data[item.model] = item.options.defaultValue;
-      });
+        data[item.model] = item.options.defaultValue
+      })
 
       this.dynamicValidateForm.domains.push({
         ...data,
         key: Date.now()
-      });
-      this.handleInput();
+      })
+      this.handleInput()
     },
     handleInput() {
-      this.$emit("change", this.dynamicValidateForm.domains);
+      this.$emit('change', this.dynamicValidateForm.domains)
     }
   }
-};
+}
 </script>
 <style scoped>
 .dynamic-delete-button {

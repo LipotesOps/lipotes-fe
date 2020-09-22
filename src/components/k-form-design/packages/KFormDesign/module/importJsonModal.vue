@@ -2,26 +2,26 @@
   <a-modal
     title="JSON数据"
     :visible="visible"
+    style="top:20px;"
+    cancel-text="关闭"
+    :destroy-on-close="true"
+    wrap-class-name="code-modal-9136076486841527"
+    width="850px"
     @ok="handleImportJson"
     @cancel="handleCancel"
-    cancelText="关闭"
-    :destroyOnClose="true"
-    wrapClassName="code-modal-9136076486841527"
-    style="top:20px;"
-    width="850px"
   >
     <p class="hint-box">导入格式如下:</p>
     <div class="json-box-9136076486841527">
       <codemirror
-        style="height:100%;"
         ref="myEditor"
         v-model="jsonFormat"
-      ></codemirror>
+        style="height:100%;"
+      />
     </div>
     <a-upload
       action="/abc"
-      :beforeUpload="beforeUpload"
-      :showUploadList="false"
+      :before-upload="beforeUpload"
+      :show-upload-list="false"
       accept="application/json"
     >
       <a-button type="primary"> 导入json文件 </a-button>
@@ -34,67 +34,67 @@
  * date 2019-11-20
  * description 导入json Modal
  */
-import { codemirror } from "vue-codemirror-lite";
-import jsonFormat from "../config/jsonFormat";
+import { codemirror } from 'vue-codemirror-lite'
+import jsonFormat from '../config/jsonFormat'
 export default {
-  name: "importJsonModal",
+  name: 'ImportJsonModal',
+  components: {
+    codemirror
+  },
   data() {
     return {
       visible: false,
       jsonFormat,
       jsonData: {},
       handleSetSelectItem: null
-    };
-  },
-  watch: {
-    visible(val) {
-      if (val) {
-        this.jsonFormat = jsonFormat;
-      }
     }
-  },
-  components: {
-    codemirror
   },
   computed: {
     editor() {
       // get current editor object
-      return this.$refs.myEditor.editor;
+      return this.$refs.myEditor.editor
+    }
+  },
+  watch: {
+    visible(val) {
+      if (val) {
+        this.jsonFormat = jsonFormat
+      }
     }
   },
   methods: {
     handleCancel() {
-      this.visible = false;
+      this.visible = false
     },
     beforeUpload(e) {
       // 通过json文件导入
-      let _this = this;
-      let reader = new FileReader();
-      reader.readAsText(e);
+      const _this = this
+      const reader = new FileReader()
+      reader.readAsText(e)
       reader.onload = function() {
-        _this.jsonFormat = this.result;
-        _this.handleImportJson();
-      };
-      return false;
+        _this.jsonFormat = this.result
+        _this.handleImportJson()
+      }
+      return false
     },
     handleImportJson() {
       // 导入JSON
       try {
-        const editorJsonData = JSON.parse(this.jsonFormat);
-        this.jsonData.list = editorJsonData.list;
-        this.jsonData.config = editorJsonData.config;
-        this.jsonData.config.layout = editorJsonData.config.layout;
-        this.handleCancel();
+        const editorJsonData = JSON.parse(this.jsonFormat)
+        this.jsonData.list = editorJsonData.list
+        this.jsonData.config = editorJsonData.config
+        this.jsonData.config.layout = editorJsonData.config.layout
+        this.handleCancel()
         // 导入之后，需要清除已选择key
-        this.handleSetSelectItem({ key: "" });
+        this.handleSetSelectItem({ key: '' })
 
-        this.$message.success("导入成功");
+        this.$message.success('导入成功')
       } catch (error) {
-        this.$message.error("导入失败，数据格式不对");
+        this.$message.error('导入失败，数据格式不对')
       }
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

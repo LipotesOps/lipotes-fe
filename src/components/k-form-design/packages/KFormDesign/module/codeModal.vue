@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Author: kcz
  * @Date: 2019-12-30 00:37:05
  * @LastEditors: kcz
@@ -10,28 +10,28 @@
     title="代码"
     :footer="null"
     :visible="visible"
-    @cancel="handleCancel"
-    wrapClassName="code-modal-9136076486841527"
     style="top:20px;"
+    wrap-class-name="code-modal-9136076486841527"
     width="850px"
-    :destroyOnClose="true"
+    :destroy-on-close="true"
+    @cancel="handleCancel"
   >
-    <a-tabs tabPosition="left" style="height:100%">
-      <a-tab-pane tab="VUE" key="1">
+    <a-tabs tab-position="left" style="height:100%">
+      <a-tab-pane key="1" tab="VUE">
         <!-- vue code start -->
-        <previewCode :editorJson="editorVueJson" fileFormat="vue" />
+        <previewCode :editor-json="editorVueJson" file-format="vue" />
         <!-- vue code end -->
       </a-tab-pane>
-      <a-tab-pane tab="HTML" key="2">
+      <a-tab-pane key="2" tab="HTML">
         <!-- html code start -->
-        <previewCode :editorJson="editorHtmlJson" fileFormat="html" />
+        <previewCode :editor-json="editorHtmlJson" file-format="html" />
         <!-- html code end -->
       </a-tab-pane>
     </a-tabs>
   </a-modal>
 </template>
 <script>
-let codeVueFront = `<template>
+const codeVueFront = `<template>
   <div>
     <k-form-build
       :value="jsonData"
@@ -46,7 +46,7 @@ export default {
   name: 'Demo',
   data () {
     return {
-      jsonData: `;
+      jsonData: `
 /* eslint-disable */
 let codeVueLast = `
     }
@@ -129,35 +129,35 @@ let codeHtmlFront = `<!DOCTYPE html>
 
 </html>`
 /* eslint-enable */
-import previewCode from "../../PreviewCode/index";
+import previewCode from '../../PreviewCode/index'
 export default {
-  name: "CodeModal",
+  name: 'CodeModal',
+  components: {
+    previewCode
+  },
   data() {
     return {
       visible: false,
-      editorVueJson: "",
-      editorHtmlJson: "",
+      editorVueJson: '',
+      editorHtmlJson: '',
       jsonData: {}
-    };
+    }
   },
   watch: {
     visible(val) {
       if (val) {
         this.editorVueJson =
-          codeVueFront + JSON.stringify(this.jsonData) + codeVueLast;
+          codeVueFront + JSON.stringify(this.jsonData) + codeVueLast
 
         this.editorHtmlJson =
-          codeHtmlFront + JSON.stringify(this.jsonData) + codeHtmlLast;
+          codeHtmlFront + JSON.stringify(this.jsonData) + codeHtmlLast
       }
     }
   },
-  components: {
-    previewCode
-  },
   methods: {
     handleCancel() {
-      this.visible = false;
+      this.visible = false
     }
   }
-};
+}
 </script>

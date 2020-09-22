@@ -9,7 +9,7 @@
           v-if="typeof config.layout !== 'undefined'"
           label="表单布局"
         >
-          <a-radio-group buttonStyle="solid" v-model="config.layout">
+          <a-radio-group v-model="config.layout" button-style="solid">
             <a-radio-button value="horizontal">水平</a-radio-button>
             <a-radio-button value="vertical">垂直</a-radio-button>
             <a-radio-button value="inline">行内</a-radio-button>
@@ -19,9 +19,9 @@
           <div class="change-col-box">
             <a-slider
               id="test"
+              v-model="config.labelCol.span"
               :max="24"
               :min="0"
-              v-model="config.labelCol.span"
               @change="config.wrapperCol.span = 24 - config.labelCol.span"
             />
           </div>
@@ -35,7 +35,7 @@
           </div>
         </a-form-item>
         <a-form-item label="预览模态框宽度">
-          <a-input-number style="width:100%;" v-model="previewOptions.width" />
+          <a-input-number v-model="previewOptions.width" style="width:100%;" />
         </a-form-item>
         <a-form-item label="表单CSS">
           <a-input v-model="config.customStyle" />
@@ -60,9 +60,9 @@
  * date 2019-11-20
  * description 表单属性设置面板组件
  */
-import kCheckbox from "../../KCheckbox/index.vue";
+import kCheckbox from '../../KCheckbox/index.vue'
 export default {
-  name: "formProperties",
+  name: 'FormProperties',
   components: {
     kCheckbox
   },
@@ -76,7 +76,7 @@ export default {
       required: true
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .change-col-box {

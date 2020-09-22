@@ -9,8 +9,10 @@ import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 import '@/styles/index.scss' // global css
 
 // k-form-design
-import KFormDesign from 'k-form-design'
-import 'k-form-design/lib/k-form-design.css'
+// import KFormDesign from 'k-form-design'
+// import 'k-form-design/lib/k-form-design.css'
+import KFormDesign from '@/components/k-form-design/packages'
+import '@/components/k-form-design/styles/form-design.less'
 Vue.use(KFormDesign)
 
 // form generator

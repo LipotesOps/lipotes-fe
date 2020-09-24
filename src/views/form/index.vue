@@ -42,7 +42,7 @@
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="所属流程" width="110px" align="center">
+      <el-table-column label="所属流程" min-width="50" align="center">
         <template slot-scope="{row}">
           <el-tag>
             {{ row | flowFilter }}

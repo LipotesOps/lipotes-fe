@@ -147,3 +147,19 @@ export function createForm(data) {
     data
   })
 }
+
+export function updateFormContent(id, data) {
+  return request({
+    url: `/api/form-content/${id}/`,
+    method: 'put',
+    data
+  })
+}
+
+export function createFormContent(data) {
+  return request({
+    url: `/api/form-content/`,
+    method: 'post',
+    data
+  })
+}

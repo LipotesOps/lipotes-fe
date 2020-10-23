@@ -54,13 +54,19 @@ export default {
     border-radius: 8px;
     margin: 25px;
     // margin-left: 25px;
+    transition: all .8s;
+
     cursor: pointer;
-    box-shadow: 1px 1px rgb(179, 173, 173), -.5px -.5px rgb(179, 173, 173);
+    box-shadow: 1px 1px rgb(212, 204, 204), -.5px -.5px rgb(212, 204, 204);
     i {
         font-size: 50px;
         color: green;
         border-radius: 5px;
         box-shadow: .5px .5px rgba(39, 63, 172, 0.562), -.3px -.3px rgba(39, 63, 172, 0.562);
     }
+}
+.el-card:hover{
+  padding-left: 6.18px;
+  padding-top: 10px;
 }
 </style>

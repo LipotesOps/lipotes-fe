@@ -9,6 +9,7 @@ import Layout from '@/layout'
 /* Router Modules */
 import nestedRouter from './modules/nested'
 import { serviceManageRouter, flowManageRouter, userManageRouter, permissionManageRouter } from './modules/admin'
+import { cmdb } from './modules/cmdb'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -87,6 +88,7 @@ export const constantRoutes = [
   flowManageRouter,
   userManageRouter,
   permissionManageRouter,
+  cmdb,
   {
     path: '/example',
     component: Layout,

@@ -14,19 +14,19 @@
         style="width: 100%;"
         @sort-change="sortChange"
       >
-        <el-table-column label="任务名称" prop="name" sortable="true" align="center" min-width="50">
+        <el-table-column label="任务名称" prop="taskName" sortable="true" align="center" min-width="50">
           <template slot-scope="{row}">
             <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="表单名称" prop="name" sortable="true" align="center" min-width="50">
+        <el-table-column label="表单名称" prop="formName" sortable="true" align="center" min-width="50">
           <template slot-scope="{row}">
-            <span>{{ row.name }}</span>
+            <span>{{ row | formNameFilter }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="Rev." prop="name" sortable="true" align="center" min-width="110">
+        <el-table-column label="Rev." prop="formTag" sortable="true" align="center" min-width="110">
           <template slot-scope="{row}">
-            <span>{{ row.name }}</span>
+            <span>{{ row | formTagFilter }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -64,6 +64,14 @@ import { fetchFlow, fetchTask, fetchForm, updateTask } from '@/api/itsc-flow'
 export default {
   name: 'FormBind',
   inject: ['reload'],
+  filters: {
+    formNameFilter(row) {
+      return window._.get(row, 'form.name', '未绑定')
+    },
+    formTagFilter(row) {
+      return window._.get(row, 'form.form_content.tag', '未绑定')
+    }
+  },
   data() {
     return {
       formArray: [],

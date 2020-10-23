@@ -7,6 +7,20 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
+          <!-- <img :src="avatar" class="user-avatar"> -->
+          <i class="el-icon-setting" />
+          <i class="el-icon-caret-bottom" />
+        </div>
+        <el-dropdown-menu slot="dropdown">
+          <router-link to="/cmdb/object">
+            <el-dropdown-item>
+              模型管理
+            </el-dropdown-item>
+          </router-link>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <el-dropdown class="avatar-container" trigger="click">
+        <div class="avatar-wrapper">
           <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
@@ -131,6 +145,13 @@ export default {
           right: -20px;
           top: 25px;
           font-size: 12px;
+        }
+        .el-icon-setting {
+          cursor: pointer;
+          // position: absolute;
+          // right: -20px;
+          top: 25px;
+          font-size: 20px;
         }
       }
     }

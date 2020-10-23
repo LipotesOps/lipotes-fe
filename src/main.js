@@ -35,6 +35,10 @@ Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 
+import _ from 'lodash'
+
+Object.defineProperty(Vue.prototype, '$_', { value: _, writable: true })
+
 Vue.config.productionTip = false
 
 new Vue({

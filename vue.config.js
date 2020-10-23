@@ -52,6 +52,14 @@ module.exports = {
         pathRewrite: {
           ['^' + process.env.FLOWABLE_REST_API]: ''
         }
+      },
+      [process.env.MICRO_API]: {
+        target: 'http://127.0.0.1:5000', // 本地环境:micro-api
+        ws: true,
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.MICRO_API]: ''
+        }
       }
     }
   },

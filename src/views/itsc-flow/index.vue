@@ -21,21 +21,21 @@
       :data="flows"
       border
       fit
+      height="680"
       highlight-current-row
-      style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="ID" prop="id" sortable="true" align="center" min-width="110">
+      <el-table-column fixed label="ID" prop="id" sortable="true" align="center" width="350">
         <template slot-scope="{row}">
           <span>{{ row.uuid }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="流程名称" min-width="100">
+      <el-table-column label="流程名称" min-width="150">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" min-width="50" class-name="small-padding">
+      <el-table-column label="Actions" align="center" min-width="150" class-name="small-padding">
         <template slot-scope="{row}">
           <el-button :disabled="row | isDeployedFilter" size="mini" type="success" @click="handleDeploy(row)">
             <!-- {{ (row.bpmn ? ((row.bpmn.status==='deployed')? false:true): false) ?'Deploy' : 'Deployed' }} -->
@@ -43,24 +43,24 @@
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="分类" align="center" min-width="50">
+      <el-table-column label="分类" align="center" min-width="150">
         <template slot-scope="{row}">
           <el-tag>{{ row.category | categoryFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="表单" width="110px" align="center">
+      <el-table-column label="表单" min-width="110px" align="center">
         <template slot-scope="{row}">
           <el-button :disabled="row | isCanBindFilter" size="mini" type="success" @click="handBind(row)">
             设置
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="Rev." align="center" min-width="50">
+      <el-table-column label="Rev." align="center" min-width="150">
         <template slot-scope="{row}">
           <span>{{ row.bpmn | bpmnFilter }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="BPMN" width="110px" align="center">
+      <el-table-column label="BPMN" min-width="110px" align="center">
         <template slot-scope="{row}">
           <router-link class="table-inline-router-link" :to="'/flow-manage/flow/edit?id='+row.id+'&uuid='+row.uuid+'&name='+row.name">查看/创建</router-link>
         </template>

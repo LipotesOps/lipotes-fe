@@ -1,8 +1,11 @@
 import request from '@/utils/request'
 
+const baseURL = '/micro-api'
+
 export function fetchCmdbObject(params) {
   return request({
-    url: '/micro-api/object/',
+    baseURL,
+    url: '/object/',
     method: 'get',
     params
   })

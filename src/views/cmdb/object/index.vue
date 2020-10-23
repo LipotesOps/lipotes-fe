@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import { fetchCmdbObject } from '@/api/micro-cmdb'
+
 export default {
   data: function() {
     return {
@@ -22,6 +24,17 @@ export default {
         { _id: 'ddd', name: '主机', objecId: 'HOST' },
         { _id: 'dddd', name: '应用', objecId: 'APP' }
       ]
+    }
+  },
+  created() {
+    this.getObjectList()
+  },
+  methods: {
+    getObjectList() {
+      fetchCmdbObject()
+        .then(resp => {
+          console.log(resp)
+        })
     }
   }
 }

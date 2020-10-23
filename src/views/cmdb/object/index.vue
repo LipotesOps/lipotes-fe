@@ -4,12 +4,16 @@
       <h4 style="margin:0px">模型管理</h4>
     </div>
     <div class="app-content-container">
-      <el-card v-for="item in objectList" :key="item._id" class="object-card" shadow="hover">
-        <i class="el-icon-cloudy" />
-        <div slot="header">
-          <span>{{ item.name }}</span>
-        </div>
-      </el-card>
+      <el-row>
+        <el-col v-for="item in objectList" :key="item._id" :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+          <el-card class="object-card" shadow="hover">
+            <i class="el-icon-cloudy" />
+            <div slot="header">
+              <span>{{ item.name }}</span>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -21,8 +25,8 @@ export default {
   data: function() {
     return {
       objectList: [
-        { _id: 'ddd', name: '主机', objecId: 'HOST' },
-        { _id: 'dddd', name: '应用', objecId: 'APP' }
+        { _id: 'ddd', name: '主机', objecId: 'HOST', to: 'production_application', icon: 'el-icon-wind-power', style: 'background: rgb(30, 30, 30)' },
+        { _id: 'dddd', name: '应用', objecId: 'APP', to: 'domain_application', icon: 'el-icon-map-location', style: 'background: rgb(101, 196, 88)' }
       ]
     }
   },
@@ -33,7 +37,10 @@ export default {
     getObjectList() {
       fetchCmdbObject()
         .then(resp => {
-          console.log(resp)
+          if (resp.status === 200) {
+            this.objectList = resp.data._items
+            console.log(resp)
+          }
         })
     }
   }
@@ -46,11 +53,14 @@ export default {
     height: 216.3px;
     border-radius: 8px;
     margin: 25px;
+    // margin-left: 25px;
+    cursor: pointer;
+    box-shadow: 1px 1px rgb(179, 173, 173), -.5px -.5px rgb(179, 173, 173);
     i {
-        font-size: 30px;
-        color: white;
-        background: rgb(110, 110, 243);
+        font-size: 50px;
+        color: green;
         border-radius: 5px;
+        box-shadow: .5px .5px rgba(39, 63, 172, 0.562), -.3px -.3px rgba(39, 63, 172, 0.562);
     }
 }
 </style>

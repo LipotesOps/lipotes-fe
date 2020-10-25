@@ -8,7 +8,7 @@ const cmdb = {
   redirect: '/cmdb/object',
   name: 'cmdb-object',
   meta: {
-    title: '模型设置',
+    title: '资源设置',
     icon: 'example'
   },
   children: [
@@ -16,13 +16,13 @@ const cmdb = {
       path: 'object',
       component: () => import('@/views/cmdb/object/index'),
       name: 'object-list',
-      meta: { title: '模型列表', icon: 'documentation' }
+      meta: { title: '资源列表', icon: 'documentation' }
     },
     {
       path: 'object/create',
       component: () => import('@/views/cmdb/object/create'),
       name: 'object-create',
-      meta: { title: '模型创建', icon: 'documentation' }
+      meta: { title: '资源创建', icon: 'documentation' }
     }
   ]
 }

@@ -19,7 +19,7 @@ const cmdb = {
       meta: { title: '资源列表', icon: 'documentation' }
     },
     {
-      path: 'object/:object_id',
+      path: 'object/:object_id/detail',
       hidden: true,
       component: () => import('@/views/cmdb/object/detail'),
       name: 'object-detail',

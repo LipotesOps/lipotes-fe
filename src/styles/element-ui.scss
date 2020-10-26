@@ -106,10 +106,12 @@
   color: #0079d2;
 }
 
+// el-dialog
 .el-dialog__wrapper {
 	transition-duration: 0.3s;
 }
 .dialog-fade-enter-active{
+  transition-duration: 0.55s !important;
 	animation: none !important;
 }
 .dialog-fade-leave-active {
@@ -123,13 +125,13 @@
 }
 
 .dialog-fade-enter-active .el-dialog{
-	animation-duration: 0.3s;
+	animation-duration: 0.418s;
 	animation-name: anim-open;
 	animation-timing-function: cubic-bezier(0.6,0,0.4,1);
 }
 
 .dialog-fade-leave-active .el-dialog{
-	animation-duration: 0.3s;
+	animation-duration: 0.618s;
 	animation-name: anim-close;
 }
 

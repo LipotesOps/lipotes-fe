@@ -5,17 +5,22 @@
     </div>
     <div class="app-content-container">
       <el-row>
-        <el-col v-for="item in objectList" :key="item._id" :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
-          <el-card class="object-card" shadow="hover">
-            <i class="el-icon-cloudy" />
-            <div slot="header">
-              <span>{{ item.name }}</span>
-            </div>
-            <div class="card-btn-area">
-              <el-button type="text" circle :plain="true" @click="$router.push({ name: 'object-detail', params: { object_id: item.object_id }})"><i class="el-icon-coin el-icon--center" /></el-button>
-              <el-button type="text" circle :plain="true" @click="handleUpdate(item)"><i class="el-icon-postcard el-icon--center" /></el-button>
-            </div>
-          </el-card>
+        <el-col v-for="(item, index) in objectList" :key="item._id" :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+          <span @mouseenter="mouseOnOff(true, index)" @mouseleave="mouseOnOff(false, index)">
+            <el-card class="object-card" shadow="hover">
+              <i class="el-icon-cloudy" />
+              <div slot="header">
+                <span>{{ item.name }}</span>
+              </div>
+              <transition name="el-fade-in-linear">
+                <div v-show="index === show" class="card-btn-area">
+                  <el-button type="text" circle :plain="true" @click="$router.push({ name: 'object-detail', params: { object_id: item.object_id }})"><i class="el-icon-coin el-icon--center" /></el-button>
+                  <el-button type="text" circle :plain="true" @click="handleUpdate(item)"><i class="el-icon-postcard el-icon--center" /></el-button>
+                </div>
+              </transition>
+            </el-card>
+          </span>
+
         </el-col>
       </el-row>
     </div>
@@ -55,6 +60,8 @@ import { fetchCmdbObject, fetchObjectCategory } from '@/api/micro-cmdb'
 export default {
   data: function() {
     return {
+      show: false,
+      showFlags: [],
       formLabelWidth: '90px',
       dialogStatus: '',
       dialogFormVisible: false,
@@ -106,6 +113,13 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
+    },
+    mouseOnOff(showing, index) {
+      if (showing) {
+        this.show = index
+        return
+      }
+      this.show = index + 1.1
     }
   }
 }
@@ -118,7 +132,7 @@ export default {
     border-radius: 8px;
     margin: 25px;
     // margin-left: 25px;
-    transition: all .8s;
+    transition: all .618s;
 
     cursor: pointer;
     box-shadow: 1px 1px rgb(212, 204, 204), -.5px -.5px rgb(212, 204, 204);
@@ -137,14 +151,22 @@ export default {
       // top: 200px;
       // right: 20px;
       text-align: right;
+      // display: none;
       i {
         font-size: 22px;
         // border-radius: 5px;
         color: gray;
         box-shadow: 0px 0px rgba(39, 63, 172, 0.562), 0px 0px rgba(39, 63, 172, 0.562);
-    }
-    }
+      }
+      }
+    // 当鼠标经过兄弟元素brother-showing时，也就是经过父级father的时候。父级获得hover状态，在父级hover的基础上写element的样式：
+    // &:hover .card-btn-area {
+    //     display: block;
+    //     transition: transform ease-out 1.3s;
+    //   }
 }
+
+// 虚浮/阴影card
 .el-card:hover{
   padding-left: 6.18px;
   padding-top: 10px;
@@ -152,43 +174,5 @@ export default {
 .el-form .el-input {
     width: 100%;
   }
-
-// dialog
-.el-dialog__wrapper {
-	transition-duration: 0.3s;
-}
-.dialog-fade-enter-active{
-	animation: none !important;
-}
-.dialog-fade-leave-active {
-	transition-duration: 0.15s !important;
-	animation: none !important;
-  }
-
-.dialog-fade-enter-active .el-dialog,
-.dialog-fade-leave-active .el-dialog{
-	animation-fill-mode: forwards;
-}
-
-.dialog-fade-enter-active .el-dialog{
-	animation-duration: 0.3s;
-	animation-name: anim-open;
-	animation-timing-function: cubic-bezier(0.6,0,0.4,1);
-}
-
-.dialog-fade-leave-active .el-dialog{
-	animation-duration: 0.3s;
-	animation-name: anim-close;
-}
-
-@keyframes anim-open {
-	0% { opacity: 0;  transform: scale3d(0, 0, 1); }
-	100% { opacity: 1; transform: scale3d(1, 1, 1); }
-}
-
-@keyframes anim-close {
-	0% { opacity: 1; }
-	100% { opacity: 0; transform: scale3d(0.5, 0.5, 1); }
-}
 
 </style>

@@ -137,13 +137,13 @@
 
 
 @keyframes anim-open {
-	0% { opacity: 0;  transform: scale3d(0, 0, 1); }
+	0% { opacity: 0;  transform: scale3d(1, 0.618, 1); }
 	100% { opacity: 1; transform: scale3d(1, 1, 1); }
 }
 
 
 @keyframes anim-close {
 	0% { opacity: 1; }
-	100% { opacity: 0; transform: scale3d(0.5, 0.5, 1); }
+	100% { opacity: 0; transform: scale3d(0.618, 0, 1); }
 }
 

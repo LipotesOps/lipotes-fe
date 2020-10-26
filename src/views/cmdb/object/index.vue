@@ -11,6 +11,10 @@
             <div slot="header">
               <span>{{ item.name }}</span>
             </div>
+            <div class="card-btn-area">
+              <el-button type="text" circle :plain="true" @click="$router.go(-1)"><i class="el-icon-coin el-icon--center" /></el-button>
+              <el-button type="text" circle :plain="true" @click="$router.push({ name: 'object-detail', params: { object_id: item.object_id }})"><i class="el-icon-postcard el-icon--center" /></el-button>
+            </div>
           </el-card>
         </el-col>
       </el-row>
@@ -63,6 +67,22 @@ export default {
         color: green;
         border-radius: 5px;
         box-shadow: .5px .5px rgba(39, 63, 172, 0.562), -.3px -.3px rgba(39, 63, 172, 0.562);
+    }
+    .card-btn-area {
+      margin-top: 15px;
+      // padding: 10px;
+      // background-color: white;
+      border-radius: 8px;
+      // position: absolute;
+      // top: 200px;
+      // right: 20px;
+      text-align: right;
+      i {
+        font-size: 22px;
+        // border-radius: 5px;
+        color: gray;
+        box-shadow: 0px 0px rgba(39, 63, 172, 0.562), 0px 0px rgba(39, 63, 172, 0.562);
+    }
     }
 }
 .el-card:hover{

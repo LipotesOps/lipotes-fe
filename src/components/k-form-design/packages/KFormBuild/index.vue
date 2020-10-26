@@ -14,8 +14,8 @@
       <buildBlocks
         v-for="(record, index) in value.list"
         ref="buildBlocks"
-        :record="record"
         :key="index"
+        :record="record"
         :dynamic-data="dynamicData"
         :config="config"
         :disabled="disabled"

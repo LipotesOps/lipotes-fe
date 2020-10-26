@@ -10,3 +10,12 @@ export function fetchCmdbObject(params) {
     params
   })
 }
+
+export function fetchObjectCategory(params) {
+  return request({
+    baseURL,
+    url: '/category/',
+    method: 'get',
+    params
+  })
+}

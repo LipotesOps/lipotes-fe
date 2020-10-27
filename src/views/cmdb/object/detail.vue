@@ -5,7 +5,32 @@
     </div>
     <div class="app-content-container">
       <p>属性</p>
-      {{ object_schema }}
+
+      <el-table
+        :key="tableKey"
+        v-loading="listLoading"
+        :data="object_schema"
+        border
+        fit
+        highlight-current-row
+        @sort-change="sortChange"
+      >
+        <el-table-column label="属性名称" min-width="150">
+          <template slot-scope="{row}">
+            <span class="link-type" @click="handleUpdate(row)">{{ row.name.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="属性ID" min-width="150">
+          <template slot-scope="{row}">
+            <span class="link-type" @click="handleUpdate(row)">{{ row.name.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="值类型" min-width="150">
+          <template slot-scope="{row}">
+            <span class="link-type" @click="handleUpdate(row)">{{ row.name.type }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
 
     </div>
   </div>
@@ -17,10 +42,10 @@ import { fetchCmdbObjectDetail } from '@/api/micro-cmdb'
 export default {
   data() {
     return {
+      listLoading: false,
+      tableKey: 0,
       objectId: this.$route.params.object_id,
-      object_schema: {
-        'name': { 'type': 'string' }
-      }
+      object_schema: []
     }
   },
   created() {
@@ -32,10 +57,13 @@ export default {
       fetchCmdbObjectDetail(params, this.objectId)
         .then(resp => {
           if (resp.status === 200) {
-            this.object_schema = this.$_.get(resp.data, 'object_schema', this.object_schema)
+            const schema = this.$_.get(resp.data, 'object_schema', {})
+            this.object_schema.push(schema)
           }
         })
-    }
+    },
+    handleUpdate() {},
+    sortChange() {}
   }
 
 }

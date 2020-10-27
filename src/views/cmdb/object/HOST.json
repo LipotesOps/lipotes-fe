@@ -1,0 +1,746 @@
+{
+    "objectId": "webspheremq",
+    "name": "WebSphereMQ实例",
+    "icon": "eo-icon-default",
+    "category": "平台资源.中间件",
+    "memo": "",
+    "protected": false,
+    "system": "",
+    "notifyDenied": false,
+    "view": {
+        "attr_order": [
+            "name",
+            "BuildType",
+            "MQ_USER",
+            "OS",
+            "Platform",
+            "ccsid",
+            "status",
+            "install_path",
+            "qmgstatus",
+            "log_path",
+            "maxmsgl",
+            "maxprty",
+            "CMVC_level",
+            "qmg_platform",
+            "qmgname",
+            "version",
+            "listeners",
+            "queues",
+            "channels"
+        ],
+        "show_key": [
+            "name"
+        ],
+        "visible": true
+    },
+    "attrList": [
+        {
+            "id": "name",
+            "name": "名称",
+            "protected": true,
+            "custom": "false",
+            "unique": "true",
+            "readonly": "false",
+            "required": "true",
+            "tag": [],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "BuildType",
+            "name": "构建类型",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "MQ_USER",
+            "name": "MQ运行用户",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "OS",
+            "name": "操作系统",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "Platform",
+            "name": "平台类型",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "ccsid",
+            "name": "CCSID",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "status",
+            "name": "状态",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "install_path",
+            "name": "安装路径",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "qmgstatus",
+            "name": "队列管理器状态",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "log_path",
+            "name": "日志路径",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "maxmsgl",
+            "name": "队列管理器最大消息数",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "maxprty",
+            "name": "队列管理器最大优先级",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "CMVC_level",
+            "name": "cmvc级别",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "qmg_platform",
+            "name": "队列管理器平台类型",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "qmgname",
+            "name": "队列管理器名",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "version",
+            "name": "版本",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "基本信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "str",
+                "regex": null,
+                "default_type": "value",
+                "default": null,
+                "struct_define": [],
+                "mode": "default",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "listeners",
+            "name": "监听信息",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "监听信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "structs",
+                "regex": null,
+                "default_type": "",
+                "default": null,
+                "struct_define": [
+                    {
+                        "id": "listen_name",
+                        "name": "监听名",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "listen_status",
+                        "name": "监听状态",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "listen_pid",
+                        "name": "监听进程号",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "listen_trptype",
+                        "name": "监听传输类型",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "listen_port",
+                        "name": "监听端口",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "listen_date",
+                        "name": "监听日期",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    }
+                ],
+                "mode": "",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "queues",
+            "name": "队列信息",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "队列信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "structs",
+                "regex": null,
+                "default_type": "",
+                "default": null,
+                "struct_define": [
+                    {
+                        "id": "queue_name",
+                        "name": "队列名",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "queue_type",
+                        "name": "队列类型",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "queue_defpsist",
+                        "name": "默认持久性",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "queue_defprty",
+                        "name": "默认优先级",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "queue_msgdlvsq",
+                        "name": "消息传递顺序",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "queue_deftype",
+                        "name": "队列定义类型",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "queue_maxdepth",
+                        "name": "消息最大深度",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "queue_maxmsgl",
+                        "name": "最大消息数",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "queue_get",
+                        "name": "可读状态",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "queue_put",
+                        "name": "可写状态",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "queue_trigtype",
+                        "name": "触发器类型",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    }
+                ],
+                "mode": "",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        },
+        {
+            "id": "channels",
+            "name": "通道信息",
+            "protected": false,
+            "custom": "true",
+            "unique": "false",
+            "readonly": "false",
+            "required": "false",
+            "tag": [
+                "通道信息"
+            ],
+            "description": "",
+            "tips": "",
+            "value": {
+                "type": "structs",
+                "regex": null,
+                "default_type": "",
+                "default": null,
+                "struct_define": [
+                    {
+                        "id": "channel_name",
+                        "name": "通道名",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "channel_chltype",
+                        "name": "通道类型",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "channel_maxmsgl",
+                        "name": "通道消息大小",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "channel_trptype",
+                        "name": "通道传输类型",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    },
+                    {
+                        "id": "channel_seqwrap",
+                        "name": "通道消息序列值",
+                        "type": "str",
+                        "regex": null,
+                        "protected": false
+                    }
+                ],
+                "mode": "",
+                "prefix": "",
+                "start_value": 0,
+                "series_number_length": 0
+            },
+            "wordIndexDenied": false,
+            "isInherit": false,
+            "notifyDenied": false
+        }
+    ],
+    "relation_groups": [],
+    "relation_list": [],
+    "indexList": [
+        {
+            "name": "1191&u&name",
+            "propertyIds": [
+                "name"
+            ],
+            "unique": true
+        }
+    ],
+    "updateAuthorizers": [],
+    "deleteAuthorizers": [],
+    "wordIndexDenied": false,
+    "_version": 25,
+    "creator": "easyops",
+    "modifier": "defaultUser",
+    "isAbstract": false,
+    "parentObjectId": "",
+    "permissionDenied": false
+}

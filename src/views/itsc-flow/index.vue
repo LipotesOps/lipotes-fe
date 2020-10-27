@@ -21,7 +21,6 @@
       :data="flows"
       border
       fit
-      height="680"
       highlight-current-row
       @sort-change="sortChange"
     >

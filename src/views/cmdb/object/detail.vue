@@ -1,41 +1,46 @@
 <template>
   <div class="app-container">
     <div class="app-content-title">
-      <h4 style="margin:0px">资源详情</h4>
+      <h4 style="margin:0px">详情 - {{ objectId }}</h4>
     </div>
     <div class="app-content-container">
-      <el-row>
-        京津冀
-      </el-row>
+      <p>属性</p>
+      {{ object_schema }}
+
     </div>
   </div>
 </template>
 
 <script>
-import { fetchCmdbObject } from '@/api/micro-cmdb'
+import { fetchCmdbObjectDetail } from '@/api/micro-cmdb'
 
 export default {
-  data: function() {
+  data() {
     return {
-      objectList: { _id: 'ddd', name: '主机', objecId: 'HOST', to: 'production_application', icon: 'el-icon-wind-power', style: 'background: rgb(30, 30, 30)' }
+      objectId: this.$route.params.object_id,
+      object_schema: {
+        'name': { 'type': 'string' }
+      }
     }
   },
   created() {
-    this.getObjectList()
+    this.getObjectDetail()
   },
   methods: {
-    getObjectList() {
-      fetchCmdbObject()
+    getObjectDetail() {
+      const params = {}
+      fetchCmdbObjectDetail(params, this.objectId)
         .then(resp => {
           if (resp.status === 200) {
-            this.objectList = resp.data._items
-            console.log(resp)
+            this.object_schema = this.$_.get(resp.data, 'object_schema', this.object_schema)
           }
         })
     }
   }
+
 }
 </script>
 
-<style scoped lang='less'>
+<style>
+
 </style>

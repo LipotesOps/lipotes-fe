@@ -51,6 +51,10 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <el-dialog :title="textMap[dialogStatus]">
+      <el-form ref="dataForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;" />
+    </el-dialog>
   </div>
 </template>
 

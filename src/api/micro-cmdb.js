@@ -12,13 +12,22 @@ export function fetchCmdbObject(params) {
   })
 }
 
+export function fetchCmdbObjectDetail(params, objectId) {
+  return request({
+    baseURL,
+    url: `/object/${objectId}/`,
+    method: 'get',
+    params
+  })
+}
+
 // 更新resource object基本信息/CI/关系
 export function updateObject(_id, data, _etag) {
   headers['If-Match'] = _etag
   return request({
     baseURL,
     url: `/object/${_id}/`,
-    method: 'put',
+    method: 'patch',
     data,
     headers
   })

@@ -135,7 +135,7 @@ export default {
     transition: all .618s;
 
     cursor: pointer;
-    box-shadow: 1px 1px rgb(212, 204, 204), -.5px -.5px rgb(212, 204, 204);
+    box-shadow: .809px .809px rgb(236, 226, 226), -.5px -.5px rgb(236, 226, 226);
     i {
         font-size: 50px;
         color: green;

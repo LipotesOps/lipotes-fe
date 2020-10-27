@@ -34,8 +34,8 @@
           <el-input v-model="rowTemp.object_id" disabled width="500px" />
         </el-form-item>
         <el-form-item label="Category" prop="id" :label-width="formLabelWidth">
-          <el-select v-model="rowTemp.category" class="filter-item" placeholder="Please select" clearable>
-            <el-option v-for="item in categoryOptions" :key="item._id" :label="item.name" :value="item._id" />
+          <el-select v-model="rowTemp.category" value-key="_id" class="filter-item" placeholder="Please select" clearable>
+            <el-option v-for="item in categoryOptions" :key="item.name" :label="item.name" :value="{'_id': item._id, '_version': item._version, 'name': item.name}" />
           </el-select>
         </el-form-item>
         <el-form-item label="Remark" :label-width="formLabelWidth">
@@ -44,10 +44,10 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
-          Cancel
+          取消
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          Confirm
+          保存
         </el-button>
       </div>
     </el-dialog>
@@ -55,11 +55,18 @@
 </template>
 
 <script>
-import { fetchCmdbObject, fetchObjectCategory } from '@/api/micro-cmdb'
+import { fetchCmdbObject, fetchObjectCategory, updateObject } from '@/api/micro-cmdb'
 
 export default {
+  inject: ['reload'],
+  filters: {
+    categoryFilter(category_id) {
+      return {}
+    }
+  },
   data: function() {
     return {
+      recipients: {},
       show: false,
       showFlags: [],
       formLabelWidth: '90px',
@@ -106,12 +113,44 @@ export default {
           }
         })
     },
-    handleUpdate(resource) {
-      this.rowTemp = Object.assign({}, resource) // copy obj
+    handleUpdate(row) {
+      this.rowTemp = Object.assign({}, row) // copy obj
+
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.rowTemp)
+
+          const id = tempData._id
+          const etag = tempData._etag
+
+          delete tempData._created
+          delete tempData._deleted
+          delete tempData._etag
+          delete tempData._links
+          delete tempData._updated
+
+          updateObject(id, tempData, etag).then((response) => {
+            const index = this.objectList.findIndex(v => v.id === this.rowTemp.id)
+            this.objectList.splice(index, 1, this.rowTemp)
+            this.dialogFormVisible = false
+            if (response.status === 200) {
+              this.$notify({
+                title: 'Success',
+                message: 'Update Successfully',
+                type: 'success',
+                duration: 2000
+              })
+              this.reload()
+            }
+          })
+        }
       })
     },
     mouseOnOff(showing, index) {
@@ -136,6 +175,13 @@ export default {
 
     cursor: pointer;
     box-shadow: .809px .809px rgb(236, 226, 226), -.5px -.5px rgb(236, 226, 226);
+
+    // 保存 后续使用
+    // &:hover {
+    //   box-shadow: .809px .809px rgb(236, 226, 226), -.5px -.5px rgb(236, 226, 226);
+    //   transition: all 0.618s;
+    //   padding: 1px;
+    // }
     i {
         font-size: 50px;
         color: green;

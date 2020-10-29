@@ -1,11 +1,9 @@
 <template>
   <div class="app-container">
     <div class="app-content-title">
-      <h4 style="margin:0px">详情 - {{ objectId }}</h4>
+      <h4 style="margin:0px">{{ objectId }}</h4>
     </div>
     <div class="app-content-container">
-      <p>属性</p>
-
       <el-table
         :key="tableKey"
         v-loading="listLoading"
@@ -15,23 +13,22 @@
         highlight-current-row
         @sort-change="sortChange"
       >
-        <el-table-column label="属性名称" min-width="150">
+        <el-table-column fixed label="配置名" prop="id" sortable="true" align="center" min-width="30">
           <template slot-scope="{row}">
-            <span class="link-type" @click="handleUpdate(row)">{{ row.name.name }}</span>
+            <span>{{ row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="属性ID" min-width="150">
+        <el-table-column fixed label="ID" prop="id" sortable="true" align="center" min-width="30">
           <template slot-scope="{row}">
-            <span class="link-type" @click="handleUpdate(row)">{{ row.name.id }}</span>
+            <span>{{ row.id }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="值类型" min-width="150">
+        <el-table-column fixed label="类型" prop="id" sortable="true" align="center" min-width="30">
           <template slot-scope="{row}">
-            <span class="link-type" @click="handleUpdate(row)">{{ row.name.type }}</span>
+            <span>{{ row.type }}</span>
           </template>
         </el-table-column>
       </el-table>
-
     </div>
   </div>
 </template>
@@ -57,8 +54,7 @@ export default {
       fetchCmdbObjectDetail(params, this.objectId)
         .then(resp => {
           if (resp.status === 200) {
-            const schema = this.$_.get(resp.data, 'object_schema', {})
-            this.object_schema.push(schema)
+            this.object_schema = this.$_.get(resp.data, 'object_schema', {})
           }
         })
     },

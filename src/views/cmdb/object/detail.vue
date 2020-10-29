@@ -28,6 +28,26 @@
             <span>{{ row.type }}</span>
           </template>
         </el-table-column>
+        <el-table-column fixed label="默认值" prop="id" sortable="true" align="center" min-width="30">
+          <template slot-scope="{row}">
+            <span>{{ row.type }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column fixed label="必填" prop="id" sortable="true" align="center" min-width="30">
+          <template slot-scope="{row}">
+            <span>{{ row.type }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column fixed label="只读" prop="id" sortable="true" align="center" min-width="30">
+          <template slot-scope="{row}">
+            <span>{{ row.type }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column fixed label="唯一" prop="id" sortable="true" align="center" min-width="30">
+          <template slot-scope="{row}">
+            <span>{{ row.type }}</span>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </div>

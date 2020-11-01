@@ -111,7 +111,7 @@
 	transition-duration: 0.3s;
 }
 .dialog-fade-enter-active{
-  transition-duration: 0.55s !important;
+  transition-duration: 0.418s !important;
 	animation: none !important;
 }
 .dialog-fade-leave-active {
@@ -131,7 +131,7 @@
 }
 
 .dialog-fade-leave-active .el-dialog{
-	animation-duration: 0.618s;
+	animation-duration: 0.418s;
 	animation-name: anim-close;
 }
 

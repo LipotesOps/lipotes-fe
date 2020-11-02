@@ -93,6 +93,7 @@
 .el-button {
   border-radius: 8px;
 }
+
 // el-select (propper-class)
 .select-option {
   border-radius: 8px;
@@ -108,42 +109,56 @@
 
 // el-dialog
 .el-dialog__wrapper {
-	transition-duration: 0.3s;
+  transition-duration: 0.3s;
 }
-.dialog-fade-enter-active{
+
+.dialog-fade-enter-active {
   transition-duration: 0.418s !important;
-	animation: none !important;
+  animation: none !important;
 }
+
 .dialog-fade-leave-active {
-	transition-duration: 0.25s !important;
-	animation: none !important;
-  }
+  transition-duration: 0.25s !important;
+  animation: none !important;
+}
 
 .dialog-fade-enter-active .el-dialog,
-.dialog-fade-leave-active .el-dialog{
-	animation-fill-mode: forwards;
+.dialog-fade-leave-active .el-dialog {
+  animation-fill-mode: forwards;
 }
 
-.dialog-fade-enter-active .el-dialog{
-	animation-duration: 0.418s;
-	animation-name: anim-open;
-	animation-timing-function: cubic-bezier(0.6,0,0.4,1);
+.dialog-fade-enter-active .el-dialog {
+  animation-duration: 0.418s;
+  animation-name: anim-open;
+  animation-timing-function: cubic-bezier(0.6, 0, 0.4, 1);
 }
 
-.dialog-fade-leave-active .el-dialog{
-	animation-duration: 0.418s;
-	animation-name: anim-close;
+.dialog-fade-leave-active .el-dialog {
+  animation-duration: 0.418s;
+  animation-name: anim-close;
 }
 
 
 @keyframes anim-open {
-	0% { opacity: 0;  transform: scale3d(1, 0.618, 1); }
-	100% { opacity: 1; transform: scale3d(1, 1, 1); }
+  0% {
+    opacity: 0;
+    transform: scale3d(1, 0.618, 1);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
 }
 
 
 @keyframes anim-close {
-	0% { opacity: 1; }
-	100% { opacity: 0; transform: scale3d(0.618, 0, 1); }
-}
+  0% {
+    opacity: 1;
+  }
 
+  100% {
+    opacity: 0;
+    transform: scale3d(0.618, 0, 1);
+  }
+}

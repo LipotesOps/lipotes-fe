@@ -6,7 +6,7 @@ const headers = { 'If-Match': undefined }
 export function fetchCmdbObject(params) {
   return request({
     baseURL,
-    url: '/object/',
+    url: '/resource/',
     method: 'get',
     params
   })
@@ -15,7 +15,7 @@ export function fetchCmdbObject(params) {
 export function fetchCmdbObjectDetail(params, objectId) {
   return request({
     baseURL,
-    url: `/object/${objectId}/`,
+    url: `/resource/${objectId}/`,
     method: 'get',
     params
   })
@@ -26,7 +26,7 @@ export function updateObject(_id, data, _etag) {
   headers['If-Match'] = _etag
   return request({
     baseURL,
-    url: `/object/${_id}/`,
+    url: `/resource/${_id}/`,
     method: 'patch',
     data,
     headers

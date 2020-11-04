@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { fetchCmdbObjectDetail } from '@/api/micro-cmdb'
+import { fetchCmdbObjectDetail } from '@/api/resource'
 
 export default {
   data() {

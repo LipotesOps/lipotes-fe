@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { fetchCmdbObject, fetchObjectCategory, updateObject } from '@/api/micro-cmdb'
+import { fetchCmdbObject, fetchObjectCategory, updateObject } from '@/api/resource'
 
 export default {
   inject: ['reload'],

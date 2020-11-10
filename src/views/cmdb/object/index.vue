@@ -3,6 +3,16 @@
     <div class="app-content-title">
       <h4 style="margin:0px">资源模型</h4>
     </div>
+    <div class="btn-area">
+      <el-select v-model="selectedVersion" placeholder="Tag" clearable class="filter-item" popper-class="select-option" style="width: 130px; margin-right: 11px">
+        <!-- <el-option v-for="item in flowStatusOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" /> -->
+      </el-select>
+      <el-button type="info" :plain="true" icon="fa-undo" @click="$router.go(-1)">返回</el-button>
+      <el-tooltip v-if="!isExist" content="新建并归属至流程" placement="top">
+        <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="createBPMN">新建<i class="el-icon-document-add el-icon--right" /></el-button>
+      </el-tooltip>
+      <el-button v-if="isExist" type="success" icon="check" :loading="committing" class="save-btn" @click="updateBpmnXML">更新<i class="el-icon-upload el-icon--right" /></el-button>
+    </div>
     <div class="app-content-container">
       <el-row>
         <el-col v-for="(item, index) in objectList" :key="item._id" :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
@@ -168,7 +178,9 @@ export default {
 }
 </script>
 
-<style scoped lang='scss'>
+<style scoped lang='less'>
+ @import url("./../../../assets/css/variables.less");
+
 .object-card {
     width: 350px;
     height: 216.3px;
@@ -225,4 +237,10 @@ export default {
     width: 100%;
   }
 
+.btn-area {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    z-index: @flying;
+  }
 </style>

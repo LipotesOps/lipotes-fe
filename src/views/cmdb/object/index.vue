@@ -4,14 +4,9 @@
       <h4 style="margin:0px">资源模型</h4>
     </div>
     <div class="btn-area">
-      <el-select v-model="selectedVersion" placeholder="Tag" clearable class="filter-item" popper-class="select-option" style="width: 130px; margin-right: 11px">
-        <!-- <el-option v-for="item in flowStatusOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" /> -->
-      </el-select>
+      <el-select v-model="selectedVersion" placeholder="Tag" clearable class="filter-item" popper-class="select-option" style="width: 130px; margin-right: 11px" />
       <el-button type="info" :plain="true" icon="fa-undo" @click="$router.go(-1)">返回</el-button>
-      <el-tooltip v-if="!isExist" content="新建并归属至流程" placement="top">
-        <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="createBPMN">新建<i class="el-icon-document-add el-icon--right" /></el-button>
-      </el-tooltip>
-      <el-button v-if="isExist" type="success" icon="check" :loading="committing" class="save-btn" @click="updateBpmnXML">更新<i class="el-icon-upload el-icon--right" /></el-button>
+      <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="handleCreate">新建<i class="el-icon-document-add el-icon--right" /></el-button>
     </div>
     <div class="app-content-container">
       <el-row>
@@ -41,7 +36,7 @@
           <el-input v-model="rowTemp.name" placeholder="Please select" />
         </el-form-item>
         <el-form-item label="ObjectId" prop="ObjectId" :label-width="formLabelWidth">
-          <el-input v-model="rowTemp.object_id" disabled width="500px" />
+          <el-input v-model="rowTemp.object_id" :disabled="dialogStatus==='update'?true:false" width="500px" />
         </el-form-item>
         <el-form-item label="Category" prop="id" :label-width="formLabelWidth">
           <el-select v-model="rowTemp.category" value-key="_id" class="filter-item" placeholder="Please select" clearable>
@@ -62,14 +57,11 @@
       </div>
     </el-dialog>
 
-    <el-dialog :title="textMap[dialogStatus]">
-      <el-form ref="dataForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;" />
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchCmdbObject, fetchObjectCategory, updateObject } from '@/api/resource'
+import { fetchCmdbObject, fetchObjectCategory, updateObject, createObject } from '@/api/resource'
 
 export default {
   inject: ['reload'],
@@ -80,6 +72,8 @@ export default {
   },
   data: function() {
     return {
+      committing: false,
+      selectedVersion: '',
       recipients: {},
       show: false,
       showFlags: [],
@@ -151,6 +145,38 @@ export default {
           delete tempData._updated
 
           updateObject(id, tempData, etag).then((response) => {
+            const index = this.objectList.findIndex(v => v.id === this.rowTemp.id)
+            this.objectList.splice(index, 1, this.rowTemp)
+            this.dialogFormVisible = false
+            if (response.status === 200) {
+              this.$notify({
+                title: 'Success',
+                message: 'Update Successfully',
+                type: 'success',
+                duration: 2000
+              })
+              this.reload()
+            }
+          })
+        }
+      })
+    },
+    handleCreate(row) {
+      this.rowTemp = Object.assign({}, row) // copy obj
+
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    createData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.rowTemp)
+          delete tempData.isTrusted
+
+          createObject(tempData).then((response) => {
             const index = this.objectList.findIndex(v => v.id === this.rowTemp.id)
             this.objectList.splice(index, 1, this.rowTemp)
             this.dialogFormVisible = false

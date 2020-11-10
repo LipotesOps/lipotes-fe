@@ -33,6 +33,17 @@ export function updateObject(_id, data, _etag) {
   })
 }
 
+// 创建resource object基本信息/CI/关系
+export function createObject(data) {
+  return request({
+    baseURL,
+    url: `/resource/`,
+    method: 'post',
+    data,
+    headers
+  })
+}
+
 export function fetchObjectCategory(params) {
   return request({
     baseURL,

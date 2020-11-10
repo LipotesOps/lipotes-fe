@@ -189,10 +189,10 @@ export default {
             const index = this.objectList.findIndex(v => v.id === this.rowTemp.id)
             this.objectList.splice(index, 1, this.rowTemp)
             this.dialogFormVisible = false
-            if (response.status === 200) {
+            if (response.status === 201) {
               this.$notify({
                 title: 'Success',
-                message: 'Update Successfully',
+                message: 'Create Successfully',
                 type: 'success',
                 duration: 2000
               })

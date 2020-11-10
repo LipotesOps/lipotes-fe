@@ -175,6 +175,15 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.rowTemp)
           delete tempData.isTrusted
+          tempData.object_schema = [
+            {
+              'id': 'name',
+              'name': '名称',
+              'type': 'string',
+              'required': true,
+              'unique': true
+            }
+          ]
 
           createObject(tempData).then((response) => {
             const index = this.objectList.findIndex(v => v.id === this.rowTemp.id)

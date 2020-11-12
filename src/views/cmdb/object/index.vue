@@ -93,10 +93,7 @@ export default {
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
-      objectList: [
-        { _id: 'ddd', name: '主机', objecId: 'HOST', to: 'production_application', icon: 'el-icon-wind-power', style: 'background: rgb(30, 30, 30)' },
-        { _id: 'dddd', name: '应用', objecId: 'APP', to: 'domain_application', icon: 'el-icon-map-location', style: 'background: rgb(101, 196, 88)' }
-      ],
+      objectList: [],
       categoryOptions: []
     }
   },

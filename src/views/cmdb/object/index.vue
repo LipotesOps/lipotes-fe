@@ -5,8 +5,8 @@
     </div>
     <div class="btn-area">
       <el-select v-model="selectedVersion" placeholder="Tag" clearable class="filter-item" popper-class="select-option" style="width: 130px; margin-right: 11px" />
-      <el-button type="info" :plain="true" icon="fa-undo" @click="$router.go(-1)">返回</el-button>
-      <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="handleCreate">新建<i class="el-icon-document-add el-icon--right" /></el-button>
+      <el-button type="info" :plain="true" icon="fa-undo" @click="$router.go(-1)"><fa-icon :icon="['fas','reply']" /></el-button>
+      <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="handleCreate"><fa-icon :icon="['fas','plus']" /></el-button>
     </div>
     <div class="app-content-container">
       <el-row>

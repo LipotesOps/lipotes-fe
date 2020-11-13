@@ -88,14 +88,17 @@ export default {
 .col-select-icon-wrapper {
 
   .col-select-icon {
-    height: 18px;
-    width: 18px;
+    height: 15px;
+    width: 15px;
 
     position: relative;
     overflow: hidden;
-    color: green;
-    // background: black;
-    // border-radius: 8px;
+    color: white;
+    background: green;
+    border-radius: 8px;
+
+    box-shadow: .809px .809px rgb(236, 226, 226), -.9px -.9px rgb(236, 226, 226);
+    border-color: rgb(255, 0, 0);
 
   }
 }

@@ -6,7 +6,7 @@
 
     <div class="btn-area">
       <el-button type="info" :plain="true" icon="user-secret" @click="$router.go(-1)"><fa-icon :icon="['fas','reply']" /></el-button>
-      <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="handleAdd"><fa-icon :icon="['fas','plus']" /></el-button>
+      <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="handleCreate"><fa-icon :icon="['fas','plus']" /></el-button>
     </div>
 
     <div class="app-content-container">
@@ -19,7 +19,7 @@
         highlight-current-row
         @sort-change="sortChange"
       >
-        <el-table-column fixed label="配置名" prop="id" sortable="true" align="center" min-width="30">
+        <el-table-column fixed label="属性" prop="id" sortable="true" align="center" min-width="30">
           <template slot-scope="{row}">
             <span>{{ row.name }}</span>
           </template>
@@ -36,14 +36,14 @@
         </el-table-column>
         <el-table-column fixed label="必填" prop="id" sortable="true" align="center" min-width="30">
           <template slot-scope="{row}">
-            <div v-if="row.required" class="col-select-icon-wrapper icon-select">
+            <div v-if="row.required===true" class="col-select-icon-wrapper icon-select">
               <svg-icon icon-class="select" class-name="col-select-icon" />
             </div>
           </template>
         </el-table-column>
         <el-table-column fixed label="唯一" prop="id" sortable="true" align="center" min-width="30">
           <template slot-scope="{row}">
-            <div v-if="row.unique" class="col-select-icon-wrapper icon-select">
+            <div v-if="row.unique===true" class="col-select-icon-wrapper icon-select">
               <svg-icon icon-class="select" class-name="col-select-icon" />
             </div>
           </template>
@@ -53,14 +53,26 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
-        <el-form-item label="Name" prop="name" :label-width="formLabelWidth">
-          <el-input v-model="rowTemp.name" placeholder="Please select" />
+        <el-form-item label="属性" prop="name" :label-width="formLabelWidth">
+          <el-input v-model="rowTemp.name" placeholder="" />
         </el-form-item>
-        <el-form-item label="ObjectId" prop="ObjectId" :label-width="formLabelWidth">
-          <el-input v-model="rowTemp.object_id" :disabled="dialogStatus==='update'?true:false" width="500px" />
+        <el-form-item label="ID" prop="id" :label-width="formLabelWidth">
+          <el-input v-model="rowTemp.id" :disabled="dialogStatus==='update'?true:false" width="500px" />
         </el-form-item>
+        <el-form-item label="类型" prop="type" :label-width="formLabelWidth">
+          <el-select v-model="rowTemp.type" value-key="type" class="filter-item" placeholder="Please select" clearable>
+            <el-option v-for="item in typeOptions" :key="item.name" :label="item.name" :value="item.value" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="校验规则" prop="limit" :label-width="formLabelWidth">
+
+          <el-checkbox v-model="rowTemp.unique" label="唯一">唯一</el-checkbox>
+          <el-checkbox v-model="rowTemp.required" label="必填">必填</el-checkbox>
+        </el-form-item>
+
         <el-form-item label="Remark" :label-width="formLabelWidth">
-          <el-input v-model="rowTemp.memo" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
+          <el-input v-model="rowTemp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -77,11 +89,20 @@
 </template>
 
 <script>
-import { fetchCmdbObjectDetail } from '@/api/resource'
+import { fetchCmdbObjectDetail, updateObject } from '@/api/resource'
+
+const typeOptions = [
+  {
+    name: '字符型',
+    value: 'string'
+  }
+]
 
 export default {
+  inject: ['reload'],
   data() {
     return {
+      object_definition: {},
       listLoading: false,
       tableKey: 0,
       objectId: this.$route.params.object_id,
@@ -95,14 +116,21 @@ export default {
         update: '编辑',
         create: '添加'
       },
+      typeOptions: typeOptions,
       rowTemp: {
-        _id: undefined,
-        name: ''
+        name: '',
+        id: '',
+        type: 'string',
+        required: true,
+        unique: false,
+        remark: ''
       },
       rules: {
-        type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
+        name: [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        id: [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        type: [{ required: true, message: 'this item is required', trigger: 'change' }],
+        limit: [{ required: false, message: 'this item is required', trigger: 'blur' }],
+        remark: [{ required: false, message: 'this item is required', trigger: 'blur' }]
       }
     }
   },
@@ -116,18 +144,60 @@ export default {
         .then(resp => {
           if (resp.status === 200) {
             this.object_schema = this.$_.get(resp.data, 'object_schema', {})
+            this.object_definition = resp.data
           }
         })
     },
-    handleUpdate() {},
     sortChange() {},
-    handleAdd(row) {
-      this.rowTemp = Object.assign({}, row) // copy obj
+    resetRowTemp() {
+      this.rowTemp = {
+        name: '',
+        id: '',
+        type: 'string',
+        required: true,
+        unique: false,
+        remark: ''
+      }
+    },
+    handleUpdate() {},
+    handleCreate() {
+      this.resetRowTemp()
+      // this.rowTemp = Object.assign({}, {}) // copy obj
 
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    createData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.rowTemp)
+          delete tempData.isTrusted
+
+          const tempSchema = Object.assign([], this.object_schema)
+          tempSchema.push(tempData)
+
+          const patchData = {}
+          patchData.object_schema = tempSchema
+
+          // 使用patch更新资源定义的CI项
+          const id = this.object_definition._id
+          const etag = this.object_definition._etag
+          updateObject(id, patchData, etag).then((response) => {
+            this.dialogFormVisible = false
+            if (response.status === 200) {
+              this.$notify({
+                title: 'Success',
+                message: 'Create Successfully',
+                type: 'success',
+                duration: 2000
+              })
+              this.reload()
+            }
+          })
+        }
       })
     }
   }

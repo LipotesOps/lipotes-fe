@@ -35,17 +35,16 @@
         </el-table-column>
         <el-table-column fixed label="必填" prop="id" sortable="true" align="center" min-width="30">
           <template slot-scope="{row}">
-            <span>{{ row.required }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column fixed label="只读" prop="id" sortable="true" align="center" min-width="30">
-          <template slot-scope="{row}">
-            <span>{{ row.type }}</span>
+            <div v-if="row.required" class="col-select-icon-wrapper icon-select">
+              <svg-icon icon-class="select" class-name="col-select-icon" />
+            </div>
           </template>
         </el-table-column>
         <el-table-column fixed label="唯一" prop="id" sortable="true" align="center" min-width="30">
           <template slot-scope="{row}">
-            <span>{{ row.unique }}</span>
+            <div v-if="row.unique" class="col-select-icon-wrapper icon-select">
+              <svg-icon icon-class="select" class-name="col-select-icon" />
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -85,6 +84,21 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+.col-select-icon-wrapper {
+
+  .col-select-icon {
+    height: 18px;
+    width: 18px;
+
+    position: relative;
+    overflow: hidden;
+    color: green;
+    // background: black;
+    // border-radius: 8px;
+
+  }
+}
 
 </style>
+

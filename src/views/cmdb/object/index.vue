@@ -262,8 +262,9 @@ export default {
 
 // 虚浮/阴影card
 .el-card:hover{
-  padding-left: 6.18px;
-  padding-top: 10px;
+  padding: 6.18px;
+  // padding-left: 6.18px;
+  // padding-top: 10px;
 }
 .el-form .el-input {
     width: 100%;

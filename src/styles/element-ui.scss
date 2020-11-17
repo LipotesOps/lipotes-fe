@@ -59,6 +59,14 @@
   border-radius: 8px;
 }
 
+.el-checkbox__inner {
+  border-radius: 4px;
+}
+
+.el-textarea__inner {
+  border-radius: 8px;
+}
+
 // refine element ui upload
 .upload-container {
   .el-upload {

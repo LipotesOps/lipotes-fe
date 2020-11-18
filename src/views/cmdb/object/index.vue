@@ -15,7 +15,7 @@
             <el-card class="object-card" shadow="hover">
               <fa-icon
                 :icon="['fas',item.icon || 'cloud']"
-                style="font-size: 50px; color: item.color; border-radius: 5px; box-shadow: .5px .5px rgba(39, 63, 172, 0.562), -.3px -.3px rgba(39, 63, 172, 0.562);"
+                :style="{color: item.color, 'width': '50px', 'height': '50px','border-radius': '5px', 'box-shadow': '.5px .5px rgba(39, 63, 172, 0.562), -.3px -.3px rgba(39, 63, 172, 0.562)'}"
               />
               <div slot="header">
                 <span>{{ item.name }}</span>

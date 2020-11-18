@@ -13,7 +13,10 @@
         <el-col v-for="(item, index) in objectList" :key="item._id" :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
           <span @mouseenter="mouseOnOff(true, index)" @mouseleave="mouseOnOff(false, index)">
             <el-card class="object-card" shadow="hover">
-              <i class="el-icon-cloudy" />
+              <fa-icon
+                :icon="['fas',item.icon || 'cloud']"
+                style="font-size: 50px; color: item.color; border-radius: 5px; box-shadow: .5px .5px rgba(39, 63, 172, 0.562), -.3px -.3px rgba(39, 63, 172, 0.562);"
+              />
               <div slot="header">
                 <span>{{ item.name }}</span>
               </div>
@@ -43,6 +46,13 @@
             <el-option v-for="item in categoryOptions" :key="item.name" :label="item.name" :value="{'_id': item._id, '_version': item._version, 'name': item.name}" />
           </el-select>
         </el-form-item>
+
+        <el-form-item label="icon" prop="icon" :label-width="formLabelWidth">
+          <el-select v-model="rowTemp.icon" value-key="_id" class="filter-item" placeholder="Please select" clearable>
+            <el-option v-for="item in iconOptions" :key="item" :label="item" :value="item" />
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="Remark" :label-width="formLabelWidth">
           <el-input v-model="rowTemp.memo" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
         </el-form-item>
@@ -86,15 +96,19 @@ export default {
       },
       rowTemp: {
         _id: undefined,
-        name: ''
+        name: '',
+        icon: 'plus',
+        color: 'green'
       },
       rules: {
-        type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
+        name: [{ required: true, message: 'this field is required', trigger: 'change' }],
+        object_id: [{ required: true, message: 'this field is required', trigger: 'change' }],
+        icon: [{ required: false, message: 'this field is required', trigger: 'change' }]
       },
       objectList: [],
-      categoryOptions: []
+      categoryOptions: [],
+      // fa-icon arr
+      iconOptions: ['ad', 'address-book', 'adjust', 'air-freshener']
     }
   },
   created() {

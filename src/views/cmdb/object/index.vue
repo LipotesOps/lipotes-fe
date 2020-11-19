@@ -266,18 +266,39 @@ export default {
  @import url("./../../../assets/css/variables.less");
 
 .object-card:hover {
-// color: red;
-transition: 2s;
-box-shadow: .809px .809px .809px .809px rgb(233, 54, 54), -.5px -.5px .5px .5px rgb(233, 54, 54);
+    // color: red;
+    // 虚浮/阴影card
+    padding: 6.18px;
+
+    box-shadow: .809px .809px .809px .809px rgba(233, 54, 54, .3), -.3px -.3px .5px .5px rgba(233, 54, 54, .3);
+    background: -webkit-linear-gradient(left top, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
+    background: -o-linear-gradient(bottom right, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
+    background: -moz-linear-gradient(bottom right, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
+    background: linear-gradient(to bottom right, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
+
+    // -webkit-transition: background-color 3000ms linear;
+    // -ms-transition: background-color 3000ms linear;
+    // transition: background-color 3000ms linear;
+
+    opacity: 1;
 }
 
 .object-card {
+    opacity: .99999;
     width: 350px;
     height: 216.3px;
     border-radius: 8px;
     margin: 25px;
     // margin-left: 25px;
-    transition: all .618s;
+
+    /* Firefox */
+    -moz-transition: all .38s easy-in;
+    /* WebKit */
+    -webkit-transition: all .38s easy-in;
+    /* Opera */
+    -o-transition: all .38s easy-in;
+    /* Standard */
+    transition: all .38s easy-in;
 
     cursor: pointer;
     box-shadow: .809px .809px rgb(236, 226, 226), -.5px -.5px rgb(236, 226, 226);
@@ -318,12 +339,6 @@ box-shadow: .809px .809px .809px .809px rgb(233, 54, 54), -.5px -.5px .5px .5px 
     //   }
 }
 
-// 虚浮/阴影card
-.el-card:hover{
-  padding: 6.18px;
-  // padding-left: 6.18px;
-  // padding-top: 10px;
-}
 .el-form .el-input {
     width: 100%;
   }

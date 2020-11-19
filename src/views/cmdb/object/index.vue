@@ -15,7 +15,7 @@
             <el-card class="object-card" shadow="hover">
               <fa-icon
                 :icon="['fas',item.icon || 'cloud']"
-                :style="{color: item.color, 'width': '50px', 'height': '50px','border-radius': '5px', 'box-shadow': '.5px .5px rgba(39, 63, 172, 0.562), -.3px -.3px rgba(39, 63, 172, 0.562)'}"
+                :style="{color: item.color, 'width': '50px', 'height': '50px','border-radius': '10px', 'box-shadow': item.color, 'box-shadow': '2.8px 1.7304px 2.8px 1.7304px, -.8090px -.5px .8090px .5px'}"
               />
               <div slot="header">
                 <span>{{ item.name }}</span>
@@ -106,7 +106,7 @@ export default {
         _id: undefined,
         name: '',
         icon: 'plus',
-        color: 'green'
+        color: 'rgba(126, 191, 80, 1.000)'
       },
       rules: {
         name: [{ required: true, message: 'this field is required', trigger: 'change' }],
@@ -132,7 +132,8 @@ export default {
         'hsva(120, 40, 94, 0.5)',
         'hsl(181, 100%, 37%)',
         'hsla(209, 100%, 56%, 0.73)',
-        'rgba(234, 1, 0, 1.000)'
+        'rgba(234, 1, 0, 1.000)',
+        'rgba(126, 191, 80, 1.000)'
       ]
     }
   },
@@ -156,6 +157,14 @@ export default {
             this.categoryOptions = resp.data._items
           }
         })
+    },
+    resetRowTemp() {
+      this.rowTemp = {
+        _id: undefined,
+        name: '',
+        icon: 'plus',
+        color: 'rgba(126, 191, 80, 1.000)'
+      }
     },
     handleUpdate(row) {
       this.rowTemp = Object.assign({}, row) // copy obj
@@ -197,8 +206,9 @@ export default {
         }
       })
     },
-    handleCreate(row) {
-      this.rowTemp = Object.assign({}, row) // copy obj
+    handleCreate() {
+      this.resetRowTemp()
+      this.rowTemp = Object.assign({}, this.rowTemp) // copy obj
 
       this.dialogStatus = 'create'
       this.dialogFormVisible = true

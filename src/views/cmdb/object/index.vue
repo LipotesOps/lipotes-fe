@@ -265,6 +265,12 @@ export default {
 <style scoped lang='less'>
  @import url("./../../../assets/css/variables.less");
 
+.object-card:hover {
+// color: red;
+transition: 2s;
+box-shadow: .809px .809px .809px .809px rgb(233, 54, 54), -.5px -.5px .5px .5px rgb(233, 54, 54);
+}
+
 .object-card {
     width: 350px;
     height: 216.3px;

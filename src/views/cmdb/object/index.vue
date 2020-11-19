@@ -13,10 +13,13 @@
         <el-col v-for="(item, index) in objectList" :key="item._id" :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
           <span @mouseenter="mouseOnOff(true, index)" @mouseleave="mouseOnOff(false, index)">
             <el-card class="object-card" shadow="hover">
-              <fa-icon
-                :icon="['fas',item.icon || 'cloud']"
-                :style="{color: item.color, 'width': '50px', 'height': '50px','border-radius': '10px', 'box-shadow': item.color, 'box-shadow': '2.8px 1.7304px 2.8px 1.7304px, -.8090px -.5px .8090px .5px'}"
-              />
+
+              <div class="fa-icon-resource" :style="{color: item.color, 'width': '53px', 'height': '53px','border-radius': '10px', 'box-shadow': item.color, 'box-shadow': '2.8px 1.7304px 2.8px 1.7304px, -.8090px -.5px .8090px .5px'}">
+                <fa-icon
+                  :icon="['fas',item.icon || 'cloud']"
+                  :style="{color: item.color, 'width': '50px', 'height': '50px','border-radius': '10px', 'margin': '1.5px 1.5px 1.5px 1.5px'}"
+                />
+              </div>
               <div slot="header">
                 <span>{{ item.name }}</span>
               </div>

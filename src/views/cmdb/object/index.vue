@@ -11,8 +11,8 @@
     <div class="app-content-container">
       <el-row>
         <el-col v-for="(item, index) in objectList" :key="item._id" :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
-          <span @mouseenter="mouseOnOff(true, index)" @mouseleave="mouseOnOff(false, index)">
-            <el-card class="object-card" shadow="hover">
+          <span @mouseenter="mouseOnOff(true, index, item)" @mouseleave="mouseOnOff(false, index, item)">
+            <el-card class="object-card" shadow="hover" :style="cardStyle">
 
               <div class="fa-icon-resource" :style="{color: item.color, 'width': '53px', 'height': '53px','border-radius': '10px', 'box-shadow': item.color, 'box-shadow': '2.8px 1.7304px 2.8px 1.7304px, -.8090px -.5px .8090px .5px'}">
                 <fa-icon
@@ -137,7 +137,12 @@ export default {
         'hsla(209, 100%, 56%, 0.73)',
         'rgba(234, 1, 0, 1.000)',
         'rgba(126, 191, 80, 1.000)'
-      ]
+      ],
+      cardStyle: {
+        backgroundHover: 'rgba(126, 191, 80, 1.000)',
+        background: 'rgba(126, 191, 80, 1.000)',
+        __color: 'rgba(126, 191, 80, 1.000)'
+      }
     }
   },
   created() {
@@ -251,11 +256,15 @@ export default {
         }
       })
     },
-    mouseOnOff(showing, index) {
+    mouseOnOff(showing, index, item) {
       if (showing) {
         this.show = index
+        this.cardStyle.backgroundHover = item.color
+        this.cardStyle.background = item.color
         return
       }
+      this.cardStyle.backgroundHover = 'white'
+      this.cardStyle.background = 'white'
       this.show = index + 1.1
     }
   }
@@ -270,11 +279,12 @@ export default {
     // 虚浮/阴影card
     padding: 6.18px;
 
-    box-shadow: .809px .809px .809px .809px rgba(233, 54, 54, .3), -.3px -.3px .5px .5px rgba(233, 54, 54, .3);
-    background: -webkit-linear-gradient(left top, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
-    background: -o-linear-gradient(bottom right, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
-    background: -moz-linear-gradient(bottom right, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
-    background: linear-gradient(to bottom right, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
+    // box-shadow: .809px .809px .809px .809px rgba(233, 54, 54, .3), -.3px -.3px .5px .5px rgba(233, 54, 54, .3);
+    // background: -webkit-linear-gradient(left top, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
+    // background: -o-linear-gradient(bottom right, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
+    // background: -moz-linear-gradient(bottom right, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
+    // background: linear-gradient(to bottom right, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
+    background: var(backgroundHover);
 
     // -webkit-transition: background-color 3000ms linear;
     // -ms-transition: background-color 3000ms linear;

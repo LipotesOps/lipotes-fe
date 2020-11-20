@@ -140,14 +140,16 @@ export default {
         'rgba(126, 191, 80, 1.000)'
       ],
       background: 'rgba(126, 191, 80, 0.1)',
-      backgroundHover: 'rgba(126, 191, 80, 0.1)'
+      backgroundHover: 'rgba(126, 191, 80, 0.2)',
+      backgroundHeaderHover: 'rgba(126, 191, 80, 0.3)'
     }
   },
   computed: {
     cardStyle() {
       return {
         '--background-color': this.background,
-        '--background-color-hover': this.backgroundHover
+        '--background-color-hover': this.backgroundHover,
+        '--background-header-hover': this.backgroundHeaderHover
       }
     }
   },
@@ -268,9 +270,11 @@ export default {
         var color_scale = chroma(item.color)
         this.background = item.color
         this.backgroundHover = color_scale.alpha(0.1)
+        this.backgroundHeaderHover = color_scale.alpha(0.01)
         return
       }
       this.cardStyle.backgroundHover = 'white'
+      this.cardStyle.backgroundHeaderHover = 'white'
       this.cardStyle.background = 'white'
       this.show = index + 1.1
     }
@@ -278,10 +282,22 @@ export default {
 }
 </script>
 
-<style scoped lang='less'>
+<style lang='less'>
  @import url("./../../../assets/css/variables.less");
 
 .object-card:hover {
+    .el-card__header:hover {
+      background: var(--background-header-hover);
+      border-radius: 8px;
+      border-block-width: 1.1px;
+      border-block-color: rgba(128, 128, 128, 0.458);
+    }
+    .el-card__header {
+      background: var(--background-header-hover);
+      border-radius: 8px;
+      border-block-width: 1.1px;
+      border-block-color: rgba(128, 128, 128, 0.281);
+    }
     // color: red;
     // 虚浮/阴影card
     padding: 6.18px;
@@ -301,6 +317,19 @@ export default {
 }
 
 .object-card {
+    .el-card__header {
+      // background: var(--background-header-hover);
+      border-radius: 8px;
+        /* Firefox */
+      -moz-transition: all .38s easy-in;
+      /* WebKit */
+      -webkit-transition: all .38s easy-in;
+      /* Opera */
+      -o-transition: all .38s easy-in;
+      /* Standard */
+      transition: all .38s easy-in;
+    }
+
     opacity: .99999;
     width: 350px;
     height: 216.3px;

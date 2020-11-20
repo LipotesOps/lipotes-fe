@@ -139,8 +139,8 @@ export default {
         'rgba(234, 1, 0, 1.000)',
         'rgba(126, 191, 80, 1.000)'
       ],
-      background: 'rgba(126, 191, 80, 1.000)',
-      backgroundHover: 'rgba(126, 191, 80, 1.000)'
+      background: 'rgba(126, 191, 80, 0.1)',
+      backgroundHover: 'rgba(126, 191, 80, 0.1)'
     }
   },
   computed: {

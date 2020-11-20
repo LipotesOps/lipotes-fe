@@ -25,6 +25,7 @@
     "bpmn-js": "^7.2.1",
     "bpmn-js-properties-panel": "^0.34.0",
     "camunda-bpmn-moddle": "^4.4.0",
+    "chroma-js": "^2.1.0",
     "clipboard": "^2.0.6",
     "core-js": "3.6.5",
     "default-passive-events": "^1.0.10",

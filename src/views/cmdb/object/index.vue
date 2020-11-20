@@ -83,6 +83,7 @@
 
 <script>
 import { fetchCmdbObject, fetchObjectCategory, updateObject, createObject } from '@/api/resource'
+import chroma from './index'
 
 export default {
   inject: ['reload'],
@@ -138,10 +139,15 @@ export default {
         'rgba(234, 1, 0, 1.000)',
         'rgba(126, 191, 80, 1.000)'
       ],
-      cardStyle: {
-        backgroundHover: 'rgba(126, 191, 80, 1.000)',
-        background: 'rgba(126, 191, 80, 1.000)',
-        __color: 'rgba(126, 191, 80, 1.000)'
+      background: 'rgba(126, 191, 80, 1.000)',
+      backgroundHover: 'rgba(126, 191, 80, 1.000)'
+    }
+  },
+  computed: {
+    cardStyle() {
+      return {
+        '--background-color': this.background,
+        '--background-color-hover': this.backgroundHover
       }
     }
   },
@@ -259,8 +265,9 @@ export default {
     mouseOnOff(showing, index, item) {
       if (showing) {
         this.show = index
-        this.cardStyle.backgroundHover = item.color
-        this.cardStyle.background = item.color
+        var color_scale = chroma(item.color)
+        this.background = item.color
+        this.backgroundHover = color_scale.alpha(0.1)
         return
       }
       this.cardStyle.backgroundHover = 'white'
@@ -284,7 +291,7 @@ export default {
     // background: -o-linear-gradient(bottom right, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
     // background: -moz-linear-gradient(bottom right, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
     // background: linear-gradient(to bottom right, rgba(233, 54, 54, .15),rgba(233, 54, 54, .2), rgba(233, 54, 54, .5));
-    background: var(backgroundHover);
+    background: var(--background-color-hover);
 
     // -webkit-transition: background-color 3000ms linear;
     // -ms-transition: background-color 3000ms linear;

@@ -333,7 +333,7 @@ export default {
     opacity: .99999;
     width: 350px;
     height: 216.3px;
-    border-radius: 8px;
+    border-radius: 12px;
     margin: 25px;
     // margin-left: 25px;
 

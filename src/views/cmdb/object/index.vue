@@ -270,7 +270,7 @@ export default {
         var color_scale = chroma(item.color)
         this.background = item.color
         this.backgroundHover = color_scale.alpha(0.1)
-        this.backgroundHeaderHover = color_scale.alpha(0.01)
+        this.backgroundHeaderHover = color_scale.alpha(0.015)
         return
       }
       this.cardStyle.backgroundHover = 'white'

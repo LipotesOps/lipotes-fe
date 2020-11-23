@@ -36,7 +36,8 @@
       </el-row>
     </div>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" class="object-dialog">
+
       <el-form ref="dataForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
         <el-form-item label="Name" prop="name" :label-width="formLabelWidth">
           <el-input v-model="rowTemp.name" placeholder="Please select" />
@@ -141,7 +142,8 @@ export default {
       ],
       background: 'rgba(126, 191, 80, 0.1)',
       backgroundHover: 'rgba(126, 191, 80, 0.2)',
-      backgroundHeaderHover: 'rgba(126, 191, 80, 0.3)'
+      backgroundHeaderHover: 'rgba(126, 191, 80, 0.3)',
+      backgroundElDialog: 'rgba(126, 191, 80, 0.1)'
     }
   },
   computed: {
@@ -149,7 +151,8 @@ export default {
       return {
         '--background-color': this.background,
         '--background-color-hover': this.backgroundHover,
-        '--background-header-hover': this.backgroundHeaderHover
+        '--background-header-hover': this.backgroundHeaderHover,
+        '--background-el-dialog': this.backgroundElDialog
       }
     }
   },
@@ -184,6 +187,9 @@ export default {
     },
     handleUpdate(row) {
       this.rowTemp = Object.assign({}, row) // copy obj
+
+      var color_scale = chroma(this.rowTemp.color)
+      this.backgroundElDialog = color_scale.alpha(0.1)
 
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -225,6 +231,9 @@ export default {
     handleCreate() {
       this.resetRowTemp()
       this.rowTemp = Object.assign({}, this.rowTemp) // copy obj
+
+      var color_scale = chroma(this.rowTemp.color)
+      this.backgroundElDialog = color_scale.alpha(0.1)
 
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
@@ -282,7 +291,7 @@ export default {
 }
 </script>
 
-<style lang='less'>
+<style lang='less' scoped>
  @import url("./../../../assets/css/variables.less");
 
 .object-card:hover {
@@ -395,4 +404,13 @@ export default {
     right: 20px;
     z-index: @flying;
   }
+
+.object-dialog {
+  // background: rgba(255, 255, 255, 0.6);
+  margin: 0 auto;
+
+  /deep/ .el-dialog {
+  background: var(--background-el-dialog);
+  }
+}
 </style>

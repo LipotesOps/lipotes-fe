@@ -64,6 +64,17 @@ export function updateResourceInstance(_id, _etag, data, objectId) {
   })
 }
 
+// 删除resource instance
+export function delResourceInstance(_id, _etag, objectId) {
+  headers['If-Match'] = _etag
+  return request({
+    baseURL,
+    url: `/${objectId}/${_id}/`,
+    method: 'delete',
+    headers
+  })
+}
+
 // 创建resource object基本信息/CI/关系
 export function createObject(data) {
   return request({

@@ -80,27 +80,17 @@
     </el-dialog>
 
     <el-dialog title="删除实例" :visible.sync="dialogDelVisible">
-      <el-form ref="dataForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
-        <el-form-item
-          v-for="(item) in object_schema"
-          :key="item.id"
-          :label="item.name"
-          :prop="item.id"
-          :label-width="formLabelWidth"
-          fixed
-        >
-          <el-input v-model="rowTemp[item.id]" placeholder="Please input" />
-        </el-form-item>
-
-        <el-form-item label="Remark" :label-width="formLabelWidth">
-          <el-input v-model="rowTemp.memo" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
+      <el-form ref="dataDel" :model="delTemp" label-position="left" label-width="100px" style="width: 80%; margin-left:50px;">
+        <el-form-item label="删除实例数量" prop="delNum" fixed>
+          <el-input v-model="delNum" placeholder="Please input" />
         </el-form-item>
       </el-form>
+
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogDelVisible = false">
           取消
         </el-button>
-        <el-button type="danger" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button type="danger" @click="deleteData()">
           确认删除
         </el-button>
       </div>
@@ -111,7 +101,7 @@
 </template>
 
 <script>
-import { fetchResourceObjectDetail, fetchResourceInstance, createResourceInstance, updateResourceInstance } from '@/api/resource'
+import { fetchResourceObjectDetail, fetchResourceInstance, createResourceInstance, updateResourceInstance, delResourceInstance } from '@/api/resource'
 
 export default {
   inject: ['reload'],
@@ -135,7 +125,9 @@ export default {
       dialogDelVisible: false,
 
       resourcInstance: [],
-      rowTemp: {}
+      rowTemp: {},
+      delTemp: {},
+      delNum: 0
 
     }
   },
@@ -214,13 +206,27 @@ export default {
       })
     },
     handleDelete(row) {
+      this.rowTemp = Object.assign({}, row) // copy obj
+
       this.dialogDelVisible = true
+      this.delNum = 0
+
+      this.$nextTick(() => {
+        this.$refs['dataDel'].clearValidate()
+      })
     },
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.rowTemp)
           delete tempData.isTrusted
+
+          delete tempData._id
+          delete tempData._created
+          delete tempData._deleted
+          delete tempData._etag
+          delete tempData._links
+          delete tempData._updated
 
           // 新建资源实例
           createResourceInstance(tempData, this.objectId).then((response) => {
@@ -269,7 +275,7 @@ export default {
       })
     },
     deleteData() {
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs['dataDel'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.rowTemp)
           delete tempData.isTrusted
@@ -282,13 +288,13 @@ export default {
           delete tempData._links
           delete tempData._updated
 
-          // 新建资源实例
-          updateResourceInstance(tempData._id, etag, tempData, this.objectId).then((response) => {
+          // 删除资源实例
+          delResourceInstance(tempData._id, etag, this.objectId).then((response) => {
             this.dialogFormVisible = false
-            if (response.status === 200) {
+            if (response.status === 204) {
               this.$notify({
                 title: 'Success',
-                message: 'Update Successfully',
+                message: 'Delete Successfully',
                 type: 'success',
                 duration: 2000
               })

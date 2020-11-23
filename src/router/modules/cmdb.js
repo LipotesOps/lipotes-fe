@@ -26,6 +26,13 @@ const cmdb = {
       meta: { title: '资源详情', icon: 'documentation' }
     },
     {
+      path: 'object/:object_id/instance',
+      hidden: true,
+      component: () => import('@/views/cmdb/instance/index'),
+      name: 'object-instance',
+      meta: { title: '资源实例', icon: 'documentation' }
+    },
+    {
       path: 'object/create',
       component: () => import('@/views/cmdb/object/create'),
       name: 'object-create',

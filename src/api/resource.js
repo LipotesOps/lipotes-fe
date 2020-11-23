@@ -3,7 +3,7 @@ import request from '@/utils/request'
 const baseURL = '/micro-api'
 const headers = { 'If-Match': undefined }
 
-export function fetchCmdbObject(params) {
+export function fetchResourceObject(params) {
   return request({
     baseURL,
     url: '/resource/',
@@ -12,7 +12,16 @@ export function fetchCmdbObject(params) {
   })
 }
 
-export function fetchCmdbObjectDetail(params, objectId) {
+export function fetchResourceInstance(params, objectId) {
+  return request({
+    baseURL,
+    url: `/${objectId}/`,
+    method: 'get',
+    params
+  })
+}
+
+export function fetchResourceObjectDetail(params, objectId) {
   return request({
     baseURL,
     url: `/resource/${objectId}/`,

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="app-content-title">
-      <h4 style="margin:0px">{{ objectId }}</h4>
+      <h4 style="margin:0px">{{ object_definition.name }} - {{ objectId }} - 属性列表</h4>
     </div>
 
     <div class="btn-area">
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { fetchCmdbObjectDetail, updateObject } from '@/api/resource'
+import { fetchResourceObjectDetail, updateObject } from '@/api/resource'
 
 const typeOptions = [
   {
@@ -140,7 +140,7 @@ export default {
   methods: {
     getObjectDetail() {
       const params = {}
-      fetchCmdbObjectDetail(params, this.objectId)
+      fetchResourceObjectDetail(params, this.objectId)
         .then(resp => {
           if (resp.status === 200) {
             this.object_schema = this.$_.get(resp.data, 'object_schema', {})

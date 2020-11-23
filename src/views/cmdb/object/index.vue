@@ -11,8 +11,8 @@
     <div class="app-content-container">
       <el-row>
         <el-col v-for="(item, index) in objectList" :key="item._id" :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
-          <span @mouseenter="mouseOnOff(true, index, item)" @mouseleave="mouseOnOff(false, index, item)">
-            <el-card class="object-card" shadow="hover" :style="cardStyle">
+          <span>
+            <el-card class="object-card" shadow="hover" :style="cardStyle" @mouseenter.native="mouseOnOff(true, index, item)" @mouseleave.native="mouseOnOff(false, index, item)" @click.native="$router.push({ name: 'object-instance', params: { object_id: item.object_id }})">
 
               <div class="fa-icon-resource" :style="{color: item.color, 'width': '53px', 'height': '53px','border-radius': '10px', 'box-shadow': item.color, 'box-shadow': '2.8px 1.7304px 2.8px 1.7304px, -.8090px -.5px .8090px .5px'}">
                 <fa-icon
@@ -25,8 +25,8 @@
               </div>
               <transition name="el-fade-in-linear">
                 <div v-show="index === show" class="card-btn-area">
-                  <el-button type="text" circle :plain="true" @click="$router.push({ name: 'object-detail', params: { object_id: item.object_id }})"><i class="el-icon-coin el-icon--center" /></el-button>
-                  <el-button type="text" circle :plain="true" @click="handleUpdate(item)"><i class="el-icon-postcard el-icon--center" /></el-button>
+                  <el-button type="text" circle :plain="true" @click.stop="$router.push({ name: 'object-detail', params: { object_id: item.object_id }})"><i class="el-icon-coin el-icon--center" /></el-button>
+                  <el-button type="text" circle :plain="true" @click.stop="handleUpdate(item)"><i class="el-icon-postcard el-icon--center" /></el-button>
                 </div>
               </transition>
             </el-card>
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { fetchCmdbObject, fetchObjectCategory, updateObject, createObject } from '@/api/resource'
+import { fetchResourceObject, fetchObjectCategory, updateObject, createObject } from '@/api/resource'
 import chroma from './index'
 
 export default {
@@ -159,7 +159,7 @@ export default {
   },
   methods: {
     getObjectList() {
-      fetchCmdbObject()
+      fetchResourceObject()
         .then(resp => {
           if (resp.status === 200) {
             this.objectList = resp.data._items

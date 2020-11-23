@@ -31,9 +31,14 @@
           align="center"
           min-width="30"
         >
-
           <template slot-scope="{row}">
             <span>{{ row[item.id] }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column fixed label="创建时间" prop="_created" sortable="true" align="center" min-width="30">
+          <template slot-scope="{row}">
+            <span>{{ row._created }}</span>
           </template>
         </el-table-column>
 
@@ -50,7 +55,7 @@
           :label-width="formLabelWidth"
           fixed
         >
-          <el-input v-model="rowTemp[item.id]" placeholder="Please select" />
+          <el-input v-model="rowTemp[item.id]" placeholder="Please input" />
         </el-form-item>
 
         <el-form-item label="Remark" :label-width="formLabelWidth">
@@ -72,7 +77,7 @@
 </template>
 
 <script>
-import { fetchResourceObjectDetail, updateObject, fetchResourceInstance } from '@/api/resource'
+import { fetchResourceObjectDetail, fetchResourceInstance, createResourceInstance } from '@/api/resource'
 
 export default {
   inject: ['reload'],
@@ -93,14 +98,9 @@ export default {
       formLabelWidth: '90px',
       dialogStatus: '',
       dialogFormVisible: false,
-      rowTemp: {
-        _id: undefined,
-        name: '',
-        icon: 'plus',
-        color: 'rgba(126, 191, 80, 1.000)'
-      },
 
-      resourcInstance: []
+      resourcInstance: [],
+      rowTemp: {}
 
     }
   },
@@ -110,8 +110,14 @@ export default {
       this.object_schema.forEach((e, i) => {
         rules[e.id] = [{ required: e.required, message: 'this field is required', trigger: 'change' }]
       })
-      console.log(rules)
       return rules
+    },
+    rowTTemp() {
+      var rowTemp = {}
+      this.object_schema.forEach((e, i) => {
+        rowTemp[e.id] = ''
+      })
+      return rowTemp
     }
   },
 
@@ -148,14 +154,9 @@ export default {
     },
     sortChange() {},
     resetRowTemp() {
-      this.rowTemp = {
-        name: '',
-        id: '',
-        type: 'string',
-        required: true,
-        unique: false,
-        remark: ''
-      }
+      // this.rowTemp.forEach((e, i) => {
+
+      // })
     },
     handleUpdate() {},
     handleCreate() {
@@ -174,18 +175,10 @@ export default {
           const tempData = Object.assign({}, this.rowTemp)
           delete tempData.isTrusted
 
-          const tempSchema = Object.assign([], this.object_schema)
-          tempSchema.push(tempData)
-
-          const patchData = {}
-          patchData.object_schema = tempSchema
-
-          // 使用patch更新资源定义的CI项
-          const id = this.object_definition._id
-          const etag = this.object_definition._etag
-          updateObject(id, patchData, etag).then((response) => {
+          // 新建资源实例
+          createResourceInstance(tempData, this.objectId).then((response) => {
             this.dialogFormVisible = false
-            if (response.status === 200) {
+            if (response.status === 201) {
               this.$notify({
                 title: 'Success',
                 message: 'Create Successfully',

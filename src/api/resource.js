@@ -21,6 +21,16 @@ export function fetchResourceInstance(params, objectId) {
   })
 }
 
+export function createResourceInstance(data, objectId) {
+  return request({
+    baseURL,
+    url: `/${objectId}/`,
+    method: 'post',
+    data,
+    headers
+  })
+}
+
 export function fetchResourceObjectDetail(params, objectId) {
   return request({
     baseURL,

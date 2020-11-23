@@ -42,11 +42,15 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
-        <el-form-item label="Name" prop="name" :label-width="formLabelWidth">
-          <el-input v-model="rowTemp.name" placeholder="Please select" />
-        </el-form-item>
-        <el-form-item label="ObjectId" prop="ObjectId" :label-width="formLabelWidth">
-          <el-input v-model="rowTemp.object_id" :disabled="dialogStatus==='update'?true:false" width="500px" />
+        <el-form-item
+          v-for="(item) in object_schema"
+          :key="item.id"
+          :label="item.name"
+          :prop="item.id"
+          :label-width="formLabelWidth"
+          fixed
+        >
+          <el-input v-model="rowTemp[item.id]" placeholder="Please select" />
         </el-form-item>
 
         <el-form-item label="Remark" :label-width="formLabelWidth">
@@ -84,12 +88,11 @@ export default {
 
       textMap: {
         update: '编辑',
-        create: '创建'
+        create: '新建'
       },
       formLabelWidth: '90px',
       dialogStatus: '',
       dialogFormVisible: false,
-      rules: [],
       rowTemp: {
         _id: undefined,
         name: '',
@@ -99,6 +102,16 @@ export default {
 
       resourcInstance: []
 
+    }
+  },
+  computed: {
+    rules() {
+      var rules = {}
+      this.object_schema.forEach((e, i) => {
+        rules[e.id] = [{ required: e.required, message: 'this field is required', trigger: 'change' }]
+      })
+      console.log(rules)
+      return rules
     }
   },
 
@@ -118,12 +131,19 @@ export default {
         })
     },
     getResourceInstance() {
+      this.listLoading = true
       const params = {}
       fetchResourceInstance(params, this.objectId)
         .then(resp => {
           if (resp.status === 200) {
             this.resourcInstance = resp.data._items
           }
+        })
+        .finally(resp => {
+          // Just to simulate the time of the request
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 200)
         })
     },
     sortChange() {},

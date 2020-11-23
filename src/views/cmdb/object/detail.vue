@@ -139,6 +139,7 @@ export default {
   },
   methods: {
     getObjectDetail() {
+      this.listLoading = true
       const params = {}
       fetchResourceObjectDetail(params, this.objectId)
         .then(resp => {
@@ -146,6 +147,12 @@ export default {
             this.object_schema = this.$_.get(resp.data, 'object_schema', {})
             this.object_definition = resp.data
           }
+        })
+        .finally(resp => {
+          // Just to simulate the time of the request
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 200)
         })
     },
     sortChange() {},

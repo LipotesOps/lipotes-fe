@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { fetchResourceObject, fetchObjectCategory, updateObject, createObject } from '@/api/resource'
+import { fetchResourceObject, fetchObjectCategory, updateResourceObject, createObject } from '@/api/resource'
 import chroma from './index'
 
 export default {
@@ -205,7 +205,7 @@ export default {
           delete tempData._links
           delete tempData._updated
 
-          updateObject(id, tempData, etag).then((response) => {
+          updateResourceObject(id, tempData, etag).then((response) => {
             const index = this.objectList.findIndex(v => v.id === this.rowTemp.id)
             this.objectList.splice(index, 1, this.rowTemp)
             this.dialogFormVisible = false

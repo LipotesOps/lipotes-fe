@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { fetchResourceObjectDetail, updateObject } from '@/api/resource'
+import { fetchResourceObjectDetail, updateResourceObject } from '@/api/resource'
 
 const typeOptions = [
   {
@@ -192,7 +192,7 @@ export default {
           // 使用patch更新资源定义的CI项
           const id = this.object_definition._id
           const etag = this.object_definition._etag
-          updateObject(id, patchData, etag).then((response) => {
+          updateResourceObject(id, patchData, etag).then((response) => {
             this.dialogFormVisible = false
             if (response.status === 200) {
               this.$notify({

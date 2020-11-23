@@ -41,11 +41,23 @@ export function fetchResourceObjectDetail(params, objectId) {
 }
 
 // 更新resource object基本信息/CI/关系
-export function updateObject(_id, data, _etag) {
+export function updateResourceObject(_id, data, _etag) {
   headers['If-Match'] = _etag
   return request({
     baseURL,
     url: `/resource/${_id}/`,
+    method: 'patch',
+    data,
+    headers
+  })
+}
+
+// 更新resource instance 基本信息/CI/关系
+export function updateResourceInstance(_id, _etag, data, objectId) {
+  headers['If-Match'] = _etag
+  return request({
+    baseURL,
+    url: `/${objectId}/${_id}/`,
     method: 'patch',
     data,
     headers

@@ -95,8 +95,8 @@
 
     <el-dialog title="删除实例" :visible.sync="dialogDelVisible">
       <el-form ref="dataDel" :model="delTemp" label-position="left" label-width="100px" style="width: 80%; margin-left:50px;">
-        <el-form-item label="删除实例数量" prop="delNum" fixed>
-          <el-input v-model="delNum" placeholder="Please input" />
+        <el-form-item label="删除属性数量" prop="delNum" fixed>
+          <el-input v-model="delTemp.delNum" placeholder="Please input" />
         </el-form-item>
       </el-form>
 
@@ -158,8 +158,9 @@ export default {
         remark: [{ required: false, message: 'this item is required', trigger: 'blur' }]
       },
 
-      delTemp: {},
-      delNum: 0,
+      delTemp: {
+        delNum: 0
+      },
       dialogDelVisible: false
     }
   },
@@ -195,6 +196,11 @@ export default {
         remark: ''
       }
     },
+    resetDelTemp() {
+      this.delTemp = {
+        delNum: 0
+      }
+    },
     handleUpdate(row) {
       this.resetRowTemp()
       this.rowTemp = Object.assign({}, row) // copy obj
@@ -206,6 +212,7 @@ export default {
       })
     },
     handleDelete(row) {
+      this.resetDelTemp()
       this.rowTemp = Object.assign({}, row) // copy obj
 
       this.dialogDelVisible = true
@@ -259,6 +266,9 @@ export default {
     deleteAttr() {
       this.$refs['dataDel'].validate((valid) => {
         if (valid) {
+          if (this.delTemp.delNum !== '1') {
+            return
+          }
           const tempData = Object.assign({}, this.rowTemp)
           const attrIndex = this.object_schema.indexOf(tempData)
           this.object_schema.splice(attrIndex, 1)

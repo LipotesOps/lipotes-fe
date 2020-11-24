@@ -48,6 +48,14 @@
             </div>
           </template>
         </el-table-column>
+
+        <el-table-column fixed label="操作" align="center" min-width="30">
+          <template slot-scope="{row}">
+            <el-button size="mini" type="success" @click="handleUpdate(row)">编辑</el-button>
+            <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
+          </template>
+        </el-table-column>
+
       </el-table>
     </div>
 
@@ -79,8 +87,25 @@
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button type="primary" @click="dialogStatus==='create'?createAttr():updateAttr()">
           保存
+        </el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="删除实例" :visible.sync="dialogDelVisible">
+      <el-form ref="dataDel" :model="delTemp" label-position="left" label-width="100px" style="width: 80%; margin-left:50px;">
+        <el-form-item label="删除实例数量" prop="delNum" fixed>
+          <el-input v-model="delNum" placeholder="Please input" />
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogDelVisible = false">
+          取消
+        </el-button>
+        <el-button type="danger" @click="deleteAttr()">
+          确认删除
         </el-button>
       </div>
     </el-dialog>
@@ -131,7 +156,11 @@ export default {
         type: [{ required: true, message: 'this item is required', trigger: 'change' }],
         limit: [{ required: false, message: 'this item is required', trigger: 'blur' }],
         remark: [{ required: false, message: 'this item is required', trigger: 'blur' }]
-      }
+      },
+
+      delTemp: {},
+      delNum: 0,
+      dialogDelVisible: false
     }
   },
   created() {
@@ -166,7 +195,26 @@ export default {
         remark: ''
       }
     },
-    handleUpdate() {},
+    handleUpdate(row) {
+      this.resetRowTemp()
+      this.rowTemp = Object.assign({}, row) // copy obj
+
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    handleDelete(row) {
+      this.rowTemp = Object.assign({}, row) // copy obj
+
+      this.dialogDelVisible = true
+      this.delNum = 0
+
+      this.$nextTick(() => {
+        this.$refs['dataDel'].clearValidate()
+      })
+    },
     handleCreate() {
       this.resetRowTemp()
       // this.rowTemp = Object.assign({}, {}) // copy obj
@@ -177,7 +225,7 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
-    createData() {
+    createAttr() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.rowTemp)
@@ -198,6 +246,70 @@ export default {
               this.$notify({
                 title: 'Success',
                 message: 'Create Successfully',
+                type: 'success',
+                duration: 2000
+              })
+              this.reload()
+            }
+          })
+        }
+      })
+    },
+
+    deleteAttr() {
+      this.$refs['dataDel'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.rowTemp)
+          const attrIndex = this.object_schema.indexOf(tempData)
+          this.object_schema.splice(attrIndex, 1)
+
+          const tempSchema = Object.assign([], this.object_schema)
+
+          const patchData = {}
+          patchData.object_schema = tempSchema
+
+          // 使用patch更新资源定义的CI项
+          const id = this.object_definition._id
+          const etag = this.object_definition._etag
+          updateResourceObject(id, patchData, etag).then((response) => {
+            this.dialogFormVisible = false
+            if (response.status === 200) {
+              this.$notify({
+                title: 'Success',
+                message: 'Delete Successfully',
+                type: 'success',
+                duration: 2000
+              })
+              this.reload()
+            }
+          })
+        }
+      })
+    },
+
+    updateAttr() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.rowTemp)
+          const attrIndex = this.object_schema.indexOf(tempData)
+
+          delete tempData.isTrusted
+
+          const tempSchema = Object.assign([], this.object_schema)
+          tempSchema.splice(attrIndex, 1, tempData)
+
+          const patchData = {}
+          patchData.object_schema = tempSchema
+
+          // 使用patch更新资源定义的CI项
+          const id = this.object_definition._id
+          const etag = this.object_definition._etag
+          updateResourceObject(id, patchData, etag).then((response) => {
+            this.dialogFormVisible = false
+            if (response.status === 200) {
+              this.$notify({
+                title: 'Success',
+                message: 'Update Successfully',
                 type: 'success',
                 duration: 2000
               })

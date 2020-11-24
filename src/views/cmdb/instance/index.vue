@@ -82,7 +82,7 @@
     <el-dialog title="删除实例" :visible.sync="dialogDelVisible">
       <el-form ref="dataDel" :model="delTemp" label-position="left" label-width="100px" style="width: 80%; margin-left:50px;">
         <el-form-item label="删除实例数量" prop="delNum" fixed>
-          <el-input v-model="delNum" placeholder="Please input" />
+          <el-input v-model="delTemp.delNum" placeholder="Please input" />
         </el-form-item>
       </el-form>
 
@@ -90,7 +90,7 @@
         <el-button @click="dialogDelVisible = false">
           取消
         </el-button>
-        <el-button type="danger" @click="deleteData()">
+        <el-button type="danger" :disabled="delTemp.delNum !== '1'" @click="deleteData()">
           确认删除
         </el-button>
       </div>
@@ -126,8 +126,9 @@ export default {
 
       resourcInstance: [],
       rowTemp: {},
-      delTemp: {},
-      delNum: 0
+      delTemp: {
+        delNum: 0
+      }
 
     }
   },
@@ -185,6 +186,11 @@ export default {
 
       // })
     },
+    resetDelTemp() {
+      this.delTemp = {
+        delNum: 0
+      }
+    },
     handleUpdate(row) {
       this.resetRowTemp()
       this.rowTemp = Object.assign({}, row) // copy obj
@@ -206,6 +212,8 @@ export default {
       })
     },
     handleDelete(row) {
+      this.resetDelTemp()
+
       this.rowTemp = Object.assign({}, row) // copy obj
 
       this.dialogDelVisible = true
@@ -277,6 +285,9 @@ export default {
     deleteData() {
       this.$refs['dataDel'].validate((valid) => {
         if (valid) {
+          if (this.delTemp.delNum !== '1') {
+            return
+          }
           const tempData = Object.assign({}, this.rowTemp)
           delete tempData.isTrusted
 

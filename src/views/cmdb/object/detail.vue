@@ -104,7 +104,7 @@
         <el-button @click="dialogDelVisible = false">
           取消
         </el-button>
-        <el-button type="danger" @click="deleteAttr()">
+        <el-button type="danger" :disabled="delTemp.delNum !== '1'" @click="deleteAttr()">
           确认删除
         </el-button>
       </div>
@@ -216,7 +216,6 @@ export default {
       this.rowTemp = Object.assign({}, row) // copy obj
 
       this.dialogDelVisible = true
-      this.delNum = 0
 
       this.$nextTick(() => {
         this.$refs['dataDel'].clearValidate()

@@ -411,7 +411,6 @@ export default {
 
   /deep/ .el-dialog {
   background: var(--background-el-dialog);
-  // rgba(235, 251, 250, 1.000)
   }
 }
 </style>

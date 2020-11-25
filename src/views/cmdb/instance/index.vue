@@ -236,6 +236,9 @@ export default {
           delete tempData._links
           delete tempData._updated
 
+          delete tempData._latest_version
+          delete tempData._version
+
           // 新建资源实例
           createResourceInstance(tempData, this.objectId).then((response) => {
             this.dialogFormVisible = false
@@ -265,6 +268,9 @@ export default {
           delete tempData._etag
           delete tempData._links
           delete tempData._updated
+
+          delete tempData._latest_version
+          delete tempData._version
 
           // 新建资源实例
           updateResourceInstance(tempData._id, etag, tempData, this.objectId).then((response) => {
@@ -298,6 +304,9 @@ export default {
           delete tempData._etag
           delete tempData._links
           delete tempData._updated
+
+          delete tempData._latest_version
+          delete tempData._version
 
           // 删除资源实例
           delResourceInstance(tempData._id, etag, this.objectId).then((response) => {

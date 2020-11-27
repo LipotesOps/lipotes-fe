@@ -38,7 +38,13 @@
 
         <el-table-column fixed label="创建时间" prop="_created" sortable="true" align="center" min-width="30">
           <template slot-scope="{row}">
-            <span>{{ row._created }}</span>
+            <span>{{ row._created | momentFormat }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column fixed label="更新时间" prop="_updated" sortable="true" align="center" min-width="30">
+          <template slot-scope="{row}">
+            <span>{{ row._updated | momentFormat }}</span>
           </template>
         </el-table-column>
 
@@ -102,9 +108,15 @@
 
 <script>
 import { fetchResourceObjectDetail, fetchResourceInstance, createResourceInstance, updateResourceInstance, delResourceInstance } from '@/api/resource'
+import moment from 'moment'
 
 export default {
   inject: ['reload'],
+  filters: {
+    momentFormat(value) {
+      return moment(value)
+    }
+  },
   data: function() {
     return {
       objectId: this.$route.params.object_id,

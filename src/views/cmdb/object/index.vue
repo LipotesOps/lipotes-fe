@@ -17,7 +17,7 @@
                 <span style="font-weight:bold; opacity: 0.9">{{ item.name }}</span>
               </div>
 
-              <el-col span="6">
+              <el-col :span="6">
                 <div class="fa-icon-resource" :style="{color: item.color, 'width': '53px', 'height': '53px','border-radius': '10px', 'box-shadow': item.color, 'box-shadow': '2.8px 1.7304px 2.8px 1.7304px, -.8090px -.5px .8090px .5px'}">
                   <fa-icon
                     :icon="['fas',item.icon || 'cloud']"
@@ -26,7 +26,7 @@
                 </div>
               </el-col>
               <transition name="el-fade-in-linear">
-                <el-col v-show="index === show" span="6">
+                <el-col v-show="index === show" :span="6">
                   <span style="opacity: 0.7">{{ item.object_id }}</span>
                 </el-col>
               </transition>

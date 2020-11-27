@@ -56,6 +56,9 @@
         </el-table-column>
 
       </el-table>
+
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.max_results" @pagination="getResourceInstance" />
+
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
@@ -108,15 +111,23 @@
 
 <script>
 import { fetchResourceObjectDetail, fetchResourceInstance, createResourceInstance, updateResourceInstance, delResourceInstance } from '@/api/resource'
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
+  components: { Pagination },
   inject: ['reload'],
   data: function() {
     return {
       objectId: this.$route.params.object_id,
       object_definition: {},
       committing: false,
+      total: 0,
       listLoading: false,
+      listQuery: {
+        page: 1,
+        max_results: 10,
+        sort: '_id'
+      },
       tableKey: 0,
 
       object_schema: [],
@@ -172,11 +183,11 @@ export default {
     },
     getResourceInstance() {
       this.listLoading = true
-      const params = {}
-      fetchResourceInstance(params, this.objectId)
+      fetchResourceInstance(this.listQuery, this.objectId)
         .then(resp => {
           if (resp.status === 200) {
             this.resourcInstance = resp.data._items
+            this.total = resp.data._meta.total
           }
         })
         .finally(resp => {

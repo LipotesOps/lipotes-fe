@@ -13,16 +13,24 @@
         <el-col v-for="(item, index) in objectList" :key="item._id" :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
           <span>
             <el-card class="object-card" shadow="hover" :style="cardStyle" @mouseenter.native="mouseOnOff(true, index, item)" @mouseleave.native="mouseOnOff(false, index, item)" @click.native="$router.push({ name: 'object-instance', params: { object_id: item.object_id }})">
-
-              <div class="fa-icon-resource" :style="{color: item.color, 'width': '53px', 'height': '53px','border-radius': '10px', 'box-shadow': item.color, 'box-shadow': '2.8px 1.7304px 2.8px 1.7304px, -.8090px -.5px .8090px .5px'}">
-                <fa-icon
-                  :icon="['fas',item.icon || 'cloud']"
-                  :style="{color: item.color, 'width': '50px', 'height': '50px','border-radius': '10px', 'margin': '1.5px 1.5px 1.5px 1.5px'}"
-                />
-              </div>
               <div slot="header">
-                <span>{{ item.name }}</span>
+                <span style="font-weight:bold">{{ item.name }}</span>
               </div>
+
+              <el-col span="6">
+                <div class="fa-icon-resource" :style="{color: item.color, 'width': '53px', 'height': '53px','border-radius': '10px', 'box-shadow': item.color, 'box-shadow': '2.8px 1.7304px 2.8px 1.7304px, -.8090px -.5px .8090px .5px'}">
+                  <fa-icon
+                    :icon="['fas',item.icon || 'cloud']"
+                    :style="{color: item.color, 'width': '50px', 'height': '50px','border-radius': '10px', 'margin': '1.5px 1.5px 1.5px 1.5px'}"
+                  />
+                </div>
+              </el-col>
+              <transition name="el-fade-in-linear">
+                <el-col v-show="index === show" span="6">
+                  <span>{{ item.object_id }}</span>
+                </el-col>
+              </transition>
+
               <transition name="el-fade-in-linear">
                 <div v-show="index === show" class="card-btn-area">
                   <el-button type="text" circle :plain="true" @click.stop="$router.push({ name: 'object-detail', params: { object_id: item.object_id }})"><i class="el-icon-coin el-icon--center" /></el-button>
@@ -362,7 +370,7 @@ export default {
         box-shadow: .5px .5px rgba(39, 63, 172, 0.562), -.3px -.3px rgba(39, 63, 172, 0.562);
     }
     .card-btn-area {
-      margin-top: 15px;
+      margin-top: 66px;
       // padding: 10px;
       // background-color: white;
       border-radius: 8px;

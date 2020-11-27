@@ -10,56 +10,53 @@
       <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="handleCreate"><fa-icon :icon="['fas','plus']" /></el-button>
     </div>
 
-    <div class="app-content-container">
-      <el-table
-        :key="tableKey"
-        v-loading="listLoading"
-        :data="resourcInstance"
-        border
-        fit
-        highlight-current-row
-        @sort-change="sortChange"
+    <el-table
+      :key="tableKey"
+      v-loading="listLoading"
+      :data="resourcInstance"
+      border
+      fit
+      highlight-current-row
+      @sort-change="sortChange"
+    >
+      <el-table-column
+        v-for="(item) in object_schema"
+        :key="item.name"
+        fixed
+        :label="item.name"
+        :value="item.name"
+        :prop="item.id"
+        sortable="true"
+        align="center"
+        min-width="30"
       >
-        <el-table-column
-          v-for="(item) in object_schema"
-          :key="item.name"
-          fixed
-          :label="item.name"
-          :value="item.name"
-          :prop="item.id"
-          sortable="true"
-          align="center"
-          min-width="30"
-        >
-          <template slot-scope="{row}">
-            <span>{{ row[item.id] }}</span>
-          </template>
-        </el-table-column>
+        <template slot-scope="{row}">
+          <span>{{ row[item.id] }}</span>
+        </template>
+      </el-table-column>
 
-        <el-table-column fixed label="创建时间" prop="_created" sortable="true" align="center" min-width="30">
-          <template slot-scope="{row}">
-            <span>{{ row._created | localTimeZone }}</span>
-          </template>
-        </el-table-column>
+      <el-table-column fixed label="创建时间" prop="_created" sortable="true" align="center" min-width="30">
+        <template slot-scope="{row}">
+          <span>{{ row._created | localTimeZone }}</span>
+        </template>
+      </el-table-column>
 
-        <el-table-column fixed label="更新时间" prop="_updated" sortable="true" align="center" min-width="30">
-          <template slot-scope="{row}">
-            <span>{{ row._updated | localTimeZone }}</span>
-          </template>
-        </el-table-column>
+      <el-table-column fixed label="更新时间" prop="_updated" sortable="true" align="center" min-width="30">
+        <template slot-scope="{row}">
+          <span>{{ row._updated | localTimeZone }}</span>
+        </template>
+      </el-table-column>
 
-        <el-table-column fixed label="操作" align="center" min-width="30">
-          <template slot-scope="{row}">
-            <el-button size="mini" type="success" @click="handleUpdate(row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
-          </template>
-        </el-table-column>
+      <el-table-column fixed label="操作" align="center" min-width="30">
+        <template slot-scope="{row}">
+          <el-button size="mini" type="success" @click="handleUpdate(row)">编辑</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
+        </template>
+      </el-table-column>
 
-      </el-table>
+    </el-table>
 
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.max_results" @pagination="getResourceInstance" />
-
-    </div>
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.max_results" @pagination="getResourceInstance" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">

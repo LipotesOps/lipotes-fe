@@ -123,6 +123,43 @@
   border-radius: 8px;
 }
 
+// pagination style
+.el-pagination {
+
+  .btn-prev {
+    border-radius: 8px !important;
+  }
+
+  .btn-next {
+    border-radius: 8px !important;
+  }
+
+  .el-pager {
+
+    .number {
+      border-radius: 8px !important;
+    }
+  }
+
+  .el-pagination__sizes {
+
+    .el-select .el-input__inner {
+      border-radius: 8px;
+    }
+
+
+  }
+}
+
+.el-select-dropdown {
+  border-radius: 8px;
+
+  .el-select-dropdown__item {
+    border-radius: 8px;
+  }
+}
+
+
 .el-tag {
   border-radius: 8px;
 }

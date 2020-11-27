@@ -46,6 +46,13 @@ Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 
+import moment from 'moment'
+// 全局时区转换
+Vue.filter('localTimeZone', function(value) {
+  if (!value) return ''
+  return moment(value)
+})
+
 import _ from 'lodash'
 
 Object.defineProperty(Vue.prototype, '$_', { value: _, writable: true })

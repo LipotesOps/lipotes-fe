@@ -14,7 +14,7 @@
           <span>
             <el-card class="object-card" shadow="hover" :style="cardStyle" @mouseenter.native="mouseOnOff(true, index, item)" @mouseleave.native="mouseOnOff(false, index, item)" @click.native="$router.push({ name: 'object-instance', params: { object_id: item.object_id }})">
               <div slot="header">
-                <span style="font-weight:bold">{{ item.name }}</span>
+                <span style="font-weight:bold; opacity: 0.9">{{ item.name }}</span>
               </div>
 
               <el-col span="6">
@@ -27,7 +27,7 @@
               </el-col>
               <transition name="el-fade-in-linear">
                 <el-col v-show="index === show" span="6">
-                  <span>{{ item.object_id }}</span>
+                  <span style="opacity: 0.7">{{ item.object_id }}</span>
                 </el-col>
               </transition>
 

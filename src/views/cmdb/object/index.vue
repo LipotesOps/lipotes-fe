@@ -27,7 +27,9 @@
               </el-col>
               <transition name="el-fade-in-linear">
                 <el-col v-show="index === show" :span="6">
-                  <span style="opacity: 0.7">{{ item.object_id }}</span>
+                  <div style="height: 53px;">
+                    <span style="opacity: 0.7">{{ item.object_id }}</span>
+                  </div>
                 </el-col>
               </transition>
 

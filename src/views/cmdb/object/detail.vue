@@ -9,55 +9,53 @@
       <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="handleCreate"><fa-icon :icon="['fas','plus']" /></el-button>
     </div>
 
-    <div class="app-content-container">
-      <el-table
-        :key="tableKey"
-        v-loading="listLoading"
-        :data="object_schema"
-        border
-        fit
-        highlight-current-row
-        @sort-change="sortChange"
-      >
-        <el-table-column fixed label="属性" prop="id" sortable="true" align="center" min-width="30">
-          <template slot-scope="{row}">
-            <span>{{ row.name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column fixed label="ID" prop="id" sortable="true" align="center" min-width="30">
-          <template slot-scope="{row}">
-            <span>{{ row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column fixed label="类型" prop="id" sortable="true" align="center" min-width="30">
-          <template slot-scope="{row}">
-            <span>{{ row.type }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column fixed label="必填" prop="id" sortable="true" align="center" min-width="30">
-          <template slot-scope="{row}">
-            <div v-if="row.required===true" class="col-select-icon-wrapper icon-select">
-              <svg-icon icon-class="select" class-name="col-select-icon" />
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column fixed label="唯一" prop="id" sortable="true" align="center" min-width="30">
-          <template slot-scope="{row}">
-            <div v-if="row.unique===true" class="col-select-icon-wrapper icon-select">
-              <svg-icon icon-class="select" class-name="col-select-icon" />
-            </div>
-          </template>
-        </el-table-column>
+    <el-table
+      :key="tableKey"
+      v-loading="listLoading"
+      :data="object_schema"
+      border
+      fit
+      highlight-current-row
+      @sort-change="sortChange"
+    >
+      <el-table-column fixed label="属性" prop="id" sortable="true" align="center" min-width="30">
+        <template slot-scope="{row}">
+          <span>{{ row.name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column fixed label="ID" prop="id" sortable="true" align="center" min-width="30">
+        <template slot-scope="{row}">
+          <span>{{ row.id }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column fixed label="类型" prop="id" sortable="true" align="center" min-width="30">
+        <template slot-scope="{row}">
+          <span>{{ row.type }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column fixed label="必填" prop="id" sortable="true" align="center" min-width="30">
+        <template slot-scope="{row}">
+          <div v-if="row.required===true" class="col-select-icon-wrapper icon-select">
+            <svg-icon icon-class="select" class-name="col-select-icon" />
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column fixed label="唯一" prop="id" sortable="true" align="center" min-width="30">
+        <template slot-scope="{row}">
+          <div v-if="row.unique===true" class="col-select-icon-wrapper icon-select">
+            <svg-icon icon-class="select" class-name="col-select-icon" />
+          </div>
+        </template>
+      </el-table-column>
 
-        <el-table-column fixed label="操作" align="center" min-width="30">
-          <template slot-scope="{row}">
-            <el-button size="mini" type="success" @click="handleUpdate(row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
-          </template>
-        </el-table-column>
+      <el-table-column fixed label="操作" align="center" min-width="30">
+        <template slot-scope="{row}">
+          <el-button size="mini" type="success" @click="handleUpdate(row)">编辑</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
+        </template>
+      </el-table-column>
 
-      </el-table>
-    </div>
+    </el-table>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">

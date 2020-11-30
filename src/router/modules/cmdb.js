@@ -14,27 +14,27 @@ const cmdb = {
   children: [
     {
       path: 'object',
-      component: () => import('@/views/cmdb/object/index'),
+      component: () => import('@/views/cmdb/object/index.vue'),
       name: 'object-list',
       meta: { title: '资源列表', icon: 'documentation' }
     },
     {
       path: 'object/:object_id/detail',
       hidden: true,
-      component: () => import('@/views/cmdb/object/detail'),
+      component: () => import('@/views/cmdb/object/detail.vue'),
       name: 'object-detail',
       meta: { title: '资源详情', icon: 'documentation' }
     },
     {
       path: 'object/:object_id/instance',
       hidden: true,
-      component: () => import('@/views/cmdb/instance/index'),
+      component: () => import('@/views/cmdb/instance/index.vue'),
       name: 'object-instance',
       meta: { title: '资源实例', icon: 'documentation' }
     },
     {
       path: 'object/create',
-      component: () => import('@/views/cmdb/object/create'),
+      component: () => import('@/views/cmdb/object/create.vue'),
       name: 'object-create',
       meta: { title: '资源创建', icon: 'documentation' }
     }

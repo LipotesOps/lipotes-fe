@@ -19,11 +19,18 @@ const cmdb = {
       meta: { title: '资源列表', icon: 'documentation' }
     },
     {
-      path: 'object/:object_id/detail',
+      path: 'object/:object_id/attribute',
       hidden: true,
-      component: () => import('@/views/cmdb/object/detail.vue'),
-      name: 'object-detail',
-      meta: { title: '资源详情', icon: 'documentation' }
+      component: () => import('@/views/cmdb/object/attribute.vue'),
+      name: 'resource-attribute',
+      meta: { title: '属性列表', icon: 'documentation' }
+    },
+    {
+      path: 'object/:object_id/relation',
+      hidden: true,
+      component: () => import('@/views/cmdb/object/relation.vue'),
+      name: 'resource-relation',
+      meta: { title: '关系列表', icon: 'documentation' }
     },
     {
       path: 'object/:object_id/instance',

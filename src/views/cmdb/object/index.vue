@@ -35,7 +35,7 @@
 
               <transition name="el-fade-in-linear">
                 <div v-show="index === show" class="card-btn-area">
-                  <el-button type="text" circle :plain="true" @click.stop="$router.push({ name: 'object-detail', params: { object_id: item.object_id }})"><i class="el-icon-coin el-icon--center" /></el-button>
+                  <el-button type="text" circle :plain="true" @click.stop="$router.push({ name: 'resource-attribute', params: { object_id: item.object_id }})"><i class="el-icon-coin el-icon--center" /></el-button>
                   <el-button type="text" circle :plain="true" @click.stop="handleUpdate(item)"><i class="el-icon-postcard el-icon--center" /></el-button>
                 </div>
               </transition>

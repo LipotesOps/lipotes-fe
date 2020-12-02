@@ -47,7 +47,8 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
 
-      <el-form ref="leftForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
+      <div>
+
         <el-row style="margin-bottom: 30px; align: middle">
           <el-col :span="4" :offset="5">
             <div class="fa-icon-resource" :style="{color: left.color, 'width': '53px', 'height': '53px','border-radius': '10px', 'box-shadow': left.color, 'box-shadow': '2.8px 1.7304px 2.8px 1.7304px, -.8090px -.5px .8090px .5px'}">
@@ -61,11 +62,7 @@
             </div>
           </el-col>
 
-          <el-col :span="10">
-            <el-input v-model="rowTemp.name" style="width: 210px" placeholder="请输入关系名称" />
-          </el-col>
-
-          <el-col :span="4">
+          <el-col :span="4" :offset="10">
             <div class="fa-icon-resource" :style="{color: right.color, 'width': '53px', 'height': '53px','border-radius': '10px', 'box-shadow': right.color, 'box-shadow': '2.8px 1.7304px 2.8px 1.7304px, -.8090px -.5px .8090px .5px'}">
               <fa-icon
                 :icon="['fas', right.icon || 'cloud']"
@@ -79,22 +76,26 @@
 
         </el-row>
 
-        <el-form-item label="关系名称" prop="name" :label-width="formLabelWidth">
-          <el-input v-model="rowTemp.name" placeholder="" />
-        </el-form-item>
-        <el-form-item label="ID" prop="id" :label-width="formLabelWidth">
-          <el-input v-model="rowTemp.id" :disabled="dialogStatus==='update'?true:false" width="500px" />
-        </el-form-item>
-        <el-form-item label="类型" prop="type" :label-width="formLabelWidth">
-          <el-select v-model="rowTemp.type" value-key="type" class="filter-item" placeholder="Please select" clearable>
-            <el-option v-for="item in typeOptions" :key="item.name" :label="item.name" :value="item.value" />
-          </el-select>
-        </el-form-item>
+        <el-form ref="leftForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
 
-        <el-form-item label="Remark" :label-width="formLabelWidth">
-          <el-input v-model="rowTemp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
-        </el-form-item>
-      </el-form>
+          <el-form-item label="关系名称" prop="name" :label-width="formLabelWidth">
+            <el-input v-model="rowTemp.name" placeholder="" />
+          </el-form-item>
+          <el-form-item label="ID" prop="id" :label-width="formLabelWidth">
+            <el-input v-model="rowTemp.id" :disabled="dialogStatus==='update'?true:false" width="500px" />
+          </el-form-item>
+          <el-form-item label="类型" prop="type" :label-width="formLabelWidth">
+            <el-select v-model="rowTemp.type" value-key="type" class="filter-item" placeholder="Please select" clearable>
+              <el-option v-for="item in typeOptions" :key="item.name" :label="item.name" :value="item.value" />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="Remark" :label-width="formLabelWidth">
+            <el-input v-model="rowTemp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
+          </el-form-item>
+        </el-form>
+
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           取消

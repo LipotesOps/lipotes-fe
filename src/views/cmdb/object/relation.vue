@@ -1,11 +1,13 @@
 <template>
   <div class="app-container">
     <div class="app-content-title">
-      <h4 style="margin:0px">{{ object_definition.name }} - {{ objectId }} - 属性列表</h4>
+      <h4 style="margin:0px">{{ object_definition.name }} - {{ objectId }} - 关系列表</h4>
     </div>
 
     <div class="btn-area">
       <el-button type="info" :plain="true" icon="user-secret" @click="$router.go(-1)"><fa-icon :icon="['fas','reply']" /></el-button>
+      <el-button type="info" :plain="true" icon="fa-undo" @click="$router.push({ name: 'resource-attribute', params: { object_id: objectId }})"><fa-icon :icon="['fas','toggle-off']" /></el-button>
+
       <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="handleCreate"><fa-icon :icon="['fas','plus']" /></el-button>
     </div>
 
@@ -91,9 +93,9 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="删除属性" :visible.sync="dialogDelVisible">
+    <el-dialog title="删除关系" :visible.sync="dialogDelVisible">
       <el-form ref="dataDel" :model="delTemp" label-position="left" label-width="100px" style="width: 80%; margin-left:50px;">
-        <el-form-item label="删除属性数量" prop="delNum" fixed>
+        <el-form-item label="删除关系数量" prop="delNum" fixed>
           <el-input v-model="delTemp.delNum" placeholder="Please input" />
         </el-form-item>
       </el-form>

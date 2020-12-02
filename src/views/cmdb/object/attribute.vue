@@ -6,6 +6,8 @@
 
     <div class="btn-area">
       <el-button type="info" :plain="true" icon="user-secret" @click="$router.go(-1)"><fa-icon :icon="['fas','reply']" /></el-button>
+      <el-button type="info" :plain="true" icon="fa-undo" @click="$router.push({ name: 'resource-relation', params: { object_id: objectId }})"><fa-icon :icon="['fas','toggle-on']" /></el-button>
+
       <el-button type="success" icon="check" :loading="committing" class="save-btn" @click="handleCreate"><fa-icon :icon="['fas','plus']" /></el-button>
     </div>
 

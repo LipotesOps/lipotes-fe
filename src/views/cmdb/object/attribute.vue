@@ -174,7 +174,7 @@ export default {
       fetchResourceObjectDetail(params, this.objectId)
         .then(resp => {
           if (resp.status === 200) {
-            this.object_schema = this.$_.get(resp.data, 'object_schema', {})
+            this.object_schema = this.$_.get(resp.data, 'object_schema', [])
             this.object_definition = resp.data
           }
         })

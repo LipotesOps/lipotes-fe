@@ -14,13 +14,13 @@
     <el-table
       :key="tableKey"
       v-loading="listLoading"
-      :data="object_schema"
+      :data="relation_schema"
       border
       fit
       highlight-current-row
       @sort-change="sortChange"
     >
-      <el-table-column fixed label="属性" prop="id" sortable="true" align="center" min-width="30">
+      <el-table-column fixed label="关系名称" prop="id" sortable="true" align="center" min-width="30">
         <template slot-scope="{row}">
           <span>{{ row.name }}</span>
         </template>
@@ -30,23 +30,9 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column fixed label="类型" prop="id" sortable="true" align="center" min-width="30">
+      <el-table-column fixed label="两端" prop="id" sortable="true" align="center" min-width="30">
         <template slot-scope="{row}">
           <span>{{ row.type }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column fixed label="必填" prop="id" sortable="true" align="center" min-width="30">
-        <template slot-scope="{row}">
-          <div v-if="row.required===true" class="col-select-icon-wrapper icon-select">
-            <svg-icon icon-class="select" class-name="col-select-icon" />
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column fixed label="唯一" prop="id" sortable="true" align="center" min-width="30">
-        <template slot-scope="{row}">
-          <div v-if="row.unique===true" class="col-select-icon-wrapper icon-select">
-            <svg-icon icon-class="select" class-name="col-select-icon" />
-          </div>
         </template>
       </el-table-column>
 
@@ -60,8 +46,40 @@
     </el-table>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
-        <el-form-item label="属性" prop="name" :label-width="formLabelWidth">
+
+      <el-form ref="leftForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
+        <el-row style="margin-bottom: 30px; align: middle">
+          <el-col :span="4" :offset="5">
+            <div class="fa-icon-resource" :style="{color: left.color, 'width': '53px', 'height': '53px','border-radius': '10px', 'box-shadow': left.color, 'box-shadow': '2.8px 1.7304px 2.8px 1.7304px, -.8090px -.5px .8090px .5px'}">
+              <fa-icon
+                :icon="['fas', left.icon || 'cloud']"
+                :style="{color: left.color, 'width': '50px', 'height': '50px','border-radius': '10px', 'margin': '1.5px 1.5px 1.5px 1.5px'}"
+              />
+            </div>
+            <div style="margin-left: 12.5px">
+              <span style="opacity: 0.7">{{ objectId }}</span>
+            </div>
+          </el-col>
+
+          <el-col :span="10">
+            <el-input v-model="rowTemp.name" style="width: 210px" placeholder="请输入关系名称" />
+          </el-col>
+
+          <el-col :span="4">
+            <div class="fa-icon-resource" :style="{color: right.color, 'width': '53px', 'height': '53px','border-radius': '10px', 'box-shadow': right.color, 'box-shadow': '2.8px 1.7304px 2.8px 1.7304px, -.8090px -.5px .8090px .5px'}">
+              <fa-icon
+                :icon="['fas', right.icon || 'cloud']"
+                :style="{color: right.color, 'width': '50px', 'height': '50px','border-radius': '10px', 'margin': '1.5px 1.5px 1.5px 1.5px'}"
+              />
+            </div>
+            <div style="margin-left: 12.5px">
+              <span style="opacity: 0.7">{{ objectId }}</span>
+            </div>
+          </el-col>
+
+        </el-row>
+
+        <el-form-item label="关系名称" prop="name" :label-width="formLabelWidth">
           <el-input v-model="rowTemp.name" placeholder="" />
         </el-form-item>
         <el-form-item label="ID" prop="id" :label-width="formLabelWidth">
@@ -71,12 +89,6 @@
           <el-select v-model="rowTemp.type" value-key="type" class="filter-item" placeholder="Please select" clearable>
             <el-option v-for="item in typeOptions" :key="item.name" :label="item.name" :value="item.value" />
           </el-select>
-        </el-form-item>
-
-        <el-form-item label="校验规则" prop="limit" :label-width="formLabelWidth">
-
-          <el-checkbox v-model="rowTemp.unique" label="唯一">唯一</el-checkbox>
-          <el-checkbox v-model="rowTemp.required" label="必填">必填</el-checkbox>
         </el-form-item>
 
         <el-form-item label="Remark" :label-width="formLabelWidth">
@@ -127,11 +139,13 @@ export default {
   inject: ['reload'],
   data() {
     return {
+      left: {},
+      right: {},
       object_definition: {},
       listLoading: false,
       tableKey: 0,
       objectId: this.$route.params.object_id,
-      object_schema: [],
+      relation_schema: [],
 
       committing: false,
       formLabelWidth: '90px',
@@ -146,15 +160,12 @@ export default {
         name: '',
         id: '',
         type: 'string',
-        required: true,
-        unique: false,
         remark: ''
       },
       rules: {
         name: [{ required: true, message: 'this item is required', trigger: 'blur' }],
         id: [{ required: true, message: 'this item is required', trigger: 'blur' }],
         type: [{ required: true, message: 'this item is required', trigger: 'change' }],
-        limit: [{ required: false, message: 'this item is required', trigger: 'blur' }],
         remark: [{ required: false, message: 'this item is required', trigger: 'blur' }]
       },
 
@@ -174,7 +185,8 @@ export default {
       fetchResourceObjectDetail(params, this.objectId)
         .then(resp => {
           if (resp.status === 200) {
-            this.object_schema = this.$_.get(resp.data, 'object_schema', {})
+            this.relation_schema = this.$_.get(resp.data, 'relation_schema', [])
+            this.left = this.$_.get(resp, 'data', {})
             this.object_definition = resp.data
           }
         })
@@ -208,7 +220,7 @@ export default {
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
+        this.$refs['leftForm'].clearValidate()
       })
     },
     handleDelete(row) {
@@ -228,20 +240,20 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
+        this.$refs['leftForm'].clearValidate()
       })
     },
     createAttr() {
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs['leftForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.rowTemp)
           delete tempData.isTrusted
 
-          const tempSchema = Object.assign([], this.object_schema)
+          const tempSchema = Object.assign([], this.relation_schema)
           tempSchema.push(tempData)
 
           const patchData = {}
-          patchData.object_schema = tempSchema
+          patchData.relation_schema = tempSchema
 
           // 使用patch更新资源定义的CI项
           const id = this.object_definition._id
@@ -269,13 +281,13 @@ export default {
             return
           }
           const tempData = Object.assign({}, this.rowTemp)
-          const attrIndex = this.object_schema.indexOf(tempData)
-          this.object_schema.splice(attrIndex, 1)
+          const attrIndex = this.relation_schema.indexOf(tempData)
+          this.relation_schema.splice(attrIndex, 1)
 
-          const tempSchema = Object.assign([], this.object_schema)
+          const tempSchema = Object.assign([], this.relation_schema)
 
           const patchData = {}
-          patchData.object_schema = tempSchema
+          patchData.relation_schema = tempSchema
 
           // 使用patch更新资源定义的CI项
           const id = this.object_definition._id
@@ -297,18 +309,18 @@ export default {
     },
 
     updateAttr() {
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs['leftForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.rowTemp)
-          const attrIndex = this.object_schema.indexOf(tempData)
+          const attrIndex = this.relation_schema.indexOf(tempData)
 
           delete tempData.isTrusted
 
-          const tempSchema = Object.assign([], this.object_schema)
+          const tempSchema = Object.assign([], this.relation_schema)
           tempSchema.splice(attrIndex, 1, tempData)
 
           const patchData = {}
-          patchData.object_schema = tempSchema
+          patchData.relation_schema = tempSchema
 
           // 使用patch更新资源定义的CI项
           const id = this.object_definition._id
@@ -335,24 +347,6 @@ export default {
 
 <style lang="less" scoped>
  @import url("./../../../assets/css/variables.less");
-
-.col-select-icon-wrapper {
-
-  .col-select-icon {
-    height: 15px;
-    width: 15px;
-
-    position: relative;
-    overflow: hidden;
-    color: white;
-    background: green;
-    border-radius: 8px;
-
-    box-shadow: .809px .809px rgb(236, 226, 226), -.9px -.9px rgb(236, 226, 226);
-    border-color: rgb(255, 0, 0);
-
-  }
-}
 
 .btn-area {
     position: absolute;

@@ -91,7 +91,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="删除实例" :visible.sync="dialogDelVisible">
+    <el-dialog title="删除属性" :visible.sync="dialogDelVisible">
       <el-form ref="dataDel" :model="delTemp" label-position="left" label-width="100px" style="width: 80%; margin-left:50px;">
         <el-form-item label="删除属性数量" prop="delNum" fixed>
           <el-input v-model="delTemp.delNum" placeholder="Please input" />

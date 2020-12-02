@@ -73,27 +73,48 @@
               <span style="opacity: 0.7">{{ objectId }}</span>
             </div>
           </el-col>
-
         </el-row>
 
-        <el-form ref="leftForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
+        <el-row>
+          <el-col :span="12">
+            <el-form ref="leftForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
+              <el-form-item label="关系名称" prop="name" :label-width="formLabelWidth">
+                <el-input v-model="rowTemp.name" placeholder="" />
+              </el-form-item>
+              <el-form-item label="ID" prop="id" :label-width="formLabelWidth">
+                <el-input v-model="rowTemp.id" :disabled="dialogStatus==='update'?true:false" width="500px" />
+              </el-form-item>
+              <el-form-item label="类型" prop="type" :label-width="formLabelWidth">
+                <el-select v-model="rowTemp.type" value-key="type" class="filter-item" placeholder="Please select" clearable>
+                  <el-option v-for="item in typeOptions" :key="item.name" :label="item.name" :value="item.value" />
+                </el-select>
+              </el-form-item>
 
-          <el-form-item label="关系名称" prop="name" :label-width="formLabelWidth">
-            <el-input v-model="rowTemp.name" placeholder="" />
-          </el-form-item>
-          <el-form-item label="ID" prop="id" :label-width="formLabelWidth">
-            <el-input v-model="rowTemp.id" :disabled="dialogStatus==='update'?true:false" width="500px" />
-          </el-form-item>
-          <el-form-item label="类型" prop="type" :label-width="formLabelWidth">
-            <el-select v-model="rowTemp.type" value-key="type" class="filter-item" placeholder="Please select" clearable>
-              <el-option v-for="item in typeOptions" :key="item.name" :label="item.name" :value="item.value" />
-            </el-select>
-          </el-form-item>
+              <el-form-item label="Remark" :label-width="formLabelWidth">
+                <el-input v-model="rowTemp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
+              </el-form-item>
+            </el-form>
+          </el-col>
+          <el-col :span="12">
+            <el-form ref="rightForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
+              <el-form-item label="关系名称" prop="name" :label-width="formLabelWidth">
+                <el-input v-model="rowTemp.name" placeholder="" />
+              </el-form-item>
+              <el-form-item label="ID" prop="id" :label-width="formLabelWidth">
+                <el-input v-model="rowTemp.id" :disabled="dialogStatus==='update'?true:false" width="500px" />
+              </el-form-item>
+              <el-form-item label="类型" prop="type" :label-width="formLabelWidth">
+                <el-select v-model="rowTemp.type" value-key="type" class="filter-item" placeholder="Please select" clearable>
+                  <el-option v-for="item in typeOptions" :key="item.name" :label="item.name" :value="item.value" />
+                </el-select>
+              </el-form-item>
 
-          <el-form-item label="Remark" :label-width="formLabelWidth">
-            <el-input v-model="rowTemp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
-          </el-form-item>
-        </el-form>
+              <el-form-item label="Remark" :label-width="formLabelWidth">
+                <el-input v-model="rowTemp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </el-row>
 
       </div>
       <div slot="footer" class="dialog-footer">
@@ -355,6 +376,10 @@ export default {
     right: 20px;
     z-index: @flying;
   }
+
+.el-select {
+  width: 100%;
+}
 
 </style>
 

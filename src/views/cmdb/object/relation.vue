@@ -77,40 +77,52 @@
 
         <el-row>
           <el-col :span="12">
-            <el-form ref="leftForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
-              <el-form-item label="关系名称" prop="name" :label-width="formLabelWidth">
-                <el-input v-model="rowTemp.name" placeholder="" />
+            <!--------------------------------------------------------------- left --------------------------------------------------------------->
+            <el-form ref="leftForm" :rules="rules" :model="rowTemp.left" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
+              <el-form-item :key="rowTemp.left.name" prop="left_name" label="关系名称" :label-width="formLabelWidth">
+                <el-input :key="rowTemp.left.name" v-model="rowTemp.left.name" placeholder="" />
               </el-form-item>
-              <el-form-item label="ID" prop="id" :label-width="formLabelWidth">
-                <el-input v-model="rowTemp.id" :disabled="dialogStatus==='update'?true:false" width="500px" />
+              <el-form-item label="ID" prop="left_id" :label-width="formLabelWidth">
+                <el-input v-model="rowTemp.left.id" :disabled="dialogStatus==='update'?true:false" width="500px" />
               </el-form-item>
-              <el-form-item label="类型" prop="type" :label-width="formLabelWidth">
-                <el-select v-model="rowTemp.type" value-key="type" class="filter-item" placeholder="Please select" clearable>
-                  <el-option v-for="item in typeOptions" :key="item.name" :label="item.name" :value="item.value" />
+              <el-form-item label="类型" prop="left_type" :label-width="formLabelWidth">
+                <el-select v-model="rowTemp.left.type" value-key="key" class="filter-item" placeholder="Please select" clearable>
+                  <el-option v-for="item in typeOptions" :key="item.id" :label="item.name" :value="item.value" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="资源ID" prop="left_resourceId" :label-width="formLabelWidth">
+                <el-select v-model="rowTemp.left.resourceId" disabled value-key="object_id" class="filter-item" placeholder="Please select" clearable>
+                  <el-option v-for="item in resourceList" :key="item.object_id" :label="item.object_id" :value="item.object_id" />
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="Remark" :label-width="formLabelWidth">
-                <el-input v-model="rowTemp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
+              <el-form-item label="Remark" prop="left_remark" :label-width="formLabelWidth">
+                <el-input v-model="rowTemp.left.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
               </el-form-item>
             </el-form>
           </el-col>
+          <!--------------------------------------------------------------- right --------------------------------------------------------------->
           <el-col :span="12">
-            <el-form ref="rightForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
-              <el-form-item label="关系名称" prop="name" :label-width="formLabelWidth">
-                <el-input v-model="rowTemp.name" placeholder="" />
+            <el-form ref="rightForm" :rules="rules" :model="rowTemp.right" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
+              <el-form-item label="关系名称" prop="right_name" :label-width="formLabelWidth">
+                <el-input v-model="rowTemp.right.name" placeholder="" />
               </el-form-item>
-              <el-form-item label="ID" prop="id" :label-width="formLabelWidth">
-                <el-input v-model="rowTemp.id" :disabled="dialogStatus==='update'?true:false" width="500px" />
+              <el-form-item label="ID" prop="right_id" :label-width="formLabelWidth">
+                <el-input v-model="rowTemp.right.id" :disabled="dialogStatus==='update'?true:false" width="500px" />
               </el-form-item>
-              <el-form-item label="类型" prop="type" :label-width="formLabelWidth">
-                <el-select v-model="rowTemp.type" value-key="type" class="filter-item" placeholder="Please select" clearable>
-                  <el-option v-for="item in typeOptions" :key="item.name" :label="item.name" :value="item.value" />
+              <el-form-item label="类型" prop="right_type" :label-width="formLabelWidth">
+                <el-select v-model="rowTemp.right.type" value-key="key" class="filter-item" placeholder="Please select" clearable>
+                  <el-option v-for="item in typeOptions" :key="item.id" :label="item.name" :value="item.value" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="资源ID" prop="right_resourceId" :label-width="formLabelWidth">
+                <el-select v-model="rowTemp.right.resourceId" value-key="object_id" class="filter-item" placeholder="Please select" clearable>
+                  <el-option v-for="item in resourceList" :key="item.object_id" :label="item.object_id" :value="item.object_id" />
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="Remark" :label-width="formLabelWidth">
-                <el-input v-model="rowTemp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
+              <el-form-item label="Remark" prop="right_remark" :label-width="formLabelWidth">
+                <el-input v-model="rowTemp.right.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
               </el-form-item>
             </el-form>
           </el-col>
@@ -148,12 +160,13 @@
 </template>
 
 <script>
-import { fetchResourceObjectDetail, updateResourceObject } from '@/api/resource'
+import { fetchResourceDefinition, fetchResourceDefinitionDetail, updateResourceObject } from '@/api/resource'
 
 const typeOptions = [
   {
-    name: '字符型',
-    value: 'string'
+    name: '关系',
+    value: 'relation',
+    key: 1
   }
 ]
 
@@ -164,6 +177,7 @@ export default {
       left: {},
       right: {},
       object_definition: {},
+      resourceList: [],
       listLoading: false,
       tableKey: 0,
       objectId: this.$route.params.object_id,
@@ -181,14 +195,27 @@ export default {
       rowTemp: {
         name: '',
         id: '',
-        type: 'string',
-        remark: ''
+        type: 'relation',
+        remark: '',
+        left: { name: '', id: '', type: { value: 'list', id: 1 }, resourceId: this.objectId, max: 1, min: 0, remark: '' },
+        right: { name: '', id: '', type: { value: 'list', id: 1 }, resourceId: '', max: 1, min: 0, remark: '' }
       },
       rules: {
         name: [{ required: true, message: 'this item is required', trigger: 'blur' }],
         id: [{ required: true, message: 'this item is required', trigger: 'blur' }],
-        type: [{ required: true, message: 'this item is required', trigger: 'change' }],
-        remark: [{ required: false, message: 'this item is required', trigger: 'blur' }]
+        type: [{ required: true, message: 'this item is required', trigger: 'blur' }],
+
+        left_name: [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        left_id: [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        left_type: [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        left_resourceId: [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        left_remark: [{ required: false, message: 'this item is required', trigger: 'blur' }],
+
+        right_name: [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        right_id: [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        right_type: [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        right_resourceId: [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        right_remark: [{ required: false, message: 'this item is required', trigger: 'blur' }]
       },
 
       delTemp: {
@@ -199,12 +226,21 @@ export default {
   },
   created() {
     this.getObjectDetail()
+    this.getResourceDefinition()
   },
   methods: {
+    getResourceDefinition() {
+      fetchResourceDefinition()
+        .then(resp => {
+          if (resp.status === 200) {
+            this.resourceList = resp.data._items
+          }
+        })
+    },
     getObjectDetail() {
       this.listLoading = true
       const params = {}
-      fetchResourceObjectDetail(params, this.objectId)
+      fetchResourceDefinitionDetail(params, this.objectId)
         .then(resp => {
           if (resp.status === 200) {
             this.relation_schema = this.$_.get(resp.data, 'relation_schema', [])
@@ -221,14 +257,16 @@ export default {
     },
     sortChange() {},
     resetRowTemp() {
-      this.rowTemp = {
+      const rowTemp = {
         name: '',
         id: '',
-        type: 'string',
-        required: true,
-        unique: false,
-        remark: ''
+        type: 'relation',
+        remark: '',
+        left: { name: '', id: '', type: { value: 'list', id: 1 }, resourceId: this.objectId, max: 1, min: 0, remark: '' },
+        right: { name: '', id: '', type: { value: 'list', id: 1 }, resourceId: '', max: 1, min: 0, remark: '' }
       }
+      this.rowTemp = Object.assign({}, rowTemp)
+      console.log(this.rowTemp)
     },
     resetDelTemp() {
       this.delTemp = {

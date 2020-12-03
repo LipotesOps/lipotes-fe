@@ -114,7 +114,7 @@
 </template>
 
 <script>
-import { fetchResourceObjectDetail, updateResourceObject } from '@/api/resource'
+import { fetchResourceDefinitionDetail, updateResourceObject } from '@/api/resource'
 
 const typeOptions = [
   {
@@ -171,7 +171,7 @@ export default {
     getObjectDetail() {
       this.listLoading = true
       const params = {}
-      fetchResourceObjectDetail(params, this.objectId)
+      fetchResourceDefinitionDetail(params, this.objectId)
         .then(resp => {
           if (resp.status === 200) {
             this.object_schema = this.$_.get(resp.data, 'object_schema', [])

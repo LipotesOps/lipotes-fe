@@ -3,7 +3,7 @@ import request from '@/utils/request'
 const baseURL = '/micro-api'
 const headers = { 'If-Match': undefined }
 
-export function fetchResourceObject(params) {
+export function fetchResourceDefinition(params) {
   return request({
     baseURL,
     url: '/resource/',
@@ -31,7 +31,7 @@ export function createResourceInstance(data, objectId) {
   })
 }
 
-export function fetchResourceObjectDetail(params, objectId) {
+export function fetchResourceDefinitionDetail(params, objectId) {
   return request({
     baseURL,
     url: `/resource/${objectId}/`,

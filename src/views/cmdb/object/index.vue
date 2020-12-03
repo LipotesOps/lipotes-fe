@@ -10,7 +10,7 @@
     </div>
     <div class="app-content-container">
       <el-row>
-        <el-col v-for="(item, index) in objectList" :key="item._id" :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+        <el-col v-for="(item, index) in resourceList" :key="item._id" :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
           <span>
             <el-card class="object-card" shadow="hover" :style="cardStyle" @mouseenter.native="mouseOnOff(true, index, item)" @mouseleave.native="mouseOnOff(false, index, item)" @click.native="$router.push({ name: 'object-instance', params: { object_id: item.object_id }})">
               <div slot="header">
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { fetchResourceObject, fetchObjectCategory, updateResourceObject, createObject } from '@/api/resource'
+import { fetchResourceDefinition, fetchObjectCategory, updateResourceObject, createObject } from '@/api/resource'
 import chroma from './index'
 
 export default {
@@ -128,7 +128,7 @@ export default {
         icon: [{ required: false, message: 'this field is required', trigger: 'change' }],
         color: [{ required: false, message: 'this field is required', trigger: 'change' }]
       },
-      objectList: [],
+      resourceList: [],
       categoryOptions: [],
       // fa-icon arr
       iconOptions: ['ad', 'address-book', 'adjust', 'air-freshener'],
@@ -164,15 +164,15 @@ export default {
     }
   },
   created() {
-    this.getObjectList()
+    this.getResourceDefinition()
     this.getObjectCategory()
   },
   methods: {
-    getObjectList() {
-      fetchResourceObject()
+    getResourceDefinition() {
+      fetchResourceDefinition()
         .then(resp => {
           if (resp.status === 200) {
-            this.objectList = resp.data._items
+            this.resourceList = resp.data._items
           }
         })
     },
@@ -215,9 +215,12 @@ export default {
           delete tempData._links
           delete tempData._updated
 
+          delete tempData._latest_version
+          delete tempData._version
+
           updateResourceObject(id, tempData, etag).then((response) => {
-            const index = this.objectList.findIndex(v => v.id === this.rowTemp.id)
-            this.objectList.splice(index, 1, this.rowTemp)
+            const index = this.resourceList.findIndex(v => v.id === this.rowTemp.id)
+            this.resourceList.splice(index, 1, this.rowTemp)
             this.dialogFormVisible = false
             if (response.status === 200) {
               this.$notify({
@@ -258,8 +261,8 @@ export default {
           ]
 
           createObject(tempData).then((response) => {
-            const index = this.objectList.findIndex(v => v.id === this.rowTemp.id)
-            this.objectList.splice(index, 1, this.rowTemp)
+            const index = this.resourceList.findIndex(v => v.id === this.rowTemp.id)
+            this.resourceList.splice(index, 1, this.rowTemp)
             this.dialogFormVisible = false
             if (response.status === 201) {
               this.$notify({

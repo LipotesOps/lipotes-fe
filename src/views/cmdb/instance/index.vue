@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import { fetchResourceObjectDetail, fetchResourceInstance, createResourceInstance, updateResourceInstance, delResourceInstance } from '@/api/resource'
+import { fetchResourceDefinitionDetail, fetchResourceInstance, createResourceInstance, updateResourceInstance, delResourceInstance } from '@/api/resource'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -170,7 +170,7 @@ export default {
   methods: {
     getObjectDetail() {
       const params = {}
-      fetchResourceObjectDetail(params, this.objectId)
+      fetchResourceDefinitionDetail(params, this.objectId)
         .then(resp => {
           if (resp.status === 200) {
             this.object_schema = this.$_.get(resp.data, 'object_schema', {})

@@ -133,7 +133,7 @@
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createAttr():updateAttr()">
+        <el-button type="primary" @click="dialogStatus==='create'?createRelation():updateRelation()">
           保存
         </el-button>
       </div>
@@ -301,9 +301,10 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['leftForm'].clearValidate()
+        this.$refs['rightForm'].clearValidate()
       })
     },
-    createAttr() {
+    createRelation() {
       this.$refs['leftForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.rowTemp)
@@ -341,8 +342,8 @@ export default {
             return
           }
           const tempData = Object.assign({}, this.rowTemp)
-          const attrIndex = this.relation_schema.indexOf(tempData)
-          this.relation_schema.splice(attrIndex, 1)
+          const relationIndex = this.relation_schema.indexOf(tempData)
+          this.relation_schema.splice(relationIndex, 1)
 
           const tempSchema = Object.assign([], this.relation_schema)
 
@@ -368,16 +369,16 @@ export default {
       })
     },
 
-    updateAttr() {
+    updateRelation() {
       this.$refs['leftForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.rowTemp)
-          const attrIndex = this.relation_schema.indexOf(tempData)
+          const relationIndex = this.relation_schema.indexOf(tempData)
 
           delete tempData.isTrusted
 
           const tempSchema = Object.assign([], this.relation_schema)
-          tempSchema.splice(attrIndex, 1, tempData)
+          tempSchema.splice(relationIndex, 1, tempData)
 
           const patchData = {}
           patchData.relation_schema = tempSchema

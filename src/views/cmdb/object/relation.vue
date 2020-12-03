@@ -281,6 +281,7 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['leftForm'].clearValidate()
+        this.$refs['rightForm'].clearValidate()
       })
     },
     handleDelete(row) {
@@ -306,6 +307,34 @@ export default {
     },
     createRelation() {
       this.$refs['leftForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.rowTemp)
+          delete tempData.isTrusted
+
+          const tempSchema = Object.assign([], this.relation_schema)
+          tempSchema.push(tempData)
+
+          const patchData = {}
+          patchData.relation_schema = tempSchema
+
+          // 使用patch更新资源定义的CI项
+          const id = this.object_definition._id
+          const etag = this.object_definition._etag
+          updateResourceObject(id, patchData, etag).then((response) => {
+            this.dialogFormVisible = false
+            if (response.status === 200) {
+              this.$notify({
+                title: 'Success',
+                message: 'Create Successfully',
+                type: 'success',
+                duration: 2000
+              })
+              this.reload()
+            }
+          })
+        }
+      })
+      this.$refs['rightForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.rowTemp)
           delete tempData.isTrusted
@@ -371,6 +400,36 @@ export default {
 
     updateRelation() {
       this.$refs['leftForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.rowTemp)
+          const relationIndex = this.relation_schema.indexOf(tempData)
+
+          delete tempData.isTrusted
+
+          const tempSchema = Object.assign([], this.relation_schema)
+          tempSchema.splice(relationIndex, 1, tempData)
+
+          const patchData = {}
+          patchData.relation_schema = tempSchema
+
+          // 使用patch更新资源定义的CI项
+          const id = this.object_definition._id
+          const etag = this.object_definition._etag
+          updateResourceObject(id, patchData, etag).then((response) => {
+            this.dialogFormVisible = false
+            if (response.status === 200) {
+              this.$notify({
+                title: 'Success',
+                message: 'Update Successfully',
+                type: 'success',
+                duration: 2000
+              })
+              this.reload()
+            }
+          })
+        }
+      })
+      this.$refs['rightForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.rowTemp)
           const relationIndex = this.relation_schema.indexOf(tempData)

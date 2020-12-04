@@ -197,8 +197,8 @@ export default {
         id: '',
         type: 'relation',
         remark: '',
-        left: { name: '', id: '', type: { value: 'list', id: 1 }, resourceId: this.objectId, max: 1, min: 0, remark: '' },
-        right: { name: '', id: '', type: { value: 'list', id: 1 }, resourceId: '', max: 1, min: 0, remark: '' }
+        left: { name: '', id: '', type: 'relation', resourceId: this.objectId, max: 1, min: 0, remark: '' },
+        right: { name: '', id: '', type: 'relation', resourceId: '', max: 1, min: 0, remark: '' }
       },
       rules: {
         name: [{ required: true, message: 'this item is required', trigger: 'blur' }],

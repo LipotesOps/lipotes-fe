@@ -78,50 +78,50 @@
         <el-row>
           <el-col :span="12">
             <!--------------------------------------------------------------- left --------------------------------------------------------------->
-            <el-form ref="leftForm" :rules="rules" :model="rowTemp.left" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
-              <el-form-item :key="rowTemp.left.name" prop="left_name" label="关系名称" :label-width="formLabelWidth">
-                <el-input :key="rowTemp.left.name" v-model="rowTemp.left.name" placeholder="" />
+            <el-form ref="leftForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
+              <el-form-item prop="left.name" label="关系名称" :label-width="formLabelWidth">
+                <el-input v-model="rowTemp.left.name" placeholder="" />
               </el-form-item>
-              <el-form-item label="ID" prop="left_id" :label-width="formLabelWidth">
+              <el-form-item label="ID" prop="left.id" :label-width="formLabelWidth">
                 <el-input v-model="rowTemp.left.id" :disabled="dialogStatus==='update'?true:false" width="500px" />
               </el-form-item>
-              <el-form-item label="类型" prop="left_type" :label-width="formLabelWidth">
+              <el-form-item label="类型" prop="left.type" :label-width="formLabelWidth">
                 <el-select v-model="rowTemp.left.type" value-key="key" class="filter-item" placeholder="Please select" clearable>
                   <el-option v-for="item in typeOptions" :key="item.id" :label="item.name" :value="item.value" />
                 </el-select>
               </el-form-item>
-              <el-form-item label="资源ID" prop="left_resourceId" :label-width="formLabelWidth">
+              <el-form-item label="资源ID" prop="left.resourceId" :label-width="formLabelWidth">
                 <el-select v-model="rowTemp.left.resourceId" disabled value-key="object_id" class="filter-item" placeholder="Please select" clearable>
                   <el-option v-for="item in resourceList" :key="item.object_id" :label="item.object_id" :value="item.object_id" />
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="Remark" prop="left_remark" :label-width="formLabelWidth">
+              <el-form-item label="Remark" prop="left.remark" :label-width="formLabelWidth">
                 <el-input v-model="rowTemp.left.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
               </el-form-item>
             </el-form>
           </el-col>
           <!--------------------------------------------------------------- right --------------------------------------------------------------->
           <el-col :span="12">
-            <el-form ref="rightForm" :rules="rules" :model="rowTemp.right" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
-              <el-form-item label="关系名称" prop="right_name" :label-width="formLabelWidth">
+            <el-form ref="rightForm" :rules="rules" :model="rowTemp" label-position="left" label-width="70px" style="width: 80%; margin-left:50px;">
+              <el-form-item label="关系名称" prop="right.name" :label-width="formLabelWidth">
                 <el-input v-model="rowTemp.right.name" placeholder="" />
               </el-form-item>
-              <el-form-item label="ID" prop="right_id" :label-width="formLabelWidth">
+              <el-form-item label="ID" prop="right.id" :label-width="formLabelWidth">
                 <el-input v-model="rowTemp.right.id" :disabled="dialogStatus==='update'?true:false" width="500px" />
               </el-form-item>
-              <el-form-item label="类型" prop="right_type" :label-width="formLabelWidth">
+              <el-form-item label="类型" prop="right.type" :label-width="formLabelWidth">
                 <el-select v-model="rowTemp.right.type" value-key="key" class="filter-item" placeholder="Please select" clearable>
                   <el-option v-for="item in typeOptions" :key="item.id" :label="item.name" :value="item.value" />
                 </el-select>
               </el-form-item>
-              <el-form-item label="资源ID" prop="right_resourceId" :label-width="formLabelWidth">
+              <el-form-item label="资源ID" prop="right.resourceId" :label-width="formLabelWidth">
                 <el-select v-model="rowTemp.right.resourceId" value-key="object_id" class="filter-item" placeholder="Please select" clearable>
                   <el-option v-for="item in resourceList" :key="item.object_id" :label="item.object_id" :value="item.object_id" />
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="Remark" prop="right_remark" :label-width="formLabelWidth">
+              <el-form-item label="Remark" prop="right.remark" :label-width="formLabelWidth">
                 <el-input v-model="rowTemp.right.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
               </el-form-item>
             </el-form>
@@ -205,17 +205,17 @@ export default {
         id: [{ required: true, message: 'this item is required', trigger: 'blur' }],
         type: [{ required: true, message: 'this item is required', trigger: 'blur' }],
 
-        left_name: [{ required: true, message: 'this item is required', trigger: 'blur' }],
-        left_id: [{ required: true, message: 'this item is required', trigger: 'blur' }],
-        left_type: [{ required: true, message: 'this item is required', trigger: 'blur' }],
-        left_resourceId: [{ required: true, message: 'this item is required', trigger: 'blur' }],
-        left_remark: [{ required: false, message: 'this item is required', trigger: 'blur' }],
+        'left.name': [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        'left.id': [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        'left.type': [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        'left.resourceId': [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        'left.remark': [{ required: false, message: 'this item is required', trigger: 'blur' }],
 
-        right_name: [{ required: true, message: 'this item is required', trigger: 'blur' }],
-        right_id: [{ required: true, message: 'this item is required', trigger: 'blur' }],
-        right_type: [{ required: true, message: 'this item is required', trigger: 'blur' }],
-        right_resourceId: [{ required: true, message: 'this item is required', trigger: 'blur' }],
-        right_remark: [{ required: false, message: 'this item is required', trigger: 'blur' }]
+        'right.name': [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        'right.id': [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        'right.type': [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        'right.resourceId': [{ required: true, message: 'this item is required', trigger: 'blur' }],
+        'right.remark': [{ required: false, message: 'this item is required', trigger: 'blur' }]
       },
 
       delTemp: {

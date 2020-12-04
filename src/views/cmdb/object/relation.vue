@@ -266,7 +266,6 @@ export default {
         right: { name: '', id: '', type: { value: 'list', id: 1 }, resourceId: '', max: 1, min: 0, remark: '' }
       }
       this.rowTemp = Object.assign({}, rowTemp)
-      console.log(this.rowTemp)
     },
     resetDelTemp() {
       this.delTemp = {

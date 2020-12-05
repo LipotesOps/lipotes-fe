@@ -150,7 +150,7 @@
         <el-button @click="dialogDelVisible = false">
           取消
         </el-button>
-        <el-button type="danger" :disabled="delTemp.delNum !== '1'" @click="deleteAttr()">
+        <el-button type="danger" :disabled="delTemp.delNum !== '1'" @click="deleteRelation()">
           确认删除
         </el-button>
       </div>
@@ -272,11 +272,12 @@ export default {
         delNum: 0
       }
     },
-    handleUpdate(row) {
-      this.resetRowTemp()
-      this.rowTemp = Object.assign({}, row) // copy obj
 
-      this.dialogStatus = 'update'
+    handleCreate() {
+      this.resetRowTemp()
+      // this.rowTemp = Object.assign({}, {}) // copy obj
+
+      this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['leftForm'].clearValidate()
@@ -293,44 +294,29 @@ export default {
         this.$refs['dataDel'].clearValidate()
       })
     },
-    handleCreate() {
+    handleUpdate(row) {
       this.resetRowTemp()
-      // this.rowTemp = Object.assign({}, {}) // copy obj
+      this.rowTemp = Object.assign({}, row) // copy obj
 
-      this.dialogStatus = 'create'
+      this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['leftForm'].clearValidate()
         this.$refs['rightForm'].clearValidate()
       })
     },
+
     createRelation() {
       this.$refs['leftForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.rowTemp)
           delete tempData.isTrusted
 
-          const tempSchema = Object.assign([], this.relation_schema)
-          tempSchema.push(tempData)
-
-          const patchData = {}
-          patchData.relation_schema = tempSchema
+          const tempRelation = Object.assign([], this.relation_schema)
+          tempRelation.push(tempData)
 
           // 使用patch更新资源定义的CI项
-          const id = this.object_definition._id
-          const etag = this.object_definition._etag
-          updateResourceObject(id, patchData, etag).then((response) => {
-            this.dialogFormVisible = false
-            if (response.status === 200) {
-              this.$notify({
-                title: 'Success',
-                message: 'Create Successfully',
-                type: 'success',
-                duration: 2000
-              })
-              this.reload()
-            }
-          })
+          this.dispatchAction(tempRelation)
         }
       })
       this.$refs['rightForm'].validate((valid) => {
@@ -338,32 +324,15 @@ export default {
           const tempData = Object.assign({}, this.rowTemp)
           delete tempData.isTrusted
 
-          const tempSchema = Object.assign([], this.relation_schema)
-          tempSchema.push(tempData)
-
-          const patchData = {}
-          patchData.relation_schema = tempSchema
+          const tempRelation = Object.assign([], this.relation_schema)
+          tempRelation.push(tempData)
 
           // 使用patch更新资源定义的CI项
-          const id = this.object_definition._id
-          const etag = this.object_definition._etag
-          updateResourceObject(id, patchData, etag).then((response) => {
-            this.dialogFormVisible = false
-            if (response.status === 200) {
-              this.$notify({
-                title: 'Success',
-                message: 'Create Successfully',
-                type: 'success',
-                duration: 2000
-              })
-              this.reload()
-            }
-          })
+          this.dispatchAction(tempRelation)
         }
       })
     },
-
-    deleteAttr() {
+    deleteRelation() {
       this.$refs['dataDel'].validate((valid) => {
         if (valid) {
           if (this.delTemp.delNum !== '1') {
@@ -373,30 +342,13 @@ export default {
           const relationIndex = this.relation_schema.indexOf(tempData)
           this.relation_schema.splice(relationIndex, 1)
 
-          const tempSchema = Object.assign([], this.relation_schema)
-
-          const patchData = {}
-          patchData.relation_schema = tempSchema
+          const tempRelation = Object.assign([], this.relation_schema)
 
           // 使用patch更新资源定义的CI项
-          const id = this.object_definition._id
-          const etag = this.object_definition._etag
-          updateResourceObject(id, patchData, etag).then((response) => {
-            this.dialogFormVisible = false
-            if (response.status === 200) {
-              this.$notify({
-                title: 'Success',
-                message: 'Delete Successfully',
-                type: 'success',
-                duration: 2000
-              })
-              this.reload()
-            }
-          })
+          this.dispatchAction(tempRelation)
         }
       })
     },
-
     updateRelation() {
       this.$refs['leftForm'].validate((valid) => {
         if (valid) {
@@ -405,27 +357,11 @@ export default {
 
           delete tempData.isTrusted
 
-          const tempSchema = Object.assign([], this.relation_schema)
-          tempSchema.splice(relationIndex, 1, tempData)
-
-          const patchData = {}
-          patchData.relation_schema = tempSchema
+          const tempRelation = Object.assign([], this.relation_schema)
+          tempRelation.splice(relationIndex, 1, tempData)
 
           // 使用patch更新资源定义的CI项
-          const id = this.object_definition._id
-          const etag = this.object_definition._etag
-          updateResourceObject(id, patchData, etag).then((response) => {
-            this.dialogFormVisible = false
-            if (response.status === 200) {
-              this.$notify({
-                title: 'Success',
-                message: 'Update Successfully',
-                type: 'success',
-                duration: 2000
-              })
-              this.reload()
-            }
-          })
+          this.dispatchAction(tempRelation)
         }
       })
       this.$refs['rightForm'].validate((valid) => {
@@ -435,27 +371,31 @@ export default {
 
           delete tempData.isTrusted
 
-          const tempSchema = Object.assign([], this.relation_schema)
-          tempSchema.splice(relationIndex, 1, tempData)
-
-          const patchData = {}
-          patchData.relation_schema = tempSchema
+          const tempRelation = Object.assign([], this.relation_schema)
+          tempRelation.splice(relationIndex, 1, tempData)
 
           // 使用patch更新资源定义的CI项
-          const id = this.object_definition._id
-          const etag = this.object_definition._etag
-          updateResourceObject(id, patchData, etag).then((response) => {
-            this.dialogFormVisible = false
-            if (response.status === 200) {
-              this.$notify({
-                title: 'Success',
-                message: 'Update Successfully',
-                type: 'success',
-                duration: 2000
-              })
-              this.reload()
-            }
+          this.dispatchAction(tempRelation)
+        }
+      })
+    },
+
+    dispatchAction(tempRelation) {
+      const patchData = {}
+      patchData.relation_schema = tempRelation
+      // create && update && delete
+      const id = this.object_definition._id
+      const etag = this.object_definition._etag
+      updateResourceObject(id, patchData, etag).then((response) => {
+        this.dialogFormVisible = false
+        if (response.status === 200) {
+          this.$notify({
+            title: 'Success',
+            message: 'Update Successfully',
+            type: 'success',
+            duration: 2000
           })
+          this.reload()
         }
       })
     }

@@ -86,7 +86,7 @@
                 <el-input v-model="rowTemp.left.id" :disabled="dialogStatus==='update'?true:false" width="500px" />
               </el-form-item>
               <el-form-item label="类型" prop="left.type" :label-width="formLabelWidth">
-                <el-select v-model="rowTemp.left.type" value-key="key" class="filter-item" placeholder="Please select" clearable>
+                <el-select v-model="rowTemp.left.type" class="filter-item" placeholder="Please select" clearable disabled>
                   <el-option v-for="item in typeOptions" :key="item.id" :label="item.name" :value="item.value" />
                 </el-select>
               </el-form-item>
@@ -111,7 +111,7 @@
                 <el-input v-model="rowTemp.right.id" :disabled="dialogStatus==='update'?true:false" width="500px" />
               </el-form-item>
               <el-form-item label="类型" prop="right.type" :label-width="formLabelWidth">
-                <el-select v-model="rowTemp.right.type" value-key="key" class="filter-item" placeholder="Please select" clearable>
+                <el-select v-model="rowTemp.right.type" value-key="key" class="filter-item" placeholder="Please select" clearable disabled>
                   <el-option v-for="item in typeOptions" :key="item.id" :label="item.name" :value="item.value" />
                 </el-select>
               </el-form-item>
@@ -197,8 +197,8 @@ export default {
         id: '',
         type: 'relation',
         remark: '',
-        left: { name: '', id: '', type: 'relation', resourceId: this.objectId, max: 1, min: 0, remark: '' },
-        right: { name: '', id: '', type: 'relation', resourceId: '', max: 1, min: 0, remark: '' }
+        left: { name: '', id: '', type: 'list', resourceId: this.objectId, max: 1, min: 0, remark: '' },
+        right: { name: '', id: '', type: 'list', resourceId: '', max: 1, min: 0, remark: '' }
       },
       rules: {
         name: [{ required: true, message: 'this item is required', trigger: 'blur' }],
@@ -262,8 +262,8 @@ export default {
         id: '',
         type: 'relation',
         remark: '',
-        left: { name: '', id: '', type: { value: 'list', id: 1 }, resourceId: this.objectId, max: 1, min: 0, remark: '' },
-        right: { name: '', id: '', type: { value: 'list', id: 1 }, resourceId: '', max: 1, min: 0, remark: '' }
+        left: { name: '', id: '', type: 'relation', resourceId: this.objectId, max: 1, min: 0, remark: '' },
+        right: { name: '', id: '', type: 'relation', resourceId: '', max: 1, min: 0, remark: '' }
       }
       this.rowTemp = Object.assign({}, rowTemp)
     },

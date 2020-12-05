@@ -307,29 +307,22 @@ export default {
     },
 
     createRelation() {
-      this.$refs['leftForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.rowTemp)
-          delete tempData.isTrusted
-
-          const tempRelation = Object.assign([], this.relation_schema)
-          tempRelation.push(tempData)
-
-          // 使用patch更新资源定义的CI项
-          this.dispatchAction(tempRelation)
+      this.$refs['leftForm'].validate((leftValid) => {
+        if (!leftValid) {
+          return
         }
-      })
-      this.$refs['rightForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.rowTemp)
-          delete tempData.isTrusted
+        this.$refs['rightForm'].validate((valid) => {
+          if (valid) {
+            const tempData = Object.assign({}, this.rowTemp)
+            delete tempData.isTrusted
 
-          const tempRelation = Object.assign([], this.relation_schema)
-          tempRelation.push(tempData)
+            const tempRelation = Object.assign([], this.relation_schema)
+            tempRelation.push(tempData)
 
-          // 使用patch更新资源定义的CI项
-          this.dispatchAction(tempRelation)
-        }
+            // 使用patch更新资源定义的CI项
+            this.dispatchAction(tempRelation)
+          }
+        })
       })
     },
     deleteRelation() {
@@ -350,33 +343,24 @@ export default {
       })
     },
     updateRelation() {
-      this.$refs['leftForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.rowTemp)
-          const relationIndex = this.relation_schema.indexOf(tempData)
-
-          delete tempData.isTrusted
-
-          const tempRelation = Object.assign([], this.relation_schema)
-          tempRelation.splice(relationIndex, 1, tempData)
-
-          // 使用patch更新资源定义的CI项
-          this.dispatchAction(tempRelation)
+      this.$refs['leftForm'].validate((leftValid) => {
+        if (!leftValid) {
+          return
         }
-      })
-      this.$refs['rightForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.rowTemp)
-          const relationIndex = this.relation_schema.indexOf(tempData)
+        this.$refs['rightForm'].validate((valid) => {
+          if (valid) {
+            const tempData = Object.assign({}, this.rowTemp)
+            const relationIndex = this.relation_schema.indexOf(tempData)
 
-          delete tempData.isTrusted
+            delete tempData.isTrusted
 
-          const tempRelation = Object.assign([], this.relation_schema)
-          tempRelation.splice(relationIndex, 1, tempData)
+            const tempRelation = Object.assign([], this.relation_schema)
+            tempRelation.splice(relationIndex, 1, tempData)
 
-          // 使用patch更新资源定义的CI项
-          this.dispatchAction(tempRelation)
-        }
+            // 使用patch更新资源定义的CI项
+            this.dispatchAction(tempRelation)
+          }
+        })
       })
     },
 

@@ -262,8 +262,8 @@ export default {
         id: '',
         type: 'relation',
         remark: '',
-        left: { name: '', id: '', type: 'relation', resourceId: this.objectId, max: 1, min: 0, remark: '' },
-        right: { name: '', id: '', type: 'relation', resourceId: '', max: 1, min: 0, remark: '' }
+        left: { name: '', id: '', type: 'list', resourceId: this.objectId, max: 1, min: 0, remark: '' },
+        right: { name: '', id: '', type: 'list', resourceId: '', max: 1, min: 0, remark: '' }
       }
       this.rowTemp = Object.assign({}, rowTemp)
     },

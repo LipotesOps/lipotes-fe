@@ -35,6 +35,22 @@
         </template>
       </el-table-column>
 
+      <el-table-column
+        v-for="(item) in relation_schema"
+        :key="item.left.name"
+        fixed
+        :label="item.left.name"
+        :value="item.left.name"
+        :prop="item.left.id"
+        sortable="true"
+        align="center"
+        min-width="30"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row[item.left.id] }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column fixed label="创建时间" prop="_created" sortable="true" align="center" min-width="30">
         <template slot-scope="{row}">
           <span>{{ row._created | localTimeZone }}</span>
@@ -175,8 +191,7 @@ export default {
         .then(resp => {
           if (resp.status === 200) {
             this.object_schema = this.$_.get(resp.data, 'object_schema', [])
-            this.relation_schema = this.$_.get(resp.data, 'relation_schema[0].left', {})
-            this.object_schema.push(this.relation_schema)
+            this.relation_schema = this.$_.get(resp.data, 'relation_schema', [])
             this.object_definition = resp.data
           }
         })

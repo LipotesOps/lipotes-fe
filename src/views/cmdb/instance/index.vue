@@ -128,6 +128,7 @@ export default {
       tableKey: 0,
 
       object_schema: [],
+      relation_schema: [],
 
       textMap: {
         update: '编辑',
@@ -173,7 +174,9 @@ export default {
       fetchResourceDefinitionDetail(params, this.objectId)
         .then(resp => {
           if (resp.status === 200) {
-            this.object_schema = this.$_.get(resp.data, 'object_schema', {})
+            this.object_schema = this.$_.get(resp.data, 'object_schema', [])
+            this.relation_schema = this.$_.get(resp.data, 'relation_schema[0].left', {})
+            this.object_schema.push(this.relation_schema)
             this.object_definition = resp.data
           }
         })

@@ -94,14 +94,7 @@
           :label-width="formLabelWidth"
           fixed
         >
-          <el-input v-model="rowTemp[item.left.id]" placeholder="Please input" />
-          <instance-option />
-        </el-form-item>
-
-        <el-form-item label="Category" prop="id" :label-width="formLabelWidth">
-          <el-select v-model="rowTemp.category" value-key="_id" class="filter-item" placeholder="Please select" clearable>
-            <el-option v-for="item in categoryOptions" :key="item.name" :label="item.name" :value="{'_id': item._id, '_version': item._version, 'name': item.name}" />
-          </el-select>
+          <instance-option v-model="rowTemp[item.left.id]" placeholder="Please input" />
         </el-form-item>
 
         <el-form-item label="Remark" :label-width="formLabelWidth">

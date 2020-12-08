@@ -86,6 +86,16 @@
         >
           <el-input v-model="rowTemp[item.id]" placeholder="Please input" />
         </el-form-item>
+        <el-form-item
+          v-for="(item) in relation_schema"
+          :key="item.left.id"
+          :label="item.left.name"
+          :prop="item.left.id"
+          :label-width="formLabelWidth"
+          fixed
+        >
+          <el-input v-model="rowTemp[item.left.id]" placeholder="Please input" />
+        </el-form-item>
 
         <el-form-item label="Remark" :label-width="formLabelWidth">
           <el-input v-model="rowTemp.memo" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />

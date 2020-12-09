@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-select v-model="valueInstance" value-key="_id" class="filter-item" placeholder="Please select" multiple clearable @change="$emit('select-change', valueInstance)">
+    <el-select v-model="valueOut" value-key="_id" class="filter-item" placeholder="Please select" multiple clearable @change="$emit('select-change', valueOut)">
       <el-option v-for="item in resourcInstance" :key="item.name" :label="item.name" :value="{'_id': item._id, '_version': item._version, 'name': item.name}" />
     </el-select>
   </div>
@@ -28,7 +28,7 @@ export default {
   },
   data() {
     return {
-      valueInstance: this.valueIn,
+      valueOut: this.valueIn,
       listQuery: {
         page: 1,
         sort: '_id'
@@ -37,7 +37,7 @@ export default {
     }
   },
   computed: {
-    // valueInstance: {
+    // valueOut: {
     //   // getter
     //   get: function() {
     //     return this.valueIn
@@ -50,7 +50,7 @@ export default {
   },
   watch: {
     valueIn: function() {
-      this.valueInstance = this.valueIn
+      this.valueOut = this.valueIn
     }
   },
   created() {

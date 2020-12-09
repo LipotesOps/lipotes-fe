@@ -94,7 +94,7 @@
           :label-width="formLabelWidth"
           fixed
         >
-          <instance-option v-model="rowTemp[item.left.id]" :resource-id="item.left.resourceId" placeholder="Please input" />
+          <instance-option v-model="rowTemp[item.left.id]" :resource-id="item.left.resourceId" placeholder="Please input" @select-change="handleSetActiveTabName(rowTemp[item.left.id])" />
         </el-form-item>
 
         <el-form-item label="Remark" :label-width="formLabelWidth">
@@ -196,6 +196,9 @@ export default {
     this.getResourceInstance()
   },
   methods: {
+    handleSetActiveTabName(value, Temp) {
+      Temp = value
+    },
     getObjectDetail() {
       const params = {}
       fetchResourceDefinitionDetail(params, this.objectId)

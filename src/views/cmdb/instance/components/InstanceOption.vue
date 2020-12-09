@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-select v-model="valueInstance" value-key="_id" class="filter-item" placeholder="Please select" multiple clearable @change="$emit('change', valueInstance)">
+    <el-select v-model="valueInstance" value-key="_id" class="filter-item" placeholder="Please select" multiple clearable @change="$emit('select-change', valueInstance)">
       <el-option v-for="item in resourcInstance" :key="item.name" :label="item.name" :value="{'_id': item._id, '_version': item._version, 'name': item.name}" />
     </el-select>
   </div>
@@ -11,7 +11,8 @@ import { fetchResourceInstance } from '@/api/resource'
 
 export default {
   model: {
-    event: 'change'
+    prop: 'valueIn',
+    event: 'select-change'
   },
   props: {
     valueIn: {
@@ -33,6 +34,23 @@ export default {
         sort: '_id'
       },
       resourcInstance: []
+    }
+  },
+  computed: {
+    // valueInstance: {
+    //   // getter
+    //   get: function() {
+    //     return this.valueIn
+    //   }
+    // setter
+    // set: function(newValue) {
+    //   console.log(newValue)
+    // }
+    // }
+  },
+  watch: {
+    valueIn: function() {
+      this.valueInstance = this.valueIn
     }
   },
   created() {

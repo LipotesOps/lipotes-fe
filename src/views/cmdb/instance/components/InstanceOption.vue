@@ -81,6 +81,11 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped lang="less">
+.filter-item{
+  width: 100%;
+}
+/deep/ .el-tag.el-tag--info{
+  background: rgba(171, 218, 212, 0.507)!important;
+}
 </style>

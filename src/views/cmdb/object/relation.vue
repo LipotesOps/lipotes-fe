@@ -225,7 +225,7 @@ export default {
   },
   computed: {
     right() {
-      return this.resourceList.find(element => element.object_id === this.rowTemp.left.resourceId) || { color: 'red' }
+      return this.resourceList.find(element => element.object_id === this.rowTemp.left.resourceId) || { color: '' }
     }
   },
   created() {

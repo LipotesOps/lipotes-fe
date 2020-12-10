@@ -58,7 +58,7 @@
               />
             </div>
             <div style="margin-left: 12.5px">
-              <span style="opacity: 0.7">{{ objectId }}</span>
+              <span style="opacity: 0.7">{{ left.object_id }}</span>
             </div>
           </el-col>
 
@@ -70,7 +70,7 @@
               />
             </div>
             <div style="margin-left: 12.5px">
-              <span style="opacity: 0.7">{{ objectId }}</span>
+              <span style="opacity: 0.7">{{ right.object_id }}</span>
             </div>
           </el-col>
         </el-row>
@@ -175,7 +175,6 @@ export default {
   data() {
     return {
       left: {},
-      right: {},
       object_definition: {},
       resourceList: [],
       listLoading: false,
@@ -222,6 +221,11 @@ export default {
         delNum: 0
       },
       dialogDelVisible: false
+    }
+  },
+  computed: {
+    right() {
+      return this.resourceList.find(element => element.object_id === this.rowTemp.left.resourceId) || { color: 'red' }
     }
   },
   created() {

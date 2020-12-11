@@ -47,7 +47,7 @@
         min-width="30"
       >
         <template slot-scope="{row}">
-          <el-tag v-for="i in row[item.left.id]" :key="i._id" :style="`margin: 1.5px; color:` + color">{{ i.name }}</el-tag>
+          <el-tag v-for="i in row[item.left.id]" :key="i._id" :style="{'margin': '1.5px', color: color[item.left.resourceId].color}">{{ i.name }}</el-tag>
         </template>
       </el-table-column>
 
@@ -133,6 +133,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import { fetchResourceDefinitionDetail, fetchResourceInstance, createResourceInstance, updateResourceInstance, delResourceInstance } from '@/api/resource'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import InstanceOption from './components/InstanceOption'
@@ -142,7 +144,6 @@ export default {
   inject: ['reload'],
   data: function() {
     return {
-      color: 'rgba(255, 120, 0, 1)',
       objectId: this.$route.params.object_id,
       object_definition: {},
       committing: false,
@@ -176,6 +177,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      color: state => state.color
+    }),
     rules() {
       var rules = {}
       this.object_schema.forEach((e, i) => {
@@ -207,7 +211,6 @@ export default {
           if (resp.status === 200) {
             this.object_schema = this.$_.get(resp.data, 'object_schema', [])
             this.relation_schema = this.$_.get(resp.data, 'relation_schema', [])
-            this.color = this.$_.get(resp.data, 'color', 'rgba(255, 120, 0, 1)')
             this.object_definition = resp.data
           }
         })

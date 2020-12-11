@@ -10,7 +10,7 @@
     </div>
     <div class="app-content-container">
       <el-row>
-        <el-col v-for="(item, index) in resourceList" :key="item._id" :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+        <el-col v-for="(item, index) in resourceListComputed" :key="item._id" :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
           <span>
             <el-card class="object-card" shadow="hover" :style="cardStyle" @mouseenter.native="mouseOnOff(true, index, item)" @mouseleave.native="mouseOnOff(false, index, item)" @click.native="$router.push({ name: 'object-instance', params: { object_id: item.object_id }})">
               <div slot="header">
@@ -94,6 +94,7 @@
 <script>
 import { fetchResourceDefinition, fetchObjectCategory, updateResourceObject, createObject } from '@/api/resource'
 import chroma from './index'
+import store from '@/store'
 
 export default {
   inject: ['reload'],
@@ -161,6 +162,12 @@ export default {
         '--background-color-hover': this.backgroundHover,
         '--background-header-hover': this.backgroundHeaderHover
       }
+    },
+    resourceListComputed() {
+      this.resourceList.forEach(element => {
+        store.dispatch('color/setColor', { resourceId: element.object_id, color: element.color })
+      })
+      return this.resourceList
     }
   },
   created() {
@@ -174,6 +181,11 @@ export default {
           if (resp.status === 200) {
             this.resourceList = resp.data._items
           }
+        })
+        .finally(resp => {
+          // Just to simulate the time of the request
+          setTimeout(() => {
+          }, 1.5 * 0)
         })
     },
     getObjectCategory() {

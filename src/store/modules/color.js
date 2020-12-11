@@ -1,9 +1,7 @@
 /* eslint-disable no-shadow */
 
 const getDefaultState = () => {
-  return {
-    APP: { color: 'rgba(155, 120, 0, 1)' }
-  }
+  return {}
 }
 
 const state = getDefaultState()
@@ -14,7 +12,6 @@ const mutations = {
   },
   SET_COLOR: (state, { resourceId, color }) => {
     state[resourceId] = Object.assign({}, { color })
-    console.log('------------------------------------------------------')
   }
 }
 

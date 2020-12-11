@@ -47,7 +47,7 @@
         min-width="30"
       >
         <template slot-scope="{row}">
-          <el-tag v-for="i in row[item.left.id]" :key="i._id" :style="{'margin': '1.5px', color: color[item.left.resourceId].color}">{{ i.name }}</el-tag>
+          <el-tag v-for="i in row[item.left.id]" :key="i._id" :style="{'margin': '1.5px', color: $_.get(color, 'item.right.resourceId'+'color', '')}">{{ i.name }}</el-tag>
         </template>
       </el-table-column>
 

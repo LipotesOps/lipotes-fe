@@ -13,3 +13,8 @@ services:
       - ${BASE_DIR}/dist/:/usr/share/nginx/html/
     ports:
       - 3000:80
+
+networks:
+  default:
+    external:
+      name: lipotes-network
